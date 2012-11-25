@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workbench progressCount="19" version="2.0">
 <workbenchAdvisor/>
-<window height="768" width="1024" x="0" y="27">
+<window height="944" width="1341" x="100" y="55">
 <fastViewData fastViewLocation="1024"/>
-<intro standby="true"/>
 <perspectiveBar>
 <itemSize x="160"/>
 </perspectiveBar>
 <coolbarLayout>
 <coolItem id="group.file" itemType="typeGroupMarker"/>
-<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="132" y="30"/>
+<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="166" y="30"/>
 <coolItem id="additions" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.cdt.ui.buildConfigActionSet" itemType="typeToolBarContribution" x="82" y="30"/>
 <coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="156" y="30"/>
@@ -18,6 +17,7 @@
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="184" y="30"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
@@ -47,7 +47,7 @@
 <view id="org.eclipse.ui.views.PropertySheet" partName="Properties"/>
 <view id="org.eclipse.ui.views.ProblemView" partName="Problems">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="105" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
+<columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="788" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
 <visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
@@ -57,12 +57,6 @@
 </view>
 <view id="org.eclipse.ui.console.ConsoleView" partName="Console">
 <viewState/>
-</view>
-<view id="org.eclipse.ui.internal.introview" partName="Welcome">
-<viewState>
-<presentation currentPage="overview" restore="true"/>
-<standbyPart/>
-</viewState>
 </view>
 <view id="org.eclipse.team.svn.ui.properties.PropertiesView" partName="SVN Properties"/>
 </views>
@@ -193,7 +187,6 @@
 <view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.eclipse.ui.views.PropertySheet"/>
 <view id="org.eclipse.debug.ui.DebugView"/>
-<view id="org.eclipse.ui.internal.introview"/>
 <fastViewBars/>
 <layout>
 <mainWindow>
@@ -209,17 +202,15 @@
 </folder>
 </info>
 <info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="topLeft">
-<folder activePageID="org.eclipse.ui.internal.introview" appearance="2" expanded="2">
-<page content="org.eclipse.ui.internal.introview" label="Welcome"/>
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
-</presentation>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.38745603" ratioLeft="661" ratioRight="1045" relationship="2" relative="topLeft"/>
-<info folder="true" part="bottom" ratio="0.74025977" ratioLeft="570" ratioRight="200" relationship="4" relative="org.eclipse.ui.editorss">
+<info part="org.eclipse.ui.editorss" ratio="0.2173913" ratioLeft="415" ratioRight="1494" relationship="2" relative="topLeft"/>
+<info folder="true" part="bottom" ratio="0.6365884" ratioLeft="515" ratioRight="294" relationship="4" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
@@ -496,5 +487,9 @@
 </trimArea>
 </trimLayout>
 </window>
-<mruList/>
+<mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" name="projectSettings.xml" tooltip="simAllocation-cAMP/projectSettings.xml">
+<persistable path="/simAllocation-cAMP/projectSettings.xml"/>
+</file>
+</mruList>
 </workbench>
