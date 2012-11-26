@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>MFPTSimulations</name>
+	<name>MFPT-Simulations</name>
 	<comment></comment>
 	<projects>
-		<project>synapseModels-MFPT</project>
 		<project>synapseModels</project>
 	</projects>
 	<buildSpec>
