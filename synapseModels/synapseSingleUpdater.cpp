@@ -132,7 +132,7 @@ void synapseSingleUpdater::initDefaultTransitionProb()
 
 	//double sumQ = 0;
 	//BUG FIX Using CascadeIndex As Index! 8/3/10
-	for (int i =0;i<miCascadeSize;i++)
+	for (int i = 0;i<miCascadeSize;i++)
 	{
 		mfQprob[i] = pow(DEFAULT_CASCADE_X,i); //q_i=x^(i-1)
 		mfPprob[i] = pow(DEFAULT_CASCADE_X,i+1)/(1-DEFAULT_CASCADE_X); //As given in Fusi '05 p=x^i/(1-x) x=1/2

@@ -85,7 +85,7 @@ typedef int t_inVal; //Input Memory Vector value types (-1,1) used so int
 	#define SIGNALS_OUTPUT_DIRECTORY "results//SignalsComparison//"
 	#define INPUT_VECTORS_DIRECTORY "results//MemoryInputVectors//"
 	#define ALLOCCTEVNT_OUTPUT_DIRECTORY "results//MemAllocationResults//"
-	#define MFPTIMESSNR_OUTPUT_DIRECTORY "..//simResults//MFPT-SNR//"
+	#define MFPTIMESSNR_OUTPUT_DIRECTORY "results//MFPT-SNR//"
 #endif
 
 	#define NTHREADS 30 //THREADING ?? MAXIMUM THREADS

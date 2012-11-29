@@ -22,7 +22,7 @@ int g_FilterTh 			= 6; //Used for Single Filter Experiments
 double g_FilterDecay 	= 0.0; //0.0916986;
 uint g_AllocRefraction	= 0;//0.375*g_FilterTh*g_FilterTh;
 uint g_timeToSampleMetaplasticity	= 10; //Used by Sim code as the time to sample the number of metaplastic transitions
-uint g_MetaplasticitySampleSize		= 10;//Sim Code Stops saving to the distribution of same threshold crossings Once this number of samples has been gathered
+uint g_MetaplasticitySampleSize		= 1;//Sim Code Stops saving to the distribution of same threshold crossings Once this number of samples has been gathered
 double g_UpdaterQ 		= 1.0/(g_FilterTh*g_FilterTh); //The single Updater Transitions - Make sure its in double format
 string g_outputTag;
 
@@ -109,8 +109,8 @@ int main(int argc, char* argv[])
 	mapSimType["simRepetition"] = 8;
 
 	mapSynapseAllocator["synapseCascade"] = 1;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascade>;
-	mapSynapseAllocator["synapseFilterUnified"] = 2;
-	mapSynapseAllocator["synapseFilterUnifiedWithDecay"] = 3;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
+	mapSynapseAllocator["synapseCascadeFilterUnified"] = 2;
+	mapSynapseAllocator["synapseCascadeFilterUnifiedWithDecay"] = 3;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
 	mapSynapseAllocator["synapseSingleFilterDual"] = 4;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
 	//mapSynapseAllocator["cascadeDelayed"]
 	//mapSynapseAllocator["CascadeSamplingFilter"]

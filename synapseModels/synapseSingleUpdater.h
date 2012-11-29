@@ -13,7 +13,7 @@
 class synapseSingleUpdater: public ICascadeSynapse {
 public:
 	synapseSingleUpdater();
-	synapseSingleUpdater(double pfQ,gsl_rng * rng_r,int MetaCycleSamples);
+	synapseSingleUpdater(double pfQ, gsl_rng * rng_r, int MetaCycleSamples);
 	synapseSingleUpdater(int piCascadeSize,gsl_rng * rng_r); //Initialize with cascadeSize
 	synapseSingleUpdater(int piCascadeSize,float startStrength,gsl_rng * rng_r); //Init With StartStrength Used by SynapticConnection
 	synapseSingleUpdater(int piCascadeSize,ICascadeSynapse::SYN_STRENGTH_STATE penumStartStrength,gsl_rng * rng_r); //
