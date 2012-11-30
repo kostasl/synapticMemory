@@ -541,7 +541,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 
 	const float MaxRepTime = 100+PeakTime;
 	int iRepIntervalStep = 5; //Is in Numerical Model Mathematica Results
-	dRepIntervalsecs = 1;
+	dRepIntervalsecs = 56;
 
 	while (dRepIntervalsecs <= MaxRepTime)
 	{

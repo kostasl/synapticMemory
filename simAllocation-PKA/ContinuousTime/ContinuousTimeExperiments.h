@@ -588,8 +588,8 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 												iPatIndex,bEncodeNewPattern,bAllocatePattern,mprng,uiAllocSynapses, mpMDistrib,
 												mpMDistribinSamples,h);
 
-				// Handle DA Signalling //
-				if (bDASignal){
+				// Handle DA Signalling -- Use bEncodeNewPattern to force 0- Signal from Uknown PAttern //
+				if (bDASignal && !bEncodeNewPattern){
 					dLastDASignalTime 	= j; //Reset  time DA->cAMP
 					dDAInjectionLevel	= dDAStep; //DA injections are taken as pulses-Delta that last 1 ts
 					dCAInjectionLevel	= h; //Use the signal Just before the new Encoding

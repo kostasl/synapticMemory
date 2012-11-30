@@ -112,7 +112,6 @@ return dcAMPLevel;
  */
 int selectPatternToEncode(unsigned long ts,uint uiNoOfPatternsStoredInTrial,bool& bPatternIsNew,bool& bAllocatePattern,t_patt_trackedtbl& vTrackedIndex,t_patt_reptbl& repetitionTable,t_inVal** X,uint uiPatCount,uint iSynCount,gsl_rng*& prng)
 {
-	bAllocatePattern  = false;
 	t_patt_trackedtbl::iterator		itt;
 	int Ret = -1; //Return -1 if random Pattern and not a tracked one.
 	uint uiPatternToCheck; //Which Pattern Index Should be Checked if it has been Allocated
