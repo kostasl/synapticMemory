@@ -558,6 +558,16 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 			//else
 				//bTimeToTestRecall =true;
 
+			/*  cAMP Equation with feedback - Calculated Using Injections At previous Cycle -Emulating the delay of integration
+			 * 			 * TODO cAMP needs to be Reconsidered for Continuous time  */
+			//cout << j << " CA:" << dCAInjectionLevel;
+			dcAMPLevel = getcAMP<T>(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
+			//assert(!isnan(dcAMPLevel));
+			dPKALevel 				+= dcAMPLevel;	 //Integrate the cAMP signal
+			if (dPKALevel > dPKAThreshold) //PKA Threshold Exceeded So Allocate
+				bAllocatePattern = true;
+
+
 			//Encode Pattern
 			if (bPatternArrived)
 			{
@@ -597,14 +607,6 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 				uiNoOfPatternsStoredInTrial++;
 			}//(bPatternArrived) Finished Looping through all synapses - Pattern is now stored
 
-			/*  cAMP Equation with feedback
-			 * TODO cAMP needs to be Reconsidered for Continuous time  */
-			//cout << j << " CA:" << dCAInjectionLevel;
-			dcAMPLevel = getcAMP<T>(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
-			//assert(!isnan(dcAMPLevel));
-			dPKALevel 				+= dcAMPLevel;	 //Integrate the cAMP signal
-			if (dPKALevel > dPKAThreshold) //PKA Threshold Exceeded So Allocate
-				bAllocatePattern = true;
 
 
 			//Check for Error COndition

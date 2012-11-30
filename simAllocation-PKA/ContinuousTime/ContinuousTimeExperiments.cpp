@@ -112,6 +112,7 @@ return dcAMPLevel;
  */
 int selectPatternToEncode(unsigned long ts,uint uiNoOfPatternsStoredInTrial,bool& bPatternIsNew,bool& bAllocatePattern,t_patt_trackedtbl& vTrackedIndex,t_patt_reptbl& repetitionTable,t_inVal** X,uint uiPatCount,uint iSynCount,gsl_rng*& prng)
 {
+	bAllocatePattern  = false;
 	t_patt_trackedtbl::iterator		itt;
 	int Ret = -1; //Return -1 if random Pattern and not a tracked one.
 	uint uiPatternToCheck; //Which Pattern Index Should be Checked if it has been Allocated
@@ -211,7 +212,7 @@ unsigned long getNextTimestep(bool& bisRecallPeriod,bool& bisEncodingPeriod,doub
 
 	//Next Period Is recording only?-Or recording too
 	bisEncodingPeriod = bisRecallPeriod =  false; //Reset Flags for next Timestep Cycle
-	tsPeriodOfRecall = getCurrentPeriodOfRecall(currentTimestep);
+	tsPeriodOfRecall = 1.0;// getCurrentPeriodOfRecall(currentTimestep);
 
 //Now check if a measurement Period occurs before the next encoding one
 unsigned long nextRecallt = currentTimestep + tsPeriodOfRecall;//LastRecallj+tsPeriodOfRecall;
