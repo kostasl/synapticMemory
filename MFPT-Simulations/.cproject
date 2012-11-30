@@ -205,7 +205,7 @@
 									<listOptionValue builtIn="false" value="m"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1101994012" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/synapseModels-MFPT}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/synapseModels/Release}&quot;"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.2046796551" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-static" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1748671870" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
