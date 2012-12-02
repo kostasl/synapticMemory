@@ -237,7 +237,11 @@ int main(int argc, char* argv[])
 
 	if (mapSynapseAllocator.find(modelName) == mapSynapseAllocator.end()  )
 	{
-		ERREXIT(2,"Model name not recognized");}
+		cout << "Model Name Can be on of:" << endl;
+		for (map<string,int>::iterator it = mapSynapseAllocator.begin(); it!=mapSynapseAllocator.end();++it)
+			cout << it->first << endl;
+		ERREXIT(100,"Model name not recognized");
+	}
 	else
 	{
 		modelType = mapSynapseAllocator[modelName];
@@ -528,6 +532,8 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	sAggregateFile += boost::lexical_cast<std::string>(modelType);
 	sAggregateFile.append("_AllocSignalVsRepTime-PKA_n");
 	sAggregateFile += boost::lexical_cast<std::string>(FilterSize);
+	sAggregateFile.append("_N");
+	sAggregateFile += boost::lexical_cast<std::string>(synapsesPopulation);
 	sAggregateFile.append("_T");
 	sAggregateFile += boost::lexical_cast<std::string>(trials);
 	sAggregateFile.append("_r");
@@ -543,7 +549,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 
 	const float MaxRepTime = 100+PeakTime;
 	int iRepIntervalStep = 5; //Is in Numerical Model Mathematica Results
-	dRepIntervalsecs = 56;
+	dRepIntervalsecs = 86;
 
 	while (dRepIntervalsecs <= MaxRepTime)
 	{
