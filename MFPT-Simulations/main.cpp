@@ -109,8 +109,8 @@ int main(int argc, char* argv[])
 	mapSimType["MFPT"] = 9;
 
 	mapSynapseAllocator["synapseCascade"] = 1;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascade>;
-	//mapSynapseAllocator["synapseFilterUnified"]
-	mapSynapseAllocator["synapseSingleFilterUnifiedWithDecay"] = 3;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
+	mapSynapseAllocator["synapseCascadeFilterUnified"] = 2;
+	mapSynapseAllocator["synapseCascadeFilterUnifiedWithDecay"] = 3;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
 	mapSynapseAllocator["synapseSingleFilterDual"] = 4;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
 	//mapSynapseAllocator["cascadeDelayed"]
 	//mapSynapseAllocator["CascadeSamplingFilter"]
@@ -136,7 +136,14 @@ int main(int argc, char* argv[])
 		ERREXIT(1,"No model argument Specified");
 
 	if (mapSynapseAllocator.find(modelName) == mapSynapseAllocator.end()  )
-	{	ERREXIT(2,"Model name not recognized");}
+	{
+		cout << "Model Name Can be on of:" << endl;
+		for (map<string,int>::iterator it = mapSynapseAllocator.begin(); it!=mapSynapseAllocator.end();++it)
+			cout << it->first << endl;
+
+		ERREXIT(100,"Model name not recognized");
+
+	}
 	else
 	{
 		modelType = mapSynapseAllocator[modelName];
