@@ -298,17 +298,21 @@ double dIn 				= g_fInjectionGain*dDA*h_hill;
 //assert(!_isnan(dCA));
 //hill is always +ve for n->even but goes to infinity for odd n.
 //Negative signals mean low CA and thus should not activate cAMP.
-if (dCA>0.0)
-	h_hill = pow(dCA,iPwr)/( pow(dCA,iPwr) + pow(h_thres,iPwr) );
+if (dCA< 0.0)//Convert to odd function
+	h_hill = 0.0;//-pow(dCA,iPwr)/( pow(dCA,iPwr) + pow(h_thres,iPwr) );
 else
-	h_hill = 0.0;
+	h_hill = pow(dCA,iPwr)/( pow(dCA,iPwr) + pow(h_thres,iPwr) );
+
 
 
 //Break it in 10 (4 For speed gain) small steps - STUPID BUT WORKS
-for (int i=0;i<10;i++)	{
-	dIn						= 0.1*g_fInjectionGain*dDA*h_hill;
-	dcAMPLevel				-= 0.1*(double)g_fcAMPDecay*dcAMPLevel; //Do Decay;
+const int steps = 10.0;
+const double frac = (1.0/steps);
+for (int i=0;i<steps;i++)	{
+	dIn						= frac*g_fInjectionGain*dDA*h_hill;
+	dcAMPLevel				-= 0.5*frac*(double)g_fcAMPDecay*dcAMPLevel; //Do Decay;
 	dcAMPLevel  			+= dIn*(g_dcAMPMax - dcAMPLevel);
+	dcAMPLevel				-= 0.5*frac*(double)g_fcAMPDecay*dcAMPLevel; //Do Decay;
 	//dcAMPLevel  			+= (dcAMPMax - dcAMPLevel)*exp(-dIn) + dIn; *}
 }
 
@@ -606,8 +610,6 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 
 				uiNoOfPatternsStoredInTrial++;
 			}//(bPatternArrived) Finished Looping through all synapses - Pattern is now stored
-
-
 
 			//Check for Error COndition
 			if (uiPatCount == uiNoOfPatternsStoredInTrial && !bUseRandomPatterns)

@@ -11,3 +11,10 @@
 *.lai
 *.la
 *.a
+
+#eclipse project files
+.cproject
+.project
+.metadata
+.settings
+.externalToolBuilders

@@ -137,14 +137,14 @@ int main(int argc, char* argv[])
 	po::options_description cascadeSim("Cascade simulation options");
 	po::options_description AllocationOptions("PKA Allocation Experiments - simulation options");
 
-	string inputFile,modelName;
+	string inputFile,modelName = "synapseSingleFilterUnifiedWithDecay"; //Default
 	string simulationName = "simRepetition";
 	int startIndex,endIndex,simulationType,modelType,synapsesPopulation,trackedMemIndex,initPeriod;
 	unsigned int trials;
 
 	long lSimtimeSeconds = 250;
 	int RepMemoryIndex = 0;
-	int RepMemoryCount = 4;
+	int RepMemoryCount = 0;
 
 	double ts = 1.000;//When Set to 1 simu. is in discrete Time
 	double dEncodingRate = 1.0;
@@ -158,12 +158,12 @@ int main(int argc, char* argv[])
 	    ("help", "produce help message")
 	    ("model,M", po::value<string>(&modelName), "The model to run the simulation on")
 		("simulation,S", po::value<string>(&simulationName)->default_value(simulationName), "The simulation name to run")
-		("trials,T", po::value<unsigned int>(&trials)->default_value(10000), "Number of iteration to average over")
+		("trials,T", po::value<unsigned int>(&trials)->default_value(100), "Number of iteration to average over")
 	    ("cSimTimeSecs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds")
 		("synapsesSize", po::value<int>(&synapsesPopulation)->default_value(10000), "The number of synapses to use - Has to match the vector file size where required")
 		("inputFile,V", po::value<string>(&inputFile)->default_value("\n"), "The vector input file to use from directory MemoryInputVectors. If No file given then Random Vectors are used.")
-		("startSize", po::value<int>(&startIndex)->default_value(1), "The range of model size parameter to begin testing - interpretation is model dependent")
-		("endSize", po::value<int>(&endIndex)->default_value(1), "The range of model size parameter to end testing - interpretation is model dependent")
+		("startSize", po::value<int>(&startIndex)->default_value(7), "The range of model size parameter to begin testing - interpretation is model dependent")
+		("endSize", po::value<int>(&endIndex)->default_value(7), "The range of model size parameter to end testing - interpretation is model dependent")
 		("metaSampleTime", po::value<uint>(&g_timeToSampleMetaplasticity)->default_value(g_timeToSampleMetaplasticity), "Time to sample metaplasticity distribution")
 		("metaSampleSize", po::value<int>(&g_MetaplasticitySampleSize)->default_value(g_MetaplasticitySampleSize), "The number of samples to obtain for the metaplasticity cycle distribution");
 
@@ -225,7 +225,8 @@ int main(int argc, char* argv[])
 		simulationType = mapSimType[simulationName];
 	else
 	{
-		ERREXIT(1,"No simulation argument Specified");
+		simulationType = mapSimType["AllocSignalVsRepetitionTime"];
+		cerr << "No simulation argument Specified, Using default: AllocSignalVsRepetitionTime" << endl;
 	}
 
 	if (simulationType==0)
@@ -235,7 +236,8 @@ int main(int argc, char* argv[])
 		ERREXIT(1,"No model argument Specified");
 
 	if (mapSynapseAllocator.find(modelName) == mapSynapseAllocator.end()  )
-	{	ERREXIT(2,"Model name not recognized");}
+	{
+		ERREXIT(2,"Model name not recognized");}
 	else
 	{
 		modelType = mapSynapseAllocator[modelName];
