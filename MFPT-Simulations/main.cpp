@@ -160,25 +160,24 @@ int main(int argc, char* argv[])
 	//simulationType=9 MFPT Save Results To file
 	//OPEN OUTPUT FILES
 	string buffTargetDir(MFPTIMES_OUTPUT_DIRECTORY);
-	string buffFilename;
 	buffTargetDir.append("_").append(modelName).append("/");
+
 	char buff[200];
 
 	ofstream* ofile[8];
 
 	for (int j=0;j<8;j++)
 	{
-		sprintf(buff,"MFPT-N%d_%d-%d_T%d_lst%.2f_ts%.2f.dat",synapsesPopulation,startIndex,endIndex,trials,(float)(j/100.0),ts);
-		buffFilename.assign(buffTargetDir);
-		buffFilename.append(buff);
+		std::sprintf(buff,"MFPT-N%d_%d-%d_T%d_lst%.2f_ts%.2f.dat",synapsesPopulation,startIndex,endIndex,trials,(float)(j/100.0),ts);
+		string buffFilename(buff);
+		//Check And Create Dir if required
+		ofile[j] = openfile( buffTargetDir, buffFilename );
 
-		ofile[j] = new ofstream(buffFilename.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
-		if (!ofile[j]->is_open()) ERREXIT(errno,"Could not Open output file");
 		//////LOG File Opened////
 		*ofile[j] << "#Size\tMFTP\tSTDVar\tlSigThres" << endl;
 	}
 
-	cout << "Running Simulation: " << simulationName << " Output File:" << buffFilename.c_str() << endl;
+	cout << "Running Simulation: " << simulationName << " Output " <<  buffTargetDir.c_str() << buff << endl;
 
 
 	//For Cascade Indexes

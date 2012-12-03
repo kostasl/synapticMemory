@@ -43,6 +43,7 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
+using namespace std;
 
 typedef int t_inVal; //Input Memory Vector value types (-1,1) used so int
 
@@ -104,6 +105,37 @@ static void errexit(int code,uint lineno ,const char* srcFile,const char* str)
 	exit(1);
 }
 
+
+static std::ofstream* openfile(string strDir,string strFile)
+{
+	string strbuff(strDir);
+	strbuff.append(strFile);
+
+
+
+	std::ofstream* file = new ofstream(strbuff.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
+		if (!file->is_open())
+		{
+			cerr << strDir;
+			string cmd = "mkdir ";
+			cmd.append(strDir);
+			cout <<  "Create Output directory" << endl;
+
+			int ret = system(cmd.c_str());
+			cout << "Ret:" << ret << endl;
+			if (!ret == 0)
+				ERREXIT(ret,"Missing path to output directory-could not create Model output directory");
+
+			//Retry Creating output file
+			file = new ofstream(strFile.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
+			if (!file->is_open())
+				ERREXIT(errno,"Could not Open output file");
+		}
+
+return file;
+}
+
+
 ///Simulation Global Variables
 //gsl_rng * rng_r; //Used by GSL Rand Num Generator
 extern char FilePath[_MAX_PATH]; // _MAX_PATH represents the longest possible path on this OS
@@ -138,6 +170,7 @@ typedef map<unsigned long,unsigned int> t_patt_reptbl; //Holds pairs of time, pa
 typedef map<unsigned int,unsigned int>  t_patt_trackedtbl; //Holds the list of index numbers of Tracked Patterns
 
 //Found in mltExperiments
+
 
 
 #endif // _STD_INC

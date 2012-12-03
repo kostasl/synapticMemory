@@ -43,6 +43,7 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 
+using namespace std;
 ///Program Parameters
 
 #define MAX_AFFERENTS 1202
@@ -99,6 +100,34 @@ static void errexit(int code,uint lineno ,const char* srcFile,const char* str)
 	//fprintf(stderr,"line:%d",__LINE__);
 	fprintf(stderr,"%s line %d : %s: %s\n",srcFile,lineno,(str),strerror(code));
 	exit(1);
+}
+
+
+static std::ofstream* openfile(string strDir,string strFile)
+{
+	string strbuff(strDir);
+	strbuff.append(strFile);
+
+
+
+	std::ofstream* file = new ofstream(strbuff.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
+		if (!file->is_open())
+		{
+			cerr << strDir;
+			string cmd = "mkdir ";
+			cmd.append(strDir);
+			cout <<  "Create Output directory" << endl;
+			int ret = system(cmd.c_str());
+			cout << "Ret:" << ret << endl;
+			if (!ret == 0)
+				ERREXIT(ret,"Missing path to output directory-could not create Model output directory");
+
+			file = new ofstream(strFile.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
+			if (!file->is_open())
+				ERREXIT(errno,"Could not Open output file");
+		}
+
+return file;
 }
 
 
