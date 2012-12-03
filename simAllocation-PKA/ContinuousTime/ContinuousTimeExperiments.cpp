@@ -1,7 +1,7 @@
 
 
 #include "ContinuousTimeExperiments.h"
-
+#include "synapseSingleFilterUnifiedWithDecay.h"
 
 
 
@@ -69,12 +69,14 @@ return iSn;
 /* Single U Filter cAMP Calculator used in SignalRep Function -
  * Template Specialization for calculating the cAMP signal as required to match
  * The numerical integration results in MATHEMATICA. Here I take the solution to u'(t)=dIn(u_m-u(t)) to
- * Inject the correct amount of cAMP during 1 timestep*/
-/*
+ * Inject the correct amount of cAMP during 1 timestep
+
 Remove Because it does not work for high decay rates or high repetitions r
+	/* COMPILER BUG with TEMPLATE FUNCTION
 template<>
 double getcAMP<synapseSingleFilterUnifiedWithDecay>(double ts,double dcAMPLevel,double dCA, double dDA,double h_thres)
 {
+
 const int iPwr = g_iHillOrder;
 double h_hill = pow(dCA,iPwr)/( pow(dCA,iPwr)+pow(h_thres,iPwr) );
 
@@ -90,9 +92,54 @@ if (dIn > 0.0) //The solution to u'[t] = s(um-u[t]) with u[0]=H where H is the v
 
 dcAMPLevel				-= 0.5*(double)g_fcAMPDecay*dcAMPLevel; //Do Half Decay After;
 
+
+
 return dcAMPLevel;
 }
 */
+
+/*Had to remove Template definition due to GCC bug in bitmap.c*/
+double getcAMP(double ts,double dcAMPLevel,double dCA, double dDA,double h_thres)
+{
+const int iPwr 			= g_iHillOrder;
+double h_hill  			= 0.0;
+
+double dIn 				= g_fInjectionGain*dDA*h_hill;
+
+//assert(!_isnan(dCA));
+//hill is always +ve for n->even but goes to infinity for odd n.
+//Negative signals mean low CA and thus should not activate cAMP.
+if (dCA< 0.0)//Convert to odd function
+	h_hill = 0.0;//-pow(dCA,iPwr)/( pow(dCA,iPwr) + pow(h_thres,iPwr) );
+else
+	h_hill = pow(dCA,iPwr)/( pow(dCA,iPwr) + pow(h_thres,iPwr) );
+
+
+
+//Break it in 10 (4 For speed gain) small steps - STUPID BUT WORKS
+const int steps = 10.0;
+const double frac = (1.0/steps);
+for (int i=0;i<steps;i++)	{
+	dIn						= frac*g_fInjectionGain*dDA*h_hill;
+	dcAMPLevel				-= 0.5*frac*(double)g_fcAMPDecay*dcAMPLevel; //Do Decay;
+	dcAMPLevel  			+= dIn*(g_dcAMPMax - dcAMPLevel);
+	dcAMPLevel				-= 0.5*frac*(double)g_fcAMPDecay*dcAMPLevel; //Do Decay;
+	//dcAMPLevel  			+= (dcAMPMax - dcAMPLevel)*exp(-dIn) + dIn; *}
+}
+
+/*
+//Problem with Fast decays.. Better split decay step in two
+dcAMPLevel				-= 0.5*(double)g_fcAMPDecay*dcAMPLevel; //Do Half Decay before;
+//Here Used to save time not to calculate without inpu
+if (dIn > 0.0) //The solution to u'[t] = s(um-u[t]) with u[0]=H where H is the value just before repetition
+	dcAMPLevel					= dIn*(1.0-dcAMPLevel); //This Works For Filter
+
+dcAMPLevel				-= 0.5*(double)g_fcAMPDecay*dcAMPLevel; //Do Half Decay After;
+*/
+
+return dcAMPLevel;
+}
+
 
 /*
  * Returns -1 if the pattern has not been stored in the X vector Before

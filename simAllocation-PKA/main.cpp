@@ -528,7 +528,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	slogFiles.push_back(fOutName);
 	/////////// END OF LOG FILE INIT //////////////////////////
 
-	string sAggregateFile = fOutName;
+	string sAggregateFile;
 	sAggregateFile += boost::lexical_cast<std::string>(modelType);
 	sAggregateFile.append("_AllocSignalVsRepTime-PKA_n");
 	sAggregateFile += boost::lexical_cast<std::string>(FilterSize);
@@ -541,11 +541,13 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	sAggregateFile.append(".dat");
 
 	cout << "Signal Output Files: " <<  sAggregateFile << endl; //Tell User Which Output file we are using
-	ofstream ofile(sAggregateFile.c_str(), ios::out ); //Open Data File
-	if (!ofile.is_open())
+	ofstream* pfile = openfile(fOutName,sAggregateFile,ios::out);
+
+	//ofstream* ofile(sAggregateFile.c_str(), ios::out ); //Open Data File
+	if (!pfile->is_open())
 		ERREXIT(101,"Could Not Open output files. Check directories");
 	//Write Header
-	ofile << "#RepTime\tAllocSNR\tAllocSignal\tAllocVariance\tAllocThreshold\tPKALevel\tPKAVariance\tSNR_FPT" << endl;
+	(*pfile) << "#RepTime\tAllocSNR\tAllocSignal\tAllocVariance\tAllocThreshold\tPKALevel\tPKAVariance\tSNR_FPT" << endl;
 
 	const float MaxRepTime = 100+PeakTime;
 	int iRepIntervalStep = 5; //Is in Numerical Model Mathematica Results
@@ -654,7 +656,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 			break;
 		}
 
-		ofile << iabsRepTime << "\t"<< AllocSignal.pairAllocSignalVal.first /sqrt(AllocSignal.pairAllocSignalVal.second) <<
+		(*pfile) << iabsRepTime << "\t"<< AllocSignal.pairAllocSignalVal.first /sqrt(AllocSignal.pairAllocSignalVal.second) <<
 				"\t" << AllocSignal.pairAllocSignalVal.first << "\t"
 				<< AllocSignal.pairAllocSignalVal.second << "\t"
 				<< g_fAllocHThres << "\t"
@@ -674,6 +676,6 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 		dRepIntervalsecs += iRepIntervalStep; //increment the repetition Time
 	}
 
-ofile.close();
+pfile->close();
 
 }
