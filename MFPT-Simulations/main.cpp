@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 	po::store(po::parse_command_line(argc,  argv, all), vm);
 	po::notify(vm);
 
-	///Add List Of Simulation Types
+	///Steup Add List Of Simulation Types And Target Models
 	mapSimType["simMemSignalinTime"] = 1;
 	mapSimType["simMemSignalsFromFile"] = 2;
 	mapSimType["PerceptronTest"] = 3;
@@ -122,6 +122,7 @@ int main(int argc, char* argv[])
 
 	trackedMemIndex = initPeriod;
 
+	//Check PAram Input
 	if (vm.count("simulation"))
 		simulationType = mapSimType[simulationName];
 	else
