@@ -226,7 +226,8 @@ ICascadeSynapse* allocSynapseArraySingleQ<synapseSingleUpdater>(char*buffer,int 
 			new(pseg) synapseSingleUpdater(iCascadeSize,IndexOfTransitionProb,startStrength, prng_r);
 		}
 		else//Starting Strength is Random
-			new(pseg) synapseSingleUpdater(g_UpdaterQ,prng_r);
+			new(pseg) synapseSingleUpdater(g_UpdaterQ,prng_r,g_MetaplasticitySampleSize);
+
 			//new(pseg) synapseSingleFilterUnifiedWithDecay(iCascadeSize,IndexOfTransitionProb,ICascadeSynapse::SYN_STRENGTH_NOTSET, prng_r);
 	}
 

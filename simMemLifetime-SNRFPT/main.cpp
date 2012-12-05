@@ -22,7 +22,7 @@ int g_FilterTh 			= 6; //Used for Single Filter Experiments
 double g_FilterDecay 	= 0.0; //0.0916986;
 uint g_AllocRefraction	= 0;//0.375*g_FilterTh*g_FilterTh;
 uint g_timeToSampleMetaplasticity	= 10; //Used by Sim code as the time to sample the number of metaplastic transitions
-uint g_MetaplasticitySampleSize		= 1;//Sim Code Stops saving to the distribution of same threshold crossings Once this number of samples has been gathered
+uint g_MetaplasticitySampleSize		= 0;//Sim Code Stops saving to the distribution of same threshold crossings Once this number of samples has been gathered
 double g_UpdaterQ 		= 1.0/(g_FilterTh*g_FilterTh); //The single Updater Transitions - Make sure its in double format
 string g_outputTag;
 

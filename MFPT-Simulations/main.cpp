@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
 		ofile[j] = openfile( buffTargetDir, buffFilename );
 
 		//////LOG File Opened////
-		*ofile[j] << "#Size\tMFTP\tSTDVar\tlSigThres" << endl;
+		*ofile[j] << "#Size\tMFTP\tSTDev\tlSigThres" << endl;
 	}
 
 	cout << "Running Simulation: " << simulationName << " Output " <<  buffTargetDir.c_str() << buff << endl;

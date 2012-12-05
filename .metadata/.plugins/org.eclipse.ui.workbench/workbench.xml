@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="23" version="2.0">
+<workbench progressCount="33" version="2.0">
 <workbenchAdvisor/>
 <window height="768" maximized="true" width="1024" x="0" y="27">
 <fastViewData fastViewLocation="1024"/>
@@ -8,15 +8,15 @@
 </perspectiveBar>
 <coolbarLayout>
 <coolItem id="group.file" itemType="typeGroupMarker"/>
-<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="166" y="30"/>
+<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="154" y="34"/>
 <coolItem id="additions" itemType="typeGroupMarker"/>
-<coolItem id="org.eclipse.cdt.ui.CElementCreationActionSet" itemType="typeToolBarContribution" x="156" y="30"/>
-<coolItem id="org.eclipse.cdt.ui.buildConfigActionSet" itemType="typeToolBarContribution" x="82" y="30"/>
-<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="120" y="30"/>
-<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="104" y="30"/>
-<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="96" y="30"/>
+<coolItem id="org.eclipse.cdt.ui.CElementCreationActionSet" itemType="typeToolBarContribution" x="148" y="34"/>
+<coolItem id="org.eclipse.cdt.ui.buildConfigActionSet" itemType="typeToolBarContribution" x="82" y="34"/>
+<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="148" y="34"/>
+<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="100" y="34"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="116" y="34"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
-<coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="184" y="30"/>
+<coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="172" y="34"/>
 <coolItem id="group.editor" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.cdt.ui.editor.CEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="group.help" itemType="typeGroupMarker"/>
@@ -32,17 +32,15 @@
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
+<part id="4"/>
+<part id="5"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
-<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" partName="main.cpp" path="/home/kostasl/CodeProjects/synapticMemory/simAllocation-PKA/main.cpp" title="main.cpp" tooltip="simAllocation-PKA/main.cpp" workbook="DefaultEditorWorkbook">
-<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simAllocation-PKA/main.cpp"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="14098" selectionTopPixel="3900"/>
-</editor>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="ContinuousTimeExperiments.h" partName="ContinuousTimeExperiments.h" path="/home/kostasl/CodeProjects/synapticMemory/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h" title="ContinuousTimeExperiments.h" tooltip="simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h" workbook="DefaultEditorWorkbook">
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="ContinuousTimeExperiments.h" partName="ContinuousTimeExperiments.h" path="/home/kostasl/synapticMemory/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h" title="ContinuousTimeExperiments.h" tooltip="simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="31" selectionOffset="20584" selectionTopPixel="6660"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="28051" selectionTopPixel="8806"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" partName="main.cpp" path="/home/kostasl/CodeProjects/synapticMemory/MFPT-Simulations/main.cpp" title="main.cpp" tooltip="MFPT-Simulations/main.cpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/MFPT-Simulations/main.cpp"/>
@@ -52,42 +50,24 @@
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simMemLifetime-SNRFPT/common.h"/>
 <editorState selectionHorizontalPixel="0" selectionLength="13" selectionOffset="5851" selectionTopPixel="1938"/>
 </editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="ContinuousTimeExperiments.cpp" partName="ContinuousTimeExperiments.cpp" path="/home/kostasl/synapticMemory/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.cpp" title="ContinuousTimeExperiments.cpp" tooltip="simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.cpp"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="3224" selectionTopPixel="1458"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" partName="main.cpp" path="/home/kostasl/synapticMemory/simAllocation-PKA/main.cpp" title="main.cpp" tooltip="simAllocation-PKA/main.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simAllocation-PKA/main.cpp"/>
+<editorState selectionHorizontalPixel="0" selectionLength="8" selectionOffset="28256" selectionTopPixel="4664"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="common.h" partName="common.h" path="/home/kostasl/synapticMemory/simAllocation-PKA/common.h" title="common.h" tooltip="simAllocation-PKA/common.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simAllocation-PKA/common.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5059" selectionTopPixel="1682"/>
+</editor>
 </editors>
 <views>
-<view id="org.eclipse.ui.navigator.ProjectExplorer" partName="Project Explorer">
-<viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.cdt.ui.cview.groupincludes="false" org.eclipse.cdt.ui.cview.groupmacros="false" org.eclipse.cdt.ui.editor.CUChildren="true" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
-</view>
-<view id="org.eclipse.ui.views.PropertySheet" partName="Properties">
-<viewState/>
-</view>
-<view id="org.eclipse.cdt.make.ui.views.MakeView" partName="Make Target"/>
 <view id="org.eclipse.debug.ui.DebugView" partName="Debug">
 <viewState/>
 </view>
-<view id="org.eclipse.ui.views.ProblemView" partName="Problems">
-<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
-<expanded>
-<category IMemento.internal.id="Errors (2 items)"/>
-<category IMemento.internal.id="Warnings"/>
-<category IMemento.internal.id="Errors"/>
-</expanded>
-<columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="363" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
-<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
-</viewState>
-</view>
-<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
-<viewState/>
-</view>
 <view id="org.eclipse.cdt.debug.ui.executablesView" partName="Executables"/>
-<view id="org.eclipse.mylyn.tasks.ui.views.tasks" partName="Task List"/>
-<view id="org.eclipse.debug.ui.BreakpointView" partName="Breakpoints"/>
-<view id="org.eclipse.debug.ui.VariableView" partName="Variables">
-<viewState/>
-</view>
 <view id="org.eclipse.ui.views.TaskList" partName="Tasks">
 <viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.completionField" categoryGroup="none" markerContentGenerator="org.eclipse.ui.ide.tasksGenerator" partName="Tasks">
 <columnWidths org.eclipse.ui.ide.completionField="40" org.eclipse.ui.ide.descriptionField="350" org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="462" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.priorityField="35" org.eclipse.ui.ide.resourceField="105"/>
@@ -100,11 +80,40 @@
 <visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
 </viewState>
 </view>
+<view id="org.eclipse.debug.ui.VariableView" partName="Variables">
+<viewState/>
+</view>
+<view id="org.eclipse.debug.ui.BreakpointView" partName="Breakpoints"/>
 <view id="org.eclipse.ui.views.ContentOutline" partName="Outline">
 <viewState/>
 </view>
+<view id="org.eclipse.ui.navigator.ProjectExplorer" partName="Project Explorer">
+<viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.cdt.ui.cview.groupincludes="false" org.eclipse.cdt.ui.cview.groupmacros="false" org.eclipse.cdt.ui.editor.CUChildren="true" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
+</view>
+<view id="org.eclipse.ui.views.PropertySheet" partName="Properties">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.views.ProblemView" partName="Problems">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
+<expanded>
+<category IMemento.internal.id="Errors (100 of 178 items)"/>
+<category IMemento.internal.id="Errors"/>
+<category IMemento.internal.id="Warnings"/>
+</expanded>
+<columnWidths org.eclipse.ui.ide.locationField="105" org.eclipse.ui.ide.markerType="363" org.eclipse.ui.ide.pathField="140" org.eclipse.ui.ide.resourceField="105" org.eclipse.ui.ide.severityAndDescriptionField="350"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
+<viewState/>
+</view>
+<view id="org.eclipse.mylyn.tasks.ui.views.tasks" partName="Task List"/>
 </views>
-<perspectives activePart="org.eclipse.ui.navigator.ProjectExplorer" activePerspective="org.eclipse.cdt.ui.CPerspective">
+<perspectives activePart="org.eclipse.cdt.ui.editor.CEditor" activePerspective="org.eclipse.cdt.ui.CPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.ui.internal.ide.application.ResourcePerspective" id="org.eclipse.ui.resourcePerspective" label="Resource"/>
 <alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
@@ -206,6 +215,9 @@
 <alwaysOnActionSet id="org.eclipse.cdt.ui.OpenActionSet"/>
 <alwaysOnActionSet id="org.eclipse.cdt.ui.CodingActionSet"/>
 <alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.presentation"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.profileActionSet"/>
+<alwaysOnActionSet id="org.eclipse.linuxtools.changelog.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.linuxtools.lttng.ui.actionSet"/>
 <show_view_action id="org.eclipse.ui.console.ConsoleView"/>
 <show_view_action id="org.eclipse.search.ui.views.SearchView"/>
 <show_view_action id="org.eclipse.ui.views.ContentOutline"/>
@@ -233,8 +245,6 @@
 <hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
 <hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
 <view id="org.eclipse.ui.navigator.ProjectExplorer"/>
-<view id="org.eclipse.ui.views.ContentOutline"/>
-<view id="org.eclipse.cdt.make.ui.views.MakeView"/>
 <view id="org.eclipse.ui.views.ProblemView"/>
 <view id="org.eclipse.ui.views.TaskList"/>
 <view id="org.eclipse.ui.console.ConsoleView"/>
@@ -260,18 +270,16 @@
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.26767942" ratioLeft="511" ratioRight="1398" relationship="2" relative="topLeft"/>
-<info folder="true" part="topRight" ratio="0.7677419" ratioLeft="1071" ratioRight="324" relationship="2" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
-<page content="org.eclipse.cdt.make.ui.views.MakeView" label="Make Target"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
-<part id="1"/>
-</presentation>
+<info part="org.eclipse.ui.editorss" ratio="0.18933493" ratioLeft="316" ratioRight="1353" relationship="2" relative="topLeft"/>
+<info folder="true" part="topRight" ratio="0.7748918" ratioLeft="895" ratioRight="260" relationship="2" relative="org.eclipse.ui.editorss">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
+<page content="org.eclipse.cdt.make.ui.views.MakeView" label="LabelNotFound"/>
+<page content="org.eclipse.pde.runtime.LogView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@b95d2f1" ratio="0.5647443" ratioLeft="519" ratioRight="400" relationship="4" relative="org.eclipse.ui.editorss">
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@b95d2f1" ratio="0.71925753" ratioLeft="620" ratioRight="242" relationship="4" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
@@ -342,29 +350,20 @@
 <view id="org.eclipse.debug.ui.BreakpointView"/>
 <view id="org.eclipse.ui.views.ContentOutline"/>
 <fastViewBars/>
-<layout>
-<mainWindow>
-<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">
-<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">
-<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.PackageExplorer" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.ui.TypeHierarchy" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
-<folder appearance="2" expanded="2">
-<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.63003266" ratioLeft="579" ratioRight="340" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
-<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
-<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.63003266" ratioLeft="579" ratioRight="340" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
 <page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.cdt.debug.ui.executablesView" label="Executables"/>
@@ -373,8 +372,7 @@
 <page content="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" label="LabelNotFound"/>
 <page content="org.eclipse.jdt.debug.ui.DisplayView" label="LabelNotFound"/>
 <page content="org.eclipse.search.SearchResultView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
@@ -382,27 +380,21 @@
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.44862518" ratioLeft="310" ratioRight="381" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
-<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="org.eclipse.ui.editorss">
-<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
-<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
 <page content="org.eclipse.ant.ui.views.AntView" label="LabelNotFound"/>
 <page content="org.eclipse.cdt.dsf.gdb.ui.tracecontrol.view" label="LabelNotFound"/>
 <page content="org.eclipse.cdt.dsf.debug.ui.disassembly.view" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="956" ratioRight="956" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
-<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">
-<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
+<info folder="true" part="org.eclipse.debug.internal.ui.ToolsFolderView" ratio="0.5" ratioLeft="956" ratioRight="956" relationship="2" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">&#x0A;<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
 <page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
 <page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.RegisterView" label="LabelNotFound"/>
 <page content="org.eclipse.cdt.debug.ui.SignalsView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.ModuleView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
@@ -414,153 +406,164 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simAllocation-PKA/main.cpp"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simAllocation-PKA/main.cpp"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simAllocation-PKA/main.cpp"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/MFPT-Simulations/main.cpp"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simMemLifetime-SNRFPT/common.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simAllocation-PKA/main.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simAllocation-PKA/common.h"/>
 </editors>
-<item historyLabel="main.cpp" index="0">
-<position info="not_deleted" x="7926" y="12"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="0" y="0"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="16449" y="23"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="34723" y="0"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="16449" y="23"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="29712" y="0"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="14518" y="0"/>
-</item>
-<item historyLabel="main.cpp" index="2">
-<position info="not_deleted" x="2521" y="2"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="13801" y="0"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="29714" y="0"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="13827" y="7"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="14474" y="0"/>
-</item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
-<position info="not_deleted" x="13827" y="7"/>
-</item>
-<item historyLabel="main.cpp" index="3">
-<position info="not_deleted" x="2521" y="2"/>
-</item>
-<item historyLabel="main.cpp" index="3">
-<position info="not_deleted" x="14936" y="0"/>
-</item>
-<item historyLabel="main.cpp" index="3">
+<item historyLabel="main.cpp" index="1">
 <position info="not_deleted" x="16006" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="3">
+<item historyLabel="main.cpp" index="1">
 <position info="not_deleted" x="28695" y="0"/>
 </item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
+<item historyLabel="ContinuousTimeExperiments.h" index="0">
 <position info="not_deleted" x="14507" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="3">
+<item historyLabel="main.cpp" index="1">
 <position info="not_deleted" x="27953" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="6322" y="36"/>
 </item>
-<item historyLabel="main.cpp" index="3">
+<item historyLabel="main.cpp" index="1">
 <position info="not_deleted" x="11856" y="36"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="6485" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="3">
+<item historyLabel="main.cpp" index="1">
 <position info="not_deleted" x="11777" y="56"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="6485" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7675" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7541" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7576" y="8"/>
 </item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
+<item historyLabel="ContinuousTimeExperiments.h" index="0">
 <position info="not_deleted" x="20574" y="8"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7610" y="0"/>
 </item>
-<item historyLabel="common.h" index="5">
+<item historyLabel="common.h" index="3">
 <position info="not_deleted" x="5851" y="13"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7610" y="0"/>
 </item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
+<item historyLabel="ContinuousTimeExperiments.h" index="0">
 <position info="not_deleted" x="20584" y="31"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7610" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7648" y="0"/>
 </item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
+<item historyLabel="ContinuousTimeExperiments.h" index="0">
 <position info="not_deleted" x="20584" y="31"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7653" y="0"/>
 </item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
+<item historyLabel="ContinuousTimeExperiments.h" index="0">
 <position info="not_deleted" x="20584" y="31"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7675" y="0"/>
 </item>
-<item historyLabel="ContinuousTimeExperiments.h" index="1">
+<item historyLabel="ContinuousTimeExperiments.h" index="0">
 <position info="not_deleted" x="20584" y="31"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7675" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="6147" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="1328" y="19"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7684" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7730" y="0"/>
 </item>
-<item historyLabel="main.cpp" index="3">
+<item historyLabel="main.cpp" index="1">
 <position info="not_deleted" x="11777" y="56"/>
 </item>
-<item historyLabel="main.cpp" index="4">
+<item historyLabel="main.cpp" index="2">
 <position info="not_deleted" x="7506" y="223"/>
 </item>
-<item active="true" historyLabel="main.cpp" index="3">
+<item historyLabel="main.cpp" index="1">
 <position info="not_deleted" x="6366" y="4"/>
+</item>
+<item historyLabel="ContinuousTimeExperiments.h" index="4">
+<position info="not_deleted" x="19209" y="31"/>
+</item>
+<item historyLabel="ContinuousTimeExperiments.cpp" index="5">
+<position info="not_deleted" x="25" y="0"/>
+</item>
+<item historyLabel="ContinuousTimeExperiments.h" index="4">
+<position info="not_deleted" x="746" y="0"/>
+</item>
+<item historyLabel="ContinuousTimeExperiments.cpp" index="5">
+<position info="not_deleted" x="2287" y="7"/>
+</item>
+<item historyLabel="ContinuousTimeExperiments.h" index="4">
+<position info="not_deleted" x="13905" y="0"/>
+</item>
+<item historyLabel="ContinuousTimeExperiments.cpp" index="5">
+<position info="not_deleted" x="3056" y="0"/>
+</item>
+<item historyLabel="ContinuousTimeExperiments.h" index="4">
+<position info="not_deleted" x="13905" y="0"/>
+</item>
+<item historyLabel="ContinuousTimeExperiments.cpp" index="5">
+<position info="not_deleted" x="3224" y="0"/>
+</item>
+<item historyLabel="main.cpp" index="6">
+<position info="not_deleted" x="28837" y="0"/>
+</item>
+<item historyLabel="common.h" index="7">
+<position info="not_deleted" x="4563" y="8"/>
+</item>
+<item historyLabel="main.cpp" index="6">
+<position info="not_deleted" x="28259" y="0"/>
+</item>
+<item historyLabel="common.h" index="7">
+<position info="not_deleted" x="4563" y="8"/>
+</item>
+<item historyLabel="main.cpp" index="6">
+<position info="not_deleted" x="28259" y="0"/>
+</item>
+<item historyLabel="common.h" index="7">
+<position info="not_deleted" x="4563" y="8"/>
+</item>
+<item historyLabel="main.cpp" index="6">
+<position info="not_deleted" x="27601" y="0"/>
+</item>
+<item historyLabel="common.h" index="7">
+<position info="not_deleted" x="5059" y="0"/>
+</item>
+<item historyLabel="main.cpp" index="6">
+<position info="not_deleted" x="28256" y="8"/>
+</item>
+<item active="true" historyLabel="ContinuousTimeExperiments.h" index="4">
+<position info="not_deleted" x="13905" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -569,6 +572,7 @@
 <actionBarAdvisor/>
 <trimLayout>
 <trimArea IMemento.internal.id="128">
+<trimItem IMemento.internal.id="org.eclipse.mylyn.tasks.ui.trim.container"/>
 <trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
 </trimArea>
 <trimArea IMemento.internal.id="1024">
@@ -579,6 +583,15 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="common.h" tooltip="simAllocation-PKA/common.h">
+<persistable path="/simAllocation-PKA/common.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="simAllocation-PKA/main.cpp">
+<persistable path="/simAllocation-PKA/main.cpp"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ContinuousTimeExperiments.cpp" tooltip="simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.cpp">
+<persistable path="/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.cpp"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="common.h" tooltip="simMemLifetime-SNRFPT/common.h">
 <persistable path="/simMemLifetime-SNRFPT/common.h"/>
 </file>
@@ -587,9 +600,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ContinuousTimeExperiments.h" tooltip="simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h">
 <persistable path="/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.h"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="simAllocation-PKA/main.cpp">
-<persistable path="/simAllocation-PKA/main.cpp"/>
 </file>
 </mruList>
 </workbench>
