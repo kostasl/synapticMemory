@@ -451,7 +451,8 @@ void synapseSingleFilterUnifiedWithDecay::reset()
 
 	//super::reset();//If we Re-init from Non zero position Then The escape time through any boundary Reduces
 		//initialiseFilterState(); //Reset running Sum - Do not - Let it be as it has been Inited by previous experience-Not the case if starting over fixed position
-	miStartIndex = miCascadeIndex; //Reset Index
+
+	//miStartIndex = miCascadeIndex; //Reset Index ??What is the poinht of this????
 	//penumStrength = penumStartStrength;
 
 

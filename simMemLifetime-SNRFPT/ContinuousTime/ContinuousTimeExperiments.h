@@ -575,12 +575,16 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 
 	char buffObjName[250];
 	T::getTypeName(buffObjName);
+	//string strDir(MFPTIMESSNR_OUTPUT_DIRECTORY);
+	//strDir.append(buffObjName);
+
+	char buffFilename[400];
 	//////LOG File Opened////
 
 
 	double dCovar,dsqE;
 ///RECORD STATISTICS FROM EACH TRACKED PATTERN
-	char buffFilename[400];
+
 	int i = 0; //TrackedMem INdex increment
 
 	//MFPT
@@ -589,6 +593,7 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 		//strcpy(buffFilename,slogFiles[4].c_str());
 		sprintf(buffFilename,(const char*)slogFiles[4].c_str(), itTracked->first-uiInitPatterns);
 		cout << "Signal Output Files: " <<  buffFilename << endl; //Tell User Which Output file we are using
+
 		ofstream ofile(buffFilename, ios::out ); //Open Data File
 		if (!ofile.is_open())
 			ERREXIT(100,"Could Not Open output files. Check directories");

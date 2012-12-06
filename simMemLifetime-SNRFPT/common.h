@@ -107,14 +107,14 @@ static void errexit(int code,uint lineno ,const char* srcFile,const char* str)
 
 using namespace std;
 
-static std::ofstream* openfile(string strDir,string strFile)
+
+static std::ofstream* openfile(string strDir,string strFile,ios::openmode omode)
 {
-	string strbuff(strDir);
+	string strbuff(strFile);
 	strbuff.append(strFile);
 
-
-
-	std::ofstream* file = new ofstream(strbuff.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
+	cout << strbuff << endl;
+	std::ofstream* file = new ofstream(strbuff.c_str(), omode ); //Open Data File for Appending So you dont Overwrite Previous Results
 		if (!file->is_open())
 		{
 			cerr << strDir;
@@ -133,6 +133,7 @@ static std::ofstream* openfile(string strDir,string strFile)
 
 return file;
 }
+
 ///Simulation Global Variables
 //gsl_rng * rng_r; //Used by GSL Rand Num Generator
 extern char FilePath[_MAX_PATH]; // _MAX_PATH represents the longest possible path on this OS

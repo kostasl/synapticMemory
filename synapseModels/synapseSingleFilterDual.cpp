@@ -58,7 +58,6 @@ synapseSingleFilterDual::synapseSingleFilterDual(int piLThres,int piHThres,doubl
 	//miRDFilterValue = gsl_ran_binomial (mprng,0.5,miLThres-1);
 
 
-
 	double r = gsl_rng_uniform(mprng);
 	if (r<0.5)
 		penumStartStrength = penumStrength = SYN_STRENGTH_STRONG;
@@ -240,14 +239,12 @@ int synapseSingleFilterDual::lThresReached()
 		switchReset();
 		Ret = -1;
 	}
-	else //P - Transitions
+	else
 	{
-		//Reset Filter
-		//Reached Terminal Then Just reflect
-		//miRDFilterValue = miLThres; //Not required as we can ignore this filters state
-		miStartIndex = miCascadeIndex + 1; //Used so Escape time Test Can Detect the change
-		//miRDFilterValue = 0;
-		reInjectFilterStateToCascadeState();
+		Ret = 0;//No Transition
+		reInjectFilterStateToCascadeState(); //Reset running Sum
+		miStartIndex = miCascadeIndex+1;//Makes Index Changed Flag true
+		uiSameThresholdTransitionCounter++;// Counter - Used for Statistics Or Allocation
 	}
 
 	return Ret;
@@ -262,13 +259,13 @@ int synapseSingleFilterDual::hThresReached()
 		switchReset();
 		Ret = -1;
 	}else
-	{//This is a p transition
-		//Reached Terminal Then Just reflect
-		reInjectFilterStateToCascadeState();
-		//miRPFilterValue = miHThres; //Not required as we can ignore this filters state
-		miStartIndex = miCascadeIndex + 1;//Used so Escape time Test Can Detect the change
-		//miRPFilterValue = 0;
+	{
+		Ret = 0;//No Transition
+		reInjectFilterStateToCascadeState(); //Reset running Sum - No reflecting Boundary
+		miStartIndex = miCascadeIndex+1; //Makes Index Changed Flag true
+		uiSameThresholdTransitionCounter++; //Metaplasticity Counter - Used for Statistics Or Allocation
 	}
+
 
 	return Ret;
 }
@@ -350,16 +347,17 @@ bool synapseSingleFilterDual::isMonitored() const
 //Method called by testEscapeTime
 void synapseSingleFilterDual::reset()
 {
+	ICascadeSynapse::reset(); //Randomizes Start Strength, Unfreezeplasticity
 
-	penumStrength = (SYN_STRENGTH_STATE)penumStartStrength;
-	miStartIndex = miCascadeIndex; //Index is frozen in this CLass - So this is used to detect changes in P Transitions
+	//penumStrength = (SYN_STRENGTH_STATE)penumStartStrength;
+	//miStartIndex = miCascadeIndex; //Index is frozen in this CLass - So this is used to detect changes in P Transitions
 	//mbStrengthChanged = false;
 	//mbCascadeIndexChanged = false;
 	mbNoPlasticity = false;
 	mbIsMonitored = false;
 
 	//setFilterThresholds();
-	reInjectFilterStateToCascadeState();
+	//reInjectFilterStateToCascadeState();
 	//initialiseFilterState(); //Like Starting Over - BUT If we Re-init from Non zero position Then The escape time through any boundary Reduces
 	 //The reset is only called by the testEscapetime Function - And thus it affects the result of this function
 }
@@ -422,30 +420,26 @@ void synapseSingleFilterDual::initialiseFilterState()
 	//Use injection PDF - Here bothe Running Sums Are +Ve and so are the thresholds
 	//They act as counters of +ve and -ve stimuli separetely
 	double p = 0.0;
-	int i; //Iterator
-	const double (*dPDFUsed)[][ciMaxInternalStates]; //Pointer to PDF. If at terminal State then Use The reflecting Boundary PDF
 
 	mbIsMonitored = false;
 
 	//When Not Using a particular Cascade state we set Terminal to 0 - The injection PDF for no decay rate can then be simply calculated
 	//This Injection Assumes HThres is always attached to the PRunning Sum
-	if (((miTerminalIndex) < 1))
-	{
-		if (dPDecayRate == 0 && dDDecayRate == 0) //We know The distribution of the No decay case
+	if (dPDecayRate == 0.0 && dDDecayRate == 0.0) //We know The distribution of the No decay case
 		{
 			miRPFilterValue = miRDFilterValue = 0;//Set To Invalid Value Initially
 			 //The PDF is a rising straight line with a fixed step increase at each step toward threshold
 			const double probPStep = 2.0/(double)(miHThres*miHThres);
 			//const double probDStep = 1/miLThres;
-			double p = 0;
-			for (int i=1;i<miHThres;i++)
+
+		for (int i=1;i<miHThres;i++)
 				p+=(i+1)*probPStep;
 
 			//Inject On one filter
 			assert (miHThres == miLThres);
 			double r = gsl_rng_uniform(mprng);
 			double q = gsl_rng_uniform(mprng);
-			p=0;
+			p=0.0;
 			for (int i=0;i<miHThres;i++)
 			{
 				p+=(i+1)*probPStep;
@@ -455,7 +449,8 @@ void synapseSingleFilterDual::initialiseFilterState()
 					break;
 				}
 			}
-			p = 0;
+
+			p = 0.0;
 			for (int i=0;i<miHThres;i++)
 			{
 				p+=(i+1)*probPStep;
@@ -468,42 +463,9 @@ void synapseSingleFilterDual::initialiseFilterState()
 
 		} //If no Decay
 
-		//miRDFilterValue = 0;
-		//miRPFilterValue = 0;
-		return; //Terminal State
-	}
-
-	//TODO: Add PDF Sets For All Rates -
-	dPDFUsed = (&mdPDF_r100);
-
-	//DO P-Filter State
-	double r = gsl_rng_uniform(mprng);
-	for ( i = 0; i< ciMaxInternalStates;i++)
-	{
-		p += (*dPDFUsed)[miCascadeIndex][i]; //Accumulate the Pdf
-		if (p > r){
-			//Found the spot since r was just exceeded
-			miRPFilterValue = i; //Remove Offset so i=0 becomes state -3 floor(ciMaxInternalStates/2)
-			break;
-		}
-	}
-
-	//Do-D Filter State Init - Same As Above
-	r = gsl_rng_uniform(mprng); //For the other filter now
-	for ( i = 0; i< ciMaxInternalStates;i++)
-	{
-		p += (*dPDFUsed)[miCascadeIndex][i]; //Accumulate the Pdf
-		if (p > r){
-			//Found the spot since r was just exceeded
-			miRDFilterValue = i; //Remove Offset so i=0 becomes state -3 floor(ciMaxInternalStates/2)
-			break;
-		}
-	}
-	//Catch stupid Errors
-	if(( (miRDFilterValue >= miLThres) || (miRPFilterValue >= miHThres) ))
-	{
-		assert((miRDFilterValue < miLThres) && ((miRPFilterValue < miHThres)));
-	}
+	//miRDFilterValue = 0;
+	//miRPFilterValue = 0;
+	return;
 
 }
 

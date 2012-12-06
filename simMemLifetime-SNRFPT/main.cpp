@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 	mapSynapseAllocator["synapseSingleFilterDual"] = 4;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
 	//mapSynapseAllocator["cascadeDelayed"]
 	//mapSynapseAllocator["CascadeSamplingFilter"]
-	//mapSynapseAllocator["synapseSingleFilterDual"]
+	mapSynapseAllocator["synapseSingleFilterDual"]	= 5;
 	mapSynapseAllocator["synapseSingleFilterUnifiedWithDecay"] = 8;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>;
 	mapSynapseAllocator["synapseSingleUpdater"] = 9;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleUpdater>;
 	//mapSynapseAllocator["synapseSerialCascade"]
@@ -147,28 +147,35 @@ int main(int argc, char* argv[])
 		ERREXIT(1,"No model argument Specified");
 
 	if (mapSynapseAllocator.find(modelName) == mapSynapseAllocator.end()  )
-	{	ERREXIT(2,"Model name not recognized");}
+	{
+		cout << "Model Name Can be on of:" << endl;
+		for (map<string,int>::iterator it = mapSynapseAllocator.begin(); it!=mapSynapseAllocator.end();++it)
+			cout << it->first << endl;
+
+		ERREXIT(2,"Model name not recognized");}
 	else
 	{
 		modelType = mapSynapseAllocator[modelName];
 	}
 
 	////OPEN OUTPUT FILES To save The point When MEAN signal Drops below SNR=1
-	string buffFilename(MFPTIMESSNR_OUTPUT_DIRECTORY);
-	buffFilename.append(modelName);
 	char buff[100];
-	sprintf(buff,"_FPT-N%d_%d-%d_T%d_ts%.2f.dat",synapsesPopulation,startIndex,endIndex,trials,ts);
-	buffFilename.append(buff);
+		sprintf(buff,"_FPT-N%d_%d-%d_T%d_ts%.2f.dat",synapsesPopulation,startIndex,endIndex,trials,ts);
 
-	cout << "@ Simulation " << simulationName << " Output File:" << buffFilename.c_str() << endl;
-	ofstream ofile(buffFilename.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
+	string strDir(MFPTIMESSNR_OUTPUT_DIRECTORY);
+	string strFilename(modelName);
+	strFilename.append(buff);
 
-	if (!ofile.is_open())
+	cout << "@ Simulation " << simulationName << " Output File:" << (strDir + strFilename) << endl;
+	ofstream* ofile = openfile(strDir,strFilename,ios::app);
+	//ofstream ofile(buffFilename.c_str(),  ); //Open Data File for Appending So you dont Overwrite Previous Results
+
+	if (!ofile->is_open())
 		ERREXIT(errno,"Could not Open output file");
 
 	//////LOG File Opened////
-	ofile << "#First Passage Time Is where SNR=1 - That is the point where on Avg Signal crosses 0" << endl;
-	ofile << "#Size\tMSFPT" << endl;
+	(*ofile) << "#First Passage Time Is where SNR=1 - That is the point where on Avg Signal crosses 0" << endl;
+	(*ofile) << "#Size\tMSFPT" << endl;
 
 	double dMSFPT;
 	//For Cascade Indexes
@@ -178,11 +185,11 @@ int main(int argc, char* argv[])
 		 g_UpdaterQ = 1.0/(g_FilterTh*g_FilterTh);
 
 		 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,vdRepTime,i,synapsesPopulation,lSimtimeSeconds,dEncodingRate,inputFile);
-		 ofile << i << "\t" << dMSFPT << endl;
+		 (*ofile) << i << "\t" << dMSFPT << endl;
 		//Switch the Simulation Type
 	 }//Loop For Each Cascade Index
 
-	 ofile.close();
+	 ofile->close();
   ///Measure Duration
   finish = clock();
   ///Print Duration of Run - //TODO: This gives the wrong Time When using Threads!
@@ -261,6 +268,16 @@ case 3: //Cascade Filter with decay
 	 //Also Available : simMemSignalinContinuousTime
 	 dMFPT = simRepetitionAllocation<synapseCascadeFilterUnifiedWithDecay,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
+
+case 5: //Single Filter Dual
+	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
+	 makeLogFileNames<synapseSingleFilterDual>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
+	 //(pFunct pF, int iSynCount,int iCascadeSize,unsigned int iSimTime,unsigned int ciInitPeriod,double mdRate, double dFp=0.5)
+	 //Also Available : simMemSignalinContinuousTime
+	 dMFPT = simRepetitionAllocation<synapseSingleFilterDual,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
+break;
+
+
 case 7:
 	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
 	 makeLogFileNames<synapseSingleFilterDual>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);

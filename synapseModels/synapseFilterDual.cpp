@@ -579,15 +579,22 @@ bool synapseFilterDual::isMonitored() const
 void synapseFilterDual::reset()
 {
 
+	ICascadeSynapse::reset(); //Randomizes Start Strength, Unfreezeplasticity
+
+	//super::reset();//If we Re-init from Non zero position Then The escape time through any boundary Reduces
+		//initialiseFilterState(); //Reset running Sum - Do not - Let it be as it has been Inited by previous experience-Not the case if starting over fixed position
+	miStartIndex = miCascadeIndex; //Reset Index
+
 	penumStrength = (SYN_STRENGTH_STATE)penumStartStrength;
+
 	miCascadeIndex	= miStartIndex;
 	//mbStrengthChanged = false;
 	//mbCascadeIndexChanged = false;
 	mbNoPlasticity = false;
 	mbIsMonitored = false;
 
-	setFilterThresholds();
-	reInjectFilterStateToCascadeState();
+	//setFilterThresholds();
+	//reInjectFilterStateToCascadeState();
 	//initialiseFilterState(); //Like Starting Over - BUT If we Re-init from Non zero position Then The escape time through any boundary Reduces
 	 //The reset is only called by the testEscapetime Function - And thus it affects the result of this function
 }
