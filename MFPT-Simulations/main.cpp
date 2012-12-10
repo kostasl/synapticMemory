@@ -245,7 +245,7 @@ case 3: //Cascade
 	 //Also Available : simMemSignalinContinuousTime
 	 simMFPT<synapseCascadeFilterUnifiedWithDecay,pAllocationFunct>(_oMFPT,_oMFPTVar,pF, synapsesPopulation,CascadeSize,trackedMemIndex, trials,dEncodingRate,repetitionTable,ts);
 break;
-case 7:
+case 4:
 	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
 	 simMFPT<synapseSingleFilterDual,pAllocationFunct>(_oMFPT,_oMFPTVar,pF, synapsesPopulation,CascadeSize,trackedMemIndex, trials,dEncodingRate,repetitionTable,ts);
 break;
@@ -264,7 +264,7 @@ case 11: //U Filter Reflecting Boundary
 break;
 
 default:
-	cerr << "Don't Have a repetition simulation associated with this type "<< modelType << " of object." << endl;
+	cerr << "Don't Have a MFPT simulation associated with this type "<< modelType << " of object." << endl;
 	ERREXIT(500,"Object not recognised for repetition simulation");
 	break;
 }
