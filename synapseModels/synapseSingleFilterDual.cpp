@@ -477,7 +477,7 @@ void  synapseSingleFilterDual::getTypeAsString(char* buff)
 
 void synapseSingleFilterDual::getTypeName(char* buff)
 {
-	strcpy(buff,"_singleFilterDual");
+	strcpy(buff,"_synapseSingleFilterDual");
 }
 
 synapseSingleFilterDual::~synapseSingleFilterDual() {
