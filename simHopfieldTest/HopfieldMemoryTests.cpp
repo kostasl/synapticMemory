@@ -760,7 +760,7 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 		switch (modelType) {
 		case 1: //synapseCascade
 			synapseCascade* oCSyn;
-			C[i - 1] = SearchForNetCapacity<synapseCascade>(oCSyn, iNeuronCount, initPatterns, 0.0f, i, itrials);
+			C[i - 1] = SearchForNetCapacity<synapseCascade>(oCSyn, iNeuronCount, initPatterns, 0.0f, i, trials);
 			break;
 		case 2: //Cascade Filter
 		case 3: //Cascade Filter With Decay
