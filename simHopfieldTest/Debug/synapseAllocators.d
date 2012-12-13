@@ -1,5 +1,5 @@
-synapseAllocators.d synapseAllocators.o: ../synapseAllocators.cpp \
- ../common.h ../synapseAllocators.h ../../synapseModels/ICascadeSynapse.h \
+synapseAllocators.d: ../synapseAllocators.cpp ../common.h \
+ ../synapseAllocators.h ../../synapseModels/ICascadeSynapse.h \
  ../../synapseModels/common.h ../../synapseModels/synapseCascade.h \
  ../../synapseModels/ICascadeSynapse.h \
  ../../synapseModels/synapseSingleUpdater.h \
@@ -9,8 +9,8 @@ synapseAllocators.d synapseAllocators.o: ../synapseAllocators.cpp \
  ../../synapseModels/synapseSingleFilterUnifiedWithDecayReflecting.h \
  ../../synapseModels/synapseCascadeFilterUnifiedWithDecay.h \
  ../../synapseModels/synapseCascadeFilterUnified.h \
- /home/kostasl/synapticMemory/synapseModels/ICascadeSynapse.h \
- /home/kostasl/synapticMemory/synapseModels/synapseCascade.h
+ /home/kostasl/CodeProjects/synapticMemory/synapseModels/ICascadeSynapse.h \
+ /home/kostasl/CodeProjects/synapticMemory/synapseModels/synapseCascade.h
 
 ../common.h:
 
@@ -38,6 +38,6 @@ synapseAllocators.d synapseAllocators.o: ../synapseAllocators.cpp \
 
 ../../synapseModels/synapseCascadeFilterUnified.h:
 
-/home/kostasl/synapticMemory/synapseModels/ICascadeSynapse.h:
+/home/kostasl/CodeProjects/synapticMemory/synapseModels/ICascadeSynapse.h:
 
-/home/kostasl/synapticMemory/synapseModels/synapseCascade.h:
+/home/kostasl/CodeProjects/synapticMemory/synapseModels/synapseCascade.h:

@@ -33,6 +33,8 @@ float g_fPKAAllocThres	= 1000; //Threshold beyong which the integrating PKA sign
 float g_fInjectionGain	= 1.0; //The GAIN of the cAMP production Process
 int g_iHillOrder		= 4; //The threshold function hill order
 uint g_AllocRefraction	= 0;//The Same Threshold Counter Limit required to allocate a synapse --0.375*g_FilterTh*g_FilterTh;
+
+float g_fAllowedRecallError = 0.05;
 string g_outputTag;
 
 

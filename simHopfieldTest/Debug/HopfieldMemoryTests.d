@@ -1,9 +1,8 @@
-HopfieldMemoryTests.d HopfieldMemoryTests.o: ../HopfieldMemoryTests.cpp \
- ../common.h ../util.h \
- /home/kostasl/synapticMemory/synapseModels/ICascadeSynapse.h \
- /home/kostasl/synapticMemory/synapseModels/common.h \
- /home/kostasl/synapticMemory/synapseModels/synapseCascade.h \
- /home/kostasl/synapticMemory/synapseModels/ICascadeSynapse.h \
+HopfieldMemoryTests.d: ../HopfieldMemoryTests.cpp ../common.h ../util.h \
+ /home/kostasl/CodeProjects/synapticMemory/synapseModels/ICascadeSynapse.h \
+ /home/kostasl/CodeProjects/synapticMemory/synapseModels/common.h \
+ /home/kostasl/CodeProjects/synapticMemory/synapseModels/synapseCascade.h \
+ /home/kostasl/CodeProjects/synapticMemory/synapseModels/ICascadeSynapse.h \
  ../InputVectorHandling.h ../HopfieldMemoryTests.h ../synapseAllocators.h \
  ../../synapseModels/ICascadeSynapse.h \
  ../../synapseModels/synapseCascade.h \
@@ -20,13 +19,13 @@ HopfieldMemoryTests.d HopfieldMemoryTests.o: ../HopfieldMemoryTests.cpp \
 
 ../util.h:
 
-/home/kostasl/synapticMemory/synapseModels/ICascadeSynapse.h:
+/home/kostasl/CodeProjects/synapticMemory/synapseModels/ICascadeSynapse.h:
 
-/home/kostasl/synapticMemory/synapseModels/common.h:
+/home/kostasl/CodeProjects/synapticMemory/synapseModels/common.h:
 
-/home/kostasl/synapticMemory/synapseModels/synapseCascade.h:
+/home/kostasl/CodeProjects/synapticMemory/synapseModels/synapseCascade.h:
 
-/home/kostasl/synapticMemory/synapseModels/ICascadeSynapse.h:
+/home/kostasl/CodeProjects/synapticMemory/synapseModels/ICascadeSynapse.h:
 
 ../InputVectorHandling.h:
 

@@ -1,4 +1,4 @@
-main.d main.o: ../main.cpp ../common.h ../synapseAllocators.h \
+main.d: ../main.cpp ../common.h ../synapseAllocators.h \
  ../../synapseModels/ICascadeSynapse.h ../../synapseModels/common.h \
  ../../synapseModels/synapseCascade.h \
  ../../synapseModels/ICascadeSynapse.h \
