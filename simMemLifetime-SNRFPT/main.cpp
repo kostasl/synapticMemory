@@ -248,21 +248,21 @@ slogFiles.push_back(fOutName);
 switch (modelType)
 {
 case 1: //synapseCascade
-	 pF =  (pAllocationFunct)allocSynapseArrayCascade<synapseCascade>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseCascade>;
 	 makeLogFileNames<synapseCascade>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 //(pFunct pF, int iSynCount,int iCascadeSize,unsigned int iSimTime,unsigned int ciInitPeriod,double mdRate, double dFp=0.5)
 	 //Also Available : simMemSignalinContinuousTime
 	 dMFPT = simRepetitionAllocation<synapseCascade,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
 case 2: //Cascade Filter
-	 pF =  (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnified>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseCascadeFilterUnified>;
 	 makeLogFileNames<synapseCascadeFilterUnified>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 //(pFunct pF, int iSynCount,int iCascadeSize,unsigned int iSimTime,unsigned int ciInitPeriod,double mdRate, double dFp=0.5)
 	 //Also Available : simMemSignalinContinuousTime
 	 dMFPT = simRepetitionAllocation<synapseCascadeFilterUnified,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
 case 3: //Cascade Filter with decay
-	 pF =  (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseCascadeFilterUnifiedWithDecay>;
 	 makeLogFileNames<synapseCascadeFilterUnifiedWithDecay>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 //(pFunct pF, int iSynCount,int iCascadeSize,unsigned int iSimTime,unsigned int ciInitPeriod,double mdRate, double dFp=0.5)
 	 //Also Available : simMemSignalinContinuousTime
@@ -270,33 +270,30 @@ case 3: //Cascade Filter with decay
 break;
 
 case 5: //Single Filter Dual
-	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleFilterDual>;
 	 makeLogFileNames<synapseSingleFilterDual>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 //(pFunct pF, int iSynCount,int iCascadeSize,unsigned int iSimTime,unsigned int ciInitPeriod,double mdRate, double dFp=0.5)
 	 //Also Available : simMemSignalinContinuousTime
 	 dMFPT = simRepetitionAllocation<synapseSingleFilterDual,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
-
-
 case 7:
-	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleFilterDual>;
 	 makeLogFileNames<synapseSingleFilterDual>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 dMFPT = simRepetitionAllocation<synapseSingleFilterDual,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
 case 8: //A Single Filter Synapse
-	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleFilterUnifiedWithDecay>;
 	 makeLogFileNames<synapseSingleFilterUnifiedWithDecay>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 dMFPT = simRepetitionAllocation<synapseSingleFilterUnifiedWithDecay,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
-
 case 9: //A Stochastic Updater Synapse
-	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleUpdater>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleUpdater>;
 	 makeLogFileNames<synapseSingleUpdater>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 //simMemSignalinContinuousTime<synapseSingleUpdater,pAllocationFunct>(pF, synapsesPopulation,i,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate);
 	 dMFPT = simRepetitionAllocation<synapseSingleUpdater,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
 case 11: //U Filter Reflecting Boundary
-	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecayReflecting>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleFilterUnifiedWithDecayReflecting>;
 	 makeLogFileNames<synapseSingleFilterUnifiedWithDecayReflecting>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 dMFPT = simRepetitionAllocation<synapseSingleFilterUnifiedWithDecayReflecting,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;

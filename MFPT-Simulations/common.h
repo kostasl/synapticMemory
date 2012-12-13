@@ -111,8 +111,6 @@ static std::ofstream* openfile(string strDir,string strFile)
 	string strbuff(strDir);
 	strbuff.append(strFile);
 
-
-
 	std::ofstream* file = new ofstream(strbuff.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
 		if (!file->is_open())
 		{

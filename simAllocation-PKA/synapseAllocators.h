@@ -29,7 +29,7 @@ extern uint g_AllocRefraction;
 //A Generic Allocation Function For all ICascadeSynapse Type Objects
 //NOTES: This Can be converted to return a T*, But.. Issues with older non template functions arise
 template <class T>
-ICascadeSynapse* allocSynapseArrayCascade(char*buffer,int iSynCount,int iCascadeSize,gsl_rng* prng_r,float StimRate)
+ICascadeSynapse* allocSynapseArray(char*buffer,int iSynCount,int iCascadeSize,gsl_rng* prng_r,float StimRate)
 {
 	  const bool bFixedStartState = false;
 	  ICascadeSynapse::SYN_STRENGTH_STATE startStrength;
@@ -83,8 +83,9 @@ ICascadeSynapse* allocSynapseArrayCascade(char*buffer,int iSynCount,int iCascade
 //////ALLOCATORS OF SINGLE FILTERS ///
 //Allocating Stochastic Updaters At a particular Cascade Index
 //GENERIC
+/*
 template <class T>
-ICascadeSynapse* allocSynapseArraySingleQ(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  const int iCascadeSize = 1;
 	  const bool bFixedStartState = false;
@@ -132,11 +133,12 @@ ICascadeSynapse* allocSynapseArraySingleQ(char*buffer,int iSynCount,int IndexOfT
 	return (ICascadeSynapse*)pmem.first;
 	//Use return_temporary_buffer(buffer) To release
 }
-
+*/
+/*
 
 //Allocating Stochastic Updaters
 template <>
-ICascadeSynapse* allocSynapseArraySingleQ<synapseCascade>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseCascade>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  const int iCascadeSize = 1;
 	  const bool bFixedStartState = false;
@@ -183,10 +185,11 @@ ICascadeSynapse* allocSynapseArraySingleQ<synapseCascade>(char*buffer,int iSynCo
 	return (ICascadeSynapse*)pmem.first;
 	//Use return_temporary_buffer(buffer) To release
 }
+*/
 
 //Allocating Stochastic Updaters
 template <>
-ICascadeSynapse* allocSynapseArraySingleQ<synapseSingleUpdater>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseSingleUpdater>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  const int iCascadeSize = 1;
 	  const bool bFixedStartState = false;
@@ -243,7 +246,7 @@ ICascadeSynapse* allocSynapseArraySingleQ<synapseSingleUpdater>(char*buffer,int 
 
 //TODO:A Better implementation of Allocators would be to take the a sample object as parameter and use Copy constructors to initialiaze the population
 template <>
-ICascadeSynapse* allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecay>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  const bool bFixedStartState = false;
 	  ICascadeSynapse::SYN_STRENGTH_STATE startStrength;
@@ -356,7 +359,7 @@ ICascadeSynapse* allocSynapseArraySingleUFilter(char*& buffer,int iSynCount,int 
 
 //Allocating Stochastic Updaters
 template <>
-ICascadeSynapse* allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecayReflecting>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecayReflecting>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  //const int iCascadeSize = 1; //Used So File Name Reflects the Filter Size
 	  char* pseg; //Generic Pointer to allocated memory
@@ -398,7 +401,7 @@ ICascadeSynapse* allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecayRef
 
 //Allocating Stochastic Updaters DUAL FILTER
 template <>
-ICascadeSynapse* allocSynapseArraySingleQ<synapseSingleFilterDual>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseSingleFilterDual>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  const int iCascadeSize = 1;
 	  const bool bFixedStartState = false;

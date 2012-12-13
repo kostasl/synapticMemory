@@ -36,7 +36,6 @@
 #include <map>
 #include <ctime>
 
-
 // ###GSL Note: For the library to work in MSVC, I had to change to the Multithreaded version WinGsl_md.lib
 // Also under Properties->C/C++->Code GEneration->Run Time Library Change to Multithreaded Debug
 //#include <WinGsl.h >
@@ -105,7 +104,7 @@ static void errexit(int code,uint lineno ,const char* srcFile,const char* str)
 
 static std::ofstream* openfile(string strDir,string strFile,ios::openmode omode)
 {
-	string strbuff(strFile);
+	string strbuff(strDir);
 	strbuff.append(strFile);
 
 	cout << strbuff << endl;

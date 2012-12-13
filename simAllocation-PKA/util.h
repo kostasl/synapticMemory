@@ -61,6 +61,10 @@ void makeLogFileNames(vector<string>& vLogFiles,unsigned int ciInitPeriod,int iC
 
 
 
+//Calcium threshold Lookup table Mapping
+double getCAthres(int theta, int reps,int modelType);
+
+
 
 template <class T>
 void makeLogFileNames(vector<string>& vLogFiles,unsigned int ciInitPeriod,int FilterState,int iCascadeSize,int RepCount,double mdRepInterval,double dSignalThres,uint trials, int iSynCount)

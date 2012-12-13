@@ -374,7 +374,7 @@ switch (modelType)
 {
 case 1: //synapseCascade
 {
-	 pF =  (pAllocationFunct)allocSynapseArrayCascade<synapseCascade>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseCascade>;
 	 synapseCascade* oCSyn; //Local To this block
 	 oCSyn = (synapseCascade*)(*pF)((char*)mem_buffer,synapsesPopulation,(int)CascadeSize,mprng,1.0);
 	 if (!oCSyn) ERREXIT(500,"simMemRepetitionAllocation: Could not create synapse objects! Out Of memory?");
@@ -390,7 +390,7 @@ break;
 
 case 2: //Cascade Filter
 {
-	 pF =  (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnified>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseCascadeFilterUnified>;
 	 synapseCascadeFilterUnified* oCSyn;
 	 oCSyn = (synapseCascadeFilterUnified*)(*pF)(mem_buffer,synapsesPopulation,(int)CascadeSize,mprng,1.0);
 
@@ -408,7 +408,7 @@ break;
 
 case 3: //Cascade Filter With Decay
 {
-	 pF =  (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseCascadeFilterUnifiedWithDecay>;
 	 synapseCascadeFilterUnifiedWithDecay* oCSyn;
 	 oCSyn = (synapseCascadeFilterUnifiedWithDecay*)(*pF)((char*)mem_buffer,synapsesPopulation,(int)CascadeSize,mprng,1.0);
 	 if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
@@ -424,7 +424,7 @@ break;
 
 case 7:
 { //Single DUAL Filter
-	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleFilterDual>;
 	 synapseSingleFilterDual* oCSyn;
 	 oCSyn = (synapseSingleFilterDual*)(*pF)((char*)mem_buffer,synapsesPopulation,(int)CascadeSize,mprng,1.0);
 	 if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
@@ -443,7 +443,7 @@ case 8: //A Single Filter Synapse
 	slogFiles.push_back(fOutName);
 	makeLogFileNames<synapseSingleFilterUnifiedWithDecay>(slogFiles,trackedMemIndex,CascadeSize,iRepCount,dRepIntervalsecs,0.5,trials, synapsesPopulation);
 
-	oCSyn = (synapseSingleFilterUnifiedWithDecay*)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>((char*)mem_buffer,synapsesPopulation,(int)CascadeSize,mprng,1.0);
+	oCSyn = (synapseSingleFilterUnifiedWithDecay*)allocSynapseArray<synapseSingleFilterUnifiedWithDecay>((char*)mem_buffer,synapsesPopulation,(int)CascadeSize,mprng,1.0);
 	if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
 	mem_buffer = (char*)oCSyn; //If New Allocation Then Update The Mem Buff pointer to newly Allocated Space
 	 simRet =
@@ -454,7 +454,7 @@ break;
 
 case 9: //A Stochastic Updater Synapse
 {
-	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleUpdater>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleUpdater>;
 	 synapseSingleUpdater* oCSyn;
 	 oCSyn = (synapseSingleUpdater*)(*pF)((char*)mem_buffer,synapsesPopulation,(int)CascadeSize,mprng,1.0);
 	 if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
@@ -469,7 +469,7 @@ break;
 
 case 11: //U Filter Reflecting Boundary
 {
-	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecayReflecting>;
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleFilterUnifiedWithDecayReflecting>;
 	 synapseSingleFilterUnifiedWithDecayReflecting* oCSyn;
 	 oCSyn = (synapseSingleFilterUnifiedWithDecayReflecting*)(*pF)((char*)mem_buffer,synapsesPopulation,(int)CascadeSize,mprng,1.0);
 	 if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
@@ -499,7 +499,6 @@ return simRet.dMeanSignalLifetime; //Return Time When SNR <= 1
  * Simulation Scans different single Repetition Times To obtain the final allocated signal Size.
  * These are stored to a file so we can plot AllocSignalSize Vs Repetition Time For each Theta assuming Alloc Threshold Is set to peak signal
  */
-
 void runAllocSignalVsRepetition(int modelType,double ts, long trials, int trackedMemIndex, int RepMemoryIndex, int iRepMemoryCount, int FilterSize, long synapsesPopulation, long lSimtimeSeconds, double dEncodingRate, string inputFile)
 {
 	t_simRet  AllocSignal; //The Time of Mean signal Crosses the noise
@@ -551,7 +550,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 
 	const float MaxRepTime = 100+PeakTime;
 	int iRepIntervalStep = 5; //Is in Numerical Model Mathematica Results
-	dRepIntervalsecs = 86;
+	dRepIntervalsecs = 1;
 
 	while (dRepIntervalsecs <= MaxRepTime)
 	{
@@ -587,7 +586,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 			slogFiles.clear();
 			slogFiles.push_back(fOutName);
 			makeLogFileNames<synapseCascade>(slogFiles,trackedMemIndex,FilterSize,iMemoryReps,dRepIntervalsecs, 0.5,trials, synapsesPopulation);
-			oCSyn = (synapseCascade*)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
+			oCSyn = (synapseCascade*)allocSynapseArray<synapseSingleFilterUnifiedWithDecay>((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
 			if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
 			mem_buffer = (char*)oCSyn; //If New Allocation Then Update The Mem Buff pointer to newly Allocated Space
 
@@ -601,7 +600,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 			slogFiles.push_back(fOutName);
 			makeLogFileNames<synapseSingleFilterUnifiedWithDecay>(slogFiles,trackedMemIndex,FilterSize,iMemoryReps,dRepIntervalsecs,0.5,trials, synapsesPopulation);
 
-			oCSyn = (synapseSingleFilterUnifiedWithDecay*)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
+			oCSyn = (synapseSingleFilterUnifiedWithDecay*)allocSynapseArray<synapseSingleFilterUnifiedWithDecay>((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
 			if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
 			mem_buffer = (char*)oCSyn; //If New Allocation Then Update The Mem Buff pointer to newly Allocated Space
 			AllocSignal = simRepetitionAllocation<synapseSingleFilterUnifiedWithDecay>(oCSyn, synapsesPopulation,FilterSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lAllocSignalMeasureTime,dEncodingRate,repetitionTable,ts,slogFiles);
@@ -614,7 +613,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 			slogFiles.push_back(fOutName);
 			makeLogFileNames<synapseSingleFilterUnifiedWithDecayReflecting>(slogFiles,trackedMemIndex,FilterSize,iMemoryReps,dRepIntervalsecs,0.5,trials, synapsesPopulation);
 
-			oCSyn = (synapseSingleFilterUnifiedWithDecayReflecting*)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecayReflecting>((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
+			oCSyn = (synapseSingleFilterUnifiedWithDecayReflecting*)allocSynapseArray<synapseSingleFilterUnifiedWithDecayReflecting>((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
 			if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
 			mem_buffer = (char*)oCSyn; //If New Allocation Then Update The Mem Buff pointer to newly Allocated Space
 
@@ -629,7 +628,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 			slogFiles.clear();
 			slogFiles.push_back(fOutName);
 			makeLogFileNames<synapseSingleUpdater>(slogFiles,trackedMemIndex,FilterSize,iMemoryReps,dRepIntervalsecs, 0.5,trials, synapsesPopulation);
-			oCSyn = (synapseSingleUpdater*)allocSynapseArraySingleQ<synapseSingleUpdater>((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
+			oCSyn = (synapseSingleUpdater*)allocSynapseArray<synapseSingleUpdater>((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
 			if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
 			mem_buffer = (char*)oCSyn; //If New Allocation Then Update The Mem Buff pointer to newly Allocated Space
 			AllocSignal = simRepetitionAllocation<synapseSingleUpdater>(oCSyn, synapsesPopulation,FilterSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lAllocSignalMeasureTime,dEncodingRate,repetitionTable,ts,slogFiles);
@@ -638,7 +637,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 
 		case 3: //Cascade Filter
 		{
-			 pF =  (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
+			 pF =  (pAllocationFunct)allocSynapseArray<synapseCascadeFilterUnifiedWithDecay>;
 			 synapseCascadeFilterUnifiedWithDecay* oCSyn;
 			 oCSyn = (synapseCascadeFilterUnifiedWithDecay*)(*pF)((char*)mem_buffer,synapsesPopulation,(int)FilterSize,mprng,1.0);
 			 if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");

@@ -110,7 +110,7 @@ using namespace std;
 
 static std::ofstream* openfile(string strDir,string strFile,ios::openmode omode)
 {
-	string strbuff(strFile);
+	string strbuff(strDir);
 	strbuff.append(strFile);
 
 	cout << strbuff << endl;
