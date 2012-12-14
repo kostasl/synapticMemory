@@ -9,9 +9,63 @@
 #include "synapseAllocators.h"
 #include "ICascadeSynapse.h"
 #include "synapseCascade.h"
+#include "synapseSingleFilterUnifiedWithDecay.h"
 
 
+//Allocating Fusi Cascade
+template <>
+ICascadeSynapse* allocSynapseArray<synapseCascade>(vector<synapseCascade*> &vSyn,char* buffer,int iSynCount,int iCascadeSize, gsl_rng* prng_r, float StimRate)
+{
+	 // const int iCascadeSize = 1;
+	  const bool bFixedStartState = false;
+	  ICascadeSynapse::SYN_STRENGTH_STATE startStrength;
+	  char* pseg; //Generic Pointer to allocated memory
+	  pair<synapseCascade*,ptrdiff_t> pmem;
 
+	  if (buffer == 0) //If null Then Allocate, Otherwise Create Objects over Previously Allocated Memory
+	  {
+		//Allocate memory Buffer to initialize cascadeSynapse objects
+		 pmem = get_temporary_buffer<synapseCascade>(iSynCount);
+	  }
+	  else
+	  {
+		  pmem.first = (synapseCascade*)buffer;
+		  pmem.second = iSynCount; //Assume Count is correct from Previous init
+	  }
+
+	  if (pmem.second < iSynCount) ERREXIT(100,"Could not allocate all the required memory");
+	  if (!pmem.first && iSynCount > 0) ERREXIT(100,"Could not allocate memory");
+
+
+//	 long p = (long)pmem.first;
+//   cout << p << " Next:" << (long)(pmem.first+1) <<  " diff:" << (long)(pmem.first+1)-p << endl;
+//   cout << "Bytes Alloc:" << ((long)(pmem.first+1)-p)*pmem.second << endl;
+//   cout << "Bytes Required:" << sizeof(synapseCascade)*iSynCount << endl;
+   synapseCascade* pObj;
+	for (int i =0;i<iSynCount;i++)
+	{
+		pseg = (char*)(pmem.first+i);
+
+		//Check If Fixed Starting Point Of strengths is used
+		if (bFixedStartState)
+		{
+			if (i < iSynCount/2)
+				startStrength = ICascadeSynapse::SYN_STRENGTH_STRONG;
+			else
+				startStrength = ICascadeSynapse::SYN_STRENGTH_WEAK;
+			//CascadeSize
+			pObj = new(pseg) synapseCascade(iCascadeSize,1, prng_r);
+		}
+		else//Starting Strength is Random
+			pObj = new(pseg) synapseCascade(iCascadeSize,prng_r);
+
+		vSyn.push_back(pObj);//Add to Target Vector
+
+	}
+
+	return (ICascadeSynapse*)pmem.first;
+	//Use return_temporary_buffer(buffer) To release
+}
 
 template <>
 ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecay>(vector<synapseSingleFilterUnifiedWithDecay*> &vSyn,char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
@@ -70,60 +124,6 @@ ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecay>(vector<s
 
 }
 
-//Allocating Fusi Cascade
-template <>
-ICascadeSynapse* allocSynapseArray<synapseCascade>(vector<synapseCascade*> &vSyn,char* buffer,int iSynCount,int iCascadeSize, gsl_rng* prng_r, float StimRate)
-{
-	 // const int iCascadeSize = 1;
-	  const bool bFixedStartState = false;
-	  ICascadeSynapse::SYN_STRENGTH_STATE startStrength;
-	  char* pseg; //Generic Pointer to allocated memory
-	  pair<synapseCascade*,ptrdiff_t> pmem;
-
-	  if (buffer == 0) //If null Then Allocate, Otherwise Create Objects over Previously Allocated Memory
-	  {
-		//Allocate memory Buffer to initialize cascadeSynapse objects
-		 pmem = get_temporary_buffer<synapseCascade>(iSynCount);
-	  }
-	  else
-	  {
-		  pmem.first = (synapseCascade*)buffer;
-		  pmem.second = iSynCount; //Assume Count is correct from Previous init
-	  }
-
-	  if (pmem.second < iSynCount) ERREXIT(100,"Could not allocate all the required memory");
-	  if (!pmem.first && iSynCount > 0) ERREXIT(100,"Could not allocate memory");
-
-
-//	 long p = (long)pmem.first;
-//   cout << p << " Next:" << (long)(pmem.first+1) <<  " diff:" << (long)(pmem.first+1)-p << endl;
-//   cout << "Bytes Alloc:" << ((long)(pmem.first+1)-p)*pmem.second << endl;
-//   cout << "Bytes Required:" << sizeof(synapseCascade)*iSynCount << endl;
-   synapseCascade* pObj;
-	for (int i =0;i<iSynCount;i++)
-	{
-		pseg = (char*)(pmem.first+i);
-
-		//Check If Fixed Starting Point Of strengths is used
-		if (bFixedStartState)
-		{
-			if (i < iSynCount/2)
-				startStrength = ICascadeSynapse::SYN_STRENGTH_STRONG;
-			else
-				startStrength = ICascadeSynapse::SYN_STRENGTH_WEAK;
-			//CascadeSize
-			pObj = new(pseg) synapseCascade(iCascadeSize,1, prng_r);
-		}
-		else//Starting Strength is Random
-			pObj = new(pseg) synapseCascade(iCascadeSize,prng_r);
-
-		vSyn.push_back(pObj);//Add to Target Vector
-
-	}
-
-	return (ICascadeSynapse*)pmem.first;
-	//Use return_temporary_buffer(buffer) To release
-}
 
 //Allocating Stochastic Updaters
 template <>

@@ -750,7 +750,7 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 			C[i - 1] = SearchForNetCapacity<synapseSingleFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
 			break;
 		case 8: //A Single Filter Synapse
-		//	C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
 			break;
 		case 9: //A Stochastic Updater Synapse
 			C[i - 1] = SearchForNetCapacity<synapseSingleUpdater>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
