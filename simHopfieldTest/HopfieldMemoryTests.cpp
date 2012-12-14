@@ -347,11 +347,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 	const uint ciInterruptCondition = trials * 0.10; // If the first n trials give 0% or 100% The simulation result is taken as min or Max and stops.
 
 	AvgSignal = 0.0; //Reset
-	//if (!pAllocationFunct)
-//		ERREXIT(500,"No Synapse Allocation Function Provided");
-	//pAllocationFunct = &allocCascadeSynDoubleThresFiltArray; //Assign Value To Function Pointer
 
-	//IF THE NET IS INITIALIZED WITH SYNS OF 0 STRENGTH THEN Binary Synapses 0-1 can be used
 	gsl_rng* mprng = g_getRandGeneratorInstance(false);
 
 	uint NetSize = _uiNeuronCount;
@@ -364,8 +360,6 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 
 	int HammingDistance 	= 0;
 	int HammingDistance2 	= 0;
-	//float AvgHammingDistance= 0;
-	//int AvgSampleCount		= 0;
 
 	uint t = trials; //Timer
 	uint rcallHits = 0;
@@ -395,24 +389,13 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 			cout << " ETL:" << (t * (Totalduration / (trials - t))) / 60
 					<< "mins" << endl;
 
-
-
-
 		///WEIGHT MATRIX INIT
 		cout << (trials-t) << " Making Weight Matrix..." << endl;
 		//Construct Weight Matrix
-		//W = makeWeightMatrixBin(NetSize,X,tPatCount); //For Strictly Binary Synapses with arbitrary transition Probability
 		//Update Allocated Weight MAtrix - 1st Call Allocates Memory - subsequent reuses the memory
 		makeWeightMatrix<T>(NetSize, X, tPatCount, _iStoredPatIndex,
 				iCascadeSize, mem_buffer, W, vSyn, slogFiles);
 
-//		///Print Matrix
-//		for (uint i =0;i<NetSize;i++)
-//		{
-//			for (uint j =0;j<NetSize;j++)
-//				cout << ((W[i][j]>0)?"+":((W[i][j]==0)?"0":"-")) << "\t";
-//			cout << endl;
-//		}
 
 		///LOG DISTRIBUTION
 		// Record Distribution After Learning around the Initial Trials t=10
@@ -435,13 +418,10 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 					tX[j] = -tX[j];
 			}
 		}
-		//cout  << endl;
 		HammingDistance 	= calcHammingDistance(tX, X[StoredPatIndex], NetSize);
-
 		//END OF PROBE INJECTION
 
-//It Appears that although the above is instructive it is very hard to accurately recall any pattern  other than the last one!
-		//LET IT FREE RUN
+		//// ---  LET IT FREE RUN --//
 		cout << "Free Search of Stable Point" << endl;
 		//cout << "Showing Change in Distance to stored pattern E:" << endl;
 		uint t_stable = 0;
