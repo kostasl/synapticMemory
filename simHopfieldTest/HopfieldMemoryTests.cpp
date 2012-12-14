@@ -335,7 +335,9 @@ inline uint calcHammingDistance(t_inVal* X1, t_inVal* X2, uint NetSize) {
   * For Each Trial
   *  makeWeightMatrix
   *  "Inject Probe Vector with Noise:"
-  *   Run n= NetSize * uiNetUpdateCycles Ouput Neuron Updates
+  *  Run n= NetSize * uiNetUpdateCycles Ouput Neuron Updates
+  *  Check if Output vector is matches stored pattern within Acceptable Error
+  * Next Trial
  */
 template<class T>
 int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
@@ -347,6 +349,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 	const uint ciInterruptCondition = trials * 0.10; // If the first n trials give 0% or 100% The simulation result is taken as min or Max and stops.
 
 	AvgSignal = 0.0; //Reset
+	int AvgSignalSamples = 0;
 
 	gsl_rng* mprng = g_getRandGeneratorInstance(false);
 
@@ -408,7 +411,8 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 		cout << "Inject Probe Vector with Noise:" << ProbeNoise
 				<< " Update Cycles:" << uiNetUpdateCycles << endl;
 		//Copy Tracked PAttern To Test Output Vector
-		for (uint j = 0; j < NetSize; j++) {
+		for (uint j = 0; j < NetSize; j++)
+		{
 			tX[j] = X[StoredPatIndex][j];
 			//cout << ((tX[j]>0)?"+":"-");
 			if (ProbeNoise > 0) //If the Probe Is noisy
@@ -417,7 +421,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 				if (r > ProbeNoise)
 					tX[j] = -tX[j];
 			}
-		}
+		} //End Loop Creating The imposed(probe) Output Vector
 		HammingDistance 	= calcHammingDistance(tX, X[StoredPatIndex], NetSize);
 		//END OF PROBE INJECTION
 
@@ -460,7 +464,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 
 			if (t_stable > uiNetUpdateCycles)
 				break; //Stop Running If we have been stable for 30 Cycles
-		}
+		}///END Loop Updating the OUtput Neurons
 
 		bool FoundStored = false;
 		float Signal = 0.0;
@@ -494,6 +498,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 		//According To Kempter Leibold 2010 GAmma Is Signal - This Appears to Match Well Against Recall Probability
 		Signal = (float) (NetSize - HammingDistance) / (float)NetSize;	//- (float) HammingDistance / (float) NetSize;
 		AvgSignal += Signal;
+		AvgSignalSamples++;
 		if (HammingDistance < fAcceptedError) //Recall Distance to Tracked Pattern
 		{
 			FoundStored = true;
@@ -536,7 +541,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 
 	deleteMemoryBuffer(NetSize, W);
 
-	AvgSignal = AvgSignal / (float)trials;
+	AvgSignal = AvgSignal / (float)AvgSignalSamples;
 
 	return rcallHits;
 }
@@ -629,10 +634,11 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 #endif
 
 	//Increment Stored PAtterns And MEasure Recall Hits
+	AvgRecallSignal = 0;
 	for (uint i = 1 + iTrackedMemIndex; i < PatCount; i++)
-	{
-		//Always Recall Pattern zero And Incrementally Increase the stored number of overlayed patterns
+	{	//Always Recall Pattern zero And Incrementally Increase the stored number of overlayed patterns
 		//An Empty Memory buffer pointer and Vector for the Synapses is Passed - Which is filled by the called functions
+		//Return the number of times Recall was within the error margin in T Trials
 		recallHits = testHopfieldBinarySyns<T>(i, _uiNeuronCount, X, tX, 0.0,
 				iTrackedMemIndex, _iCascadeSize, AvgSignal, trials, slogFiles,
 				vSyn, mem_buffer);
@@ -648,7 +654,7 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 		else {
 			NoRecallTrialsCount = 0;
 			iCapacity = i - iTrackedMemIndex; //Store Capacity Up to last successul recall
-			AvgRecallSignal = AvgSignal;
+			AvgRecallSignal = AvgSignal; //The last one saved will be when The PatCount = Capacity
 		}
 
 		if (NoRecallTrialsCount == 3) //Stop If Recall has been impossible for 3 increasing pattern sizes now
