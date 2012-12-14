@@ -3,7 +3,9 @@
  *  Author: kostasl
  *  Created on: Dec 13, 2011
  *
- * Runs the Hopfield Memory Test
+ * Runs the Hopfield Memory Test - Capacity is counted by incrementally attempting storage and recall of n Patterns.
+ * The recall of the pattern is tested for T trials - The computation is cut short if recall is succesful during the first %10 of trials and the storage of n+1 Patterns
+ * is tested
  *
  *
  */
@@ -21,12 +23,11 @@ using namespace std;
 int g_FilterTh 			= 7; //Used for Single Filter Experiments
 double g_FilterDecay 	= 0.0; //0.0916986;
 
-
 uint g_timeToSampleMetaplasticity	= 0; //Used by Sim code as the time to sample the number of metaplastic transitions
 int g_MetaplasticitySampleSize		= 0;//Sim Code Stops saving to the distribution of same threshold crossings Once this number of samples has been gathered
 double g_UpdaterQ 		= 1.0/(g_FilterTh*g_FilterTh); //The single Updater Transitions - Make sure its in double format
 float g_fAllocHThres	= 0.0; //Default Post Synaptic depol. Threshold to switch on Allocation
-float g_fcAMPDecay		= 0.01; //The timeconstant for the cAmp alpha process (With 0.5 it takes approx 10 tsteps for a complete wave)
+float g_fcAMPDecay		= 0.0; //The timeconstant for the cAmp alpha process (With 0.5 it takes approx 10 tsteps for a complete wave)
 float g_fcAMPMagnitude	= 0.0;
 double g_dcAMPMax		= 1.0;// A globally set  saturation value of cAMP.
 float g_fPKAAllocThres	= 1000; //Threshold beyong which the integrating PKA signal switches allocation ON
@@ -34,7 +35,7 @@ float g_fInjectionGain	= 1.0; //The GAIN of the cAMP production Process
 int g_iHillOrder		= 4; //The threshold function hill order
 uint g_AllocRefraction	= 0;//The Same Threshold Counter Limit required to allocate a synapse --0.375*g_FilterTh*g_FilterTh;
 
-float g_fAllowedRecallError = 0.05;
+float g_fAllowedRecallError = 0.01;
 string g_outputTag;
 
 
@@ -49,12 +50,13 @@ int main(int argc, char* argv[])
 
 	po::options_description all("Allowed options"); //The group Of All options
 	po::options_description basicSim("Simulation Averaging options ");
+	po::options_description hopfieldSim("Hopfield Simulation option");
 	po::options_description singleFilterSim("Single Filter Simulation options");
 	po::options_description cascadeSim("Cascade simulation options");
 	po::options_description AllocationOptions("PKA Allocation Experiments - simulation options");
 
 	string inputFile,modelName = "synapseSingleFilterUnifiedWithDecay"; //Default
-	string simulationName = "simRepetition";
+	string simulationName = "HopfieldTest";
 	int startIndex,endIndex,simulationType,modelType,iNeuronPopulation,trackedMemIndex,initPeriod;
 	unsigned int trials;
 
@@ -78,16 +80,18 @@ int main(int argc, char* argv[])
 	    ("cSimTimeSecs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds")
 		("NetSize", po::value<int>(&iNeuronPopulation)->default_value(100), "The number of synapses to use - Has to match the vector file size where required")
 		("inputFile,V", po::value<string>(&inputFile)->default_value("\n"), "The vector input file to use from directory MemoryInputVectors. If No file given then Random Vectors are used.")
-		("startSize", po::value<int>(&startIndex)->default_value(7), "The range of model size parameter to begin testing - interpretation is model dependent")
-		("endSize", po::value<int>(&endIndex)->default_value(7), "The range of model size parameter to end testing - interpretation is model dependent")
+		("startSize", po::value<int>(&startIndex)->default_value(1), "The range of model size parameter to begin testing - interpretation is model dependent")
+		("endSize", po::value<int>(&endIndex)->default_value(15), "The range of model size parameter to end testing - interpretation is model dependent")
 		("metaSampleTime", po::value<uint>(&g_timeToSampleMetaplasticity)->default_value(g_timeToSampleMetaplasticity), "Time to sample metaplasticity distribution")
 		("metaSampleSize", po::value<int>(&g_MetaplasticitySampleSize)->default_value(g_MetaplasticitySampleSize), "The number of samples to obtain for the metaplasticity cycle distribution");
 
+	hopfieldSim.add_options()
+		("RecallError,E", po::value<float>(&g_fAllowedRecallError)->default_value(g_fAllowedRecallError), "The Single Filter's Decay Value");
+
 	singleFilterSim.add_options()
-	   ("FilterDecay,D", po::value<double>(&g_FilterDecay)->default_value(g_FilterDecay), "The Single Filter's Decay Value");
+	   ("FilterDecay,D", po::value<double>(&g_FilterDecay)->default_value(g_FilterDecay), "The percent of allowed error in the hopfield Network Output");
 
 	cascadeSim.add_options()
-
 	   ("initPeriod,I", po::value<int>(&initPeriod)->default_value(0), "Memories used to initialise Synapses")
 	   ("StochUpdQ,Q", po::value<double>(&g_UpdaterQ)->default_value(g_UpdaterQ), "Stochastic Updater Transition probability q")
 	   ("Timestep,ts", po::value<double>(&ts)->default_value(ts), "Sim. Timstep in seconds. Set to 1.0 for a discrete time simulation.")
@@ -105,34 +109,33 @@ int main(int argc, char* argv[])
 	if (g_MetaplasticitySampleSize == 0)
 		g_MetaplasticitySampleSize = -1;///Disable This limit
 
-	all.add(basicSim).add(singleFilterSim).add(cascadeSim).add(AllocationOptions);
+	all.add(basicSim).add(singleFilterSim).add(hopfieldSim).add(cascadeSim).add(AllocationOptions);
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc,  argv, all), vm);
 	po::notify(vm);
 
 	///Add List Of Simulation Types
-	mapSimType["simMemSignalinTime"] = 1;
+	mapSimType["simMemSignalinTime"] 	= 1;
 	mapSimType["simMemSignalsFromFile"] = 2;
-	mapSimType["PerceptronTest"] = 3;
-	mapSimType["HopfieldTest"] = 4;
+	mapSimType["PerceptronTest"] 		= 3;
+	mapSimType["HopfieldTest"] 			= 4;
 	mapSimType["simMemSignalinContinuousTime"] = 5;
-	mapSimType["simEscTime"] = 6;
-	mapSimType["MeanMemoryLifetime"] = 7;
-	mapSimType["simRepetition"] = 8;
-	mapSimType["ThresholdCycleFq"] = 9;
+	mapSimType["simEscTime"] 			= 6;
+	mapSimType["MeanMemoryLifetime"] 	= 7;
+	mapSimType["simRepetition"] 		= 8;
+	mapSimType["ThresholdCycleFq"] 		= 9;
 	mapSimType["AllocSignalVsRepetitionTime"] = 10;
 
-
-	mapSynapseAllocator["synapseCascade"] = 1;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascade>;
-	mapSynapseAllocator["synapseCascadeFilterUnified"] = 2;
+	mapSynapseAllocator["synapseCascade"] 				= 1;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascade>;
+	mapSynapseAllocator["synapseCascadeFilterUnified"] 	= 2;
 	mapSynapseAllocator["synapseCascadeFilterUnifiedWithDecay"] = 3;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
-	mapSynapseAllocator["synapseSingleFilterDual"] = 4;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
-	//mapSynapseAllocator["cascadeDelayed"]
-	//mapSynapseAllocator["CascadeSamplingFilter"]
-	//mapSynapseAllocator["synapseSingleFilterDual"]
+	mapSynapseAllocator["synapseSingleFilterDual"] 	= 4;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
+	mapSynapseAllocator["synapseCascadeFilterDual"]	= 5;
+	mapSynapseAllocator["CascadeSamplingFilter"]	= 6;
+	mapSynapseAllocator["synapseSingleFilterDual"]	= 7;
 	mapSynapseAllocator["synapseSingleFilterUnifiedWithDecay"] = 8;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>;
-	mapSynapseAllocator["synapseSingleUpdater"] = 9;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleUpdater>;
-	//mapSynapseAllocator["synapseSerialCascade"]
+	mapSynapseAllocator["synapseSingleUpdater"] 	= 9;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleUpdater>;
+	mapSynapseAllocator["synapseSerialCascade"]		= 10;
 	mapSynapseAllocator["synapseSingleFilterUnifiedWithDecayRefl"] = 11;
 
 	trackedMemIndex = initPeriod;
@@ -166,33 +169,13 @@ int main(int argc, char* argv[])
 	start = clock();
 	if (simulationType == 4) //Simulate Signal In Time MLT
 	{
-
-		////OPEN OUTPUT FILES To save The point When MEAN signal Drops below SNR=1
-//		string buffFilename(ALLOCCTEVNT_OUTPUT_DIRECTORY);
-//		buffFilename.append(modelName);
-//		char buff[100];
-//		std::sprintf(buff,"_FPT-N%d_%d-%d_T%d_ts%.2f.dat",synapsesPopulation,startIndex,endIndex,trials,ts);
-//		buffFilename.append(buff);
-//
-//		cout << "@ Simulation " << simulationName << " Output File:" << buffFilename.c_str() << endl;
-//		ofstream ofile(buffFilename.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
-//
-//		if (!ofile.is_open())
-//			ERREXIT(errno,"Could not Open output file");
-//
-//		//////LOG File Opened////
-//		ofile << "#First Passage Time Is where SNR=1 - That is the point where on Avg Signal crosses 0" << endl;
-//		ofile << "#Size\tMSFPT" << endl;
-
-
 		cout << "****HOPFIELD MEMORY LIFETIME TEST******" << endl;
-		double dMSFPT;
-		//For Cascade Indexes/Symmetric Filter Sizes
-			 g_fcAMPMagnitude	= 1.0;  //
-			 doHopfieldCapacityTest(modelType,modelName, iNeuronPopulation,trials, trackedMemIndex,endIndex,startIndex);
-
+		doHopfieldCapacityTest(modelType,modelName, iNeuronPopulation, trials, trackedMemIndex, endIndex, startIndex);
 	}//END IF SIMULATION TYPE (1) MLT
-
+	else
+	{
+		cout <<  simulationName << " Is not handled by this executable" << endl;
+	}
   ///Measure Duration
   finish = clock();
 

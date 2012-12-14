@@ -46,6 +46,8 @@
 
 typedef int t_inVal; //Input Memory Vector value types (-1,1) used so int
 
+using namespace std;
+
 ///Program Parameters
 
 #define MAX_AFFERENTS 1202
@@ -139,8 +141,6 @@ static void errexit(int code,uint lineno ,const char* srcFile,const char* str)
 }
 
 
-using namespace std;
-
 
 static std::ofstream* openfile(string strDir,string strFile,ios::openmode omode)
 {
@@ -169,36 +169,15 @@ return file;
 }
 
 
-
-
 ///Simulation Global Variables
-//gsl_rng * rng_r; //Used by GSL Rand Num Generator
 extern char FilePath[_MAX_PATH]; // _MAX_PATH represents the longest possible path on this OS
 
-//extern gsl_rng * rng_r; //Used by GSL Rand Num Generator
-
-
-
 ///GLOBAL Instance and FunctioN
-static gsl_rng* g_rng_r = 0;
+static gsl_rng* g_rng_r = 0;  //Used by GSL Rand Num Generator
 
 //class cascadeSynapse; //Need this Prototype Here For Template Allocator Functions - Implementation of the class is however now Legacy
 class ICascadeSynapse;
-//Synapse Model Allocation Function Templated to Fit Old And New Synapse Classes
-//Wrapper Struct required as no Template function pointers are allowed
-template <typename T>
-struct synapseAllocator {
-    typedef T* (*pFunct)(char*,int,int,gsl_rng*,float);
-    typedef std::vector<T*>* pvSyns;
-    typedef pvSyns (*vpFunct)(char*,int,int,gsl_rng*,float); //The vector Equivalent
-    pFunct pF; //Accessory Member Declared
-};
 
-//Declare for Legacy reasons
-//typedef synapseAllocator<cascadeSynapse>::pFunct pAllocationFunct; //Old Naming style for the two allocator functions
-typedef synapseAllocator<ICascadeSynapse>::pFunct pAllocationFunct;
-typedef synapseAllocator<ICascadeSynapse>::vpFunct pVectorAllocationFunct2;
-using namespace std;
 
 
 typedef map<unsigned long,unsigned int> t_patt_reptbl; //Holds pairs of time, pattern index - For repeating input patterns

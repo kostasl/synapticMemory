@@ -716,7 +716,7 @@ void  synapseFilterDual::getTypeAsString(char* buff)
 
 void synapseFilterDual::getTypeName(char* buff)
 {
-	strcpy(buff,"_DualFiltRev1");
+	strcpy(buff,"_synapseCascadeDualFilter");
 }
 
 synapseFilterDual::~synapseFilterDual() {

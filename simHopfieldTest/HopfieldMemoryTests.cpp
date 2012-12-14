@@ -3,23 +3,14 @@
 
 #include "common.h"
 #include "util.h"
-#include <iostream>
-//#include "switchSynapse.h"
-//#include "LegacyClasses/doubleThresholdFilter.h"
-//#include  "synapticConnection.h"
-//#include "PoissonSource.h"
-//#include "PoissonNeuron.h"
-//#include "BinaryNeuron.h"
-//#include "synapticTransmission.h"
 
-//#include "CascadeModelSim.h"
+#include "synapseAllocators.h"
 #include "InputVectorHandling.h"
 #include "HopfieldMemoryTests.h"
-#include "synapseAllocators.h"
 
-//Converting String <-FLoat
+#include <iostream>
 
-//#include <stream>
+
 
 //Global Vars
 uint g_time = 0;
@@ -110,22 +101,28 @@ inline void deleteMemoryBuffer(uint ArrSize, T**& buffer) {
 //}
 
 /*
- ///////////USES LEGACY CASCADE SYNAPSE
+   USES LEGACY CASCADE SYNAPSE
 
- //A Binary Learning Rule For Associative learning as Described by Barret&Rossum 2008
- //Without stochastic updates the forgetting is too fast and only the last pattern is remembered
- //Attempting a recall of any other pattern Fails - Setting q low 0.1 then the most recent pattern can be recalled accuratelly
- //But it is also possible to recall past ones for pats 10 in a Net of 500 neur.
- //Can be Given A memory pointer which it initialises to Hold cascadeSynapse Objects
+ A Binary Learning Rule For Associative learning as Described by Barret & Rossum 2008
+ Without stochastic updates the forgetting is too fast and only the last pattern is remembered
+ Attempting a recall of any other pattern Fails - Setting q low 0.1 then the most recent pattern can be recalled accuratelly
+ But it is also possible to recall past ones for pats 10 in a Net of 500 neur.
+ Can be Given A memory pointer which it initialises to Hold cascadeSynapse Objects
 
- //Makes A symmetric Weight Matrix As Required by a Hopfield Memory recurrent network
- //There is the option of allocating the 1st memory to all available synapses (Changes the uniform Distribution)
- // and then testing lifetime
- //@buffer pointer to where objects of CascadeSynapse Are stored - The memory is allocated the 1st time the function runs and then it is re-used. This improves speed
- //@Weight Array Pointer // The memory is allocated the 1st time the function runs and then it is re-used. This improves speed
- //@function To Allocate Array of Synapses - Can be any of Filter Allocation ones Found in CascadeModelSim.cpp
- //The Synapse Objects may be retained in memory and re-used if bReconstructObjects = false.
- // 		This Option Should be used when we are sure the distribution among cascade states is stationary after memory storage
+* Called During each Trial -
+* Makes A symmetric Weight Matrix As Required by a Hopfield Memory recurrent network
+1 if bReconstructObjects =true The Objects Are reconstructed everytime - But the memory space is retained -To optimize speed
+2 The Vector X is randomized EveryTime function is called
+3 Then synObjects Are stimulated
+4 Weight Matrix Constructed from synObjects Strength
+
+ * There is the option of allocating the 1st memory to all available synapses (Changes the uniform Distribution)
+ * and then testing lifetime
+ * @buffer pointer to where objects of CascadeSynapse Are stored - The memory is allocated the 1st time the function runs and then it is re-used. This improves speed
+ * @Weight Array Pointer // The memory is allocated the 1st time the function runs and then it is re-used. This improves speed
+ * @function To Allocate Array of Synapses - Can be any of Filter Allocation ones Found in CascadeModelSim.cpp
+ * The Synapse Objects may be retained in memory and re-used if bReconstructObjects = false.
+ * This Option Should be used when we are sure the distribution among cascade states is stationary after memory storage
  */
 template<class T>
 float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
@@ -156,25 +153,23 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 	//Check if the Memory for Vectors and the Buffer for the Objects has not been Initialised
 	if (NeedToInitMemory) {
 		vSyn.clear(); //Clear Vector of Pointers to Synapses
-		//vSyn.reserve(NetSize * NetSize); //Size Vector To save Time
+		vSyn.reserve(0.55*NetSize * NetSize); //Size Vector To save Time
 		//Buffer Inited In Alloc Function - Here Make The Array of pointers to buffers
 		buffer = new char*[NetSize]; //Make Pointer Array to Pointers
 		assert( buffer != NULL);
 		memset(buffer,0,NetSize*sizeof(char*));
 		cout << "Memory for synapses in bytes :" << NetSize*NetSize*0.5*sizeBlock <<  endl;
 
-	} else { //Memory Has been Inited So delete Old Objects to create New over allocated Memory
-			 //Call Destructors Manually
-			if (bReconstructObjects)
+	} else {
+		//Memory Has been Inited So delete Old Objects to create New over allocated Memory  //Call Destructors Manually
+		if (bReconstructObjects)
 				for (typename vector<T*>::iterator it = vSyn.begin();it != vSyn.end(); ++it)(*it)->~T();
-			}
-
-
+		}
 
 
 	//<ALLOCATION> new Synapses And Store pointers In vector
 	uint iSynCount = 0;
-	for (int i = 0; i < NetSize; i++) //For EACH NEURON
+	for (int i = 0; i < (NetSize); i++) //For EACH NEURON
 		{
 
 		if (bAllocateWVector) {
@@ -195,16 +190,12 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 
 		if (bReconstructObjects || NeedToInitMemory) {
 			///Initialise Synapses Using Allocation Function - Only 1/2 of NetSize^2 - As there are symmetric connections
-			s[i] = (T*)allocSynapseArray<T>((char*) buffer[i], i+1,(int) _CascadeSize, mprng, 1.0);
-			iSynCount += i+1;
+			s[i] = (T*)allocSynapseArray<T>(vSyn,(char*) buffer[i], i,(int) _CascadeSize, mprng, 1.0);
+			iSynCount += i;
 
-			//COPY TO FLAT VECTOR A Bit Inefficient But Given Copy doesnt work and it happens only once then its ok -Have to MOVE ON
-			for (int j = 0; (j < i) && NeedToInitMemory; j++) //To Each Other Neuron \\TODO:Remove Vector Dependency
-					vSyn.push_back(&s[i][j]); //Add pointer To flat Vector
-			///cout << "Added to Synapse Vector: " << (int)vSyn.size() <<endl;
 		} //If Init Memory Or Objects Required
 
-		if (!s[i]) //Check Failure
+		if (!s[i] && i>0) //Check Failure
 			ERREXIT(500,"makeWeightMatrix<T>: Could not create synapse objects! Out Of memory?");
 
 	} // FOR EACH NEURON // END OF ALLOCATION
@@ -212,8 +203,7 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 	//Number of Synapses Should Be Half a square Matrix - Diagonal which is 0 - No self Connection
 	assert((uint)vSyn.size() == 0.5*NetSize*NetSize-0.5*NetSize);
 
-	///--<LEARNING>--///
-	// - LEarn Patterns using Cascade Objects And Return Float Weight matrix -
+	///--<LEARNING>--///  - LEarn Patterns using synapse Objects And Return Float Weight matrix -
 	//1st Time Around Init the synapses with x number of patterns found before the Tracked Memory So the Distribution moves to Equilibrium
 	uint istartPoint = 0;
 	if (NeedToInitMemory || bReconstructObjects) //Reconstructing Object Requires To run INit Patterns.
@@ -226,7 +216,7 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 	}
 
 	for (uint j = istartPoint; j < patCount; j++) //For Each Pattern
-		{
+	{
 		///Report Distribution First Time this is Run
 		if (NeedToInitMemory && j == iTrackedIndex) {
 			cout << "Inited Synapses. Distribution Before Memory Storage is:"	<< endl;
@@ -234,18 +224,23 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 			reportStateDistribution(vSyn, NetSize * NetSize, fname);
 		}
 
+		double r; //Randomize Vector
+		for (int i = 0; i < NetSize; i++)
+		{	r	= gsl_rng_uniform(mprng);
+			Xin[j][i] = (r < 0.5) ? 1 : -1;
+		}//Make Test Vector
+
 		for (int i = 0; i < NetSize; i++) {
-			//Randomize DESIGN
+			//Randomize DESIGN - Throw in Noise?
 //			double r = gsl_rng_uniform(mprng );
 //			if (r>0.5 && j > istartPoint)
 //				Xin[j][i] = -Xin[j][i];
 
-			for (int k = 0; k < NetSize; k++) {
+			for (int k = 0; k <= i; k++) {
 				//w[i][k] = 0.0;
 				//W_ik From i->k weight is the output of neuron i at training pattern j
 				//Binary learning Rule according to barret&Rossum Cannot Work For AutoAssociative Nets
 				//w[i][k] = (Xin[j][i] > 0)?1:-1;
-
 				//Symmetric - Refer to Same Objects
 				if (k < i) {
 					if (Xin[j][i] * Xin[j][k] > 0) {
@@ -260,22 +255,6 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 
 		} //END OF For Each Neuron
 	} //For Each Pattern
-
-	  //Save Allocated Memory In Pointer parameter
-//buffer = (char**)s; //No need By allocation Design
-//	Delete CascadeObjects But Do not Deallocate Memory - NO NEED - Just Overwrite In Allocated Memory
-///NO NEED - DESTRUCTORS CALLED UPON ENTRY TO FUNCTION AND AT THE END OF THE HOPFIELD MEM TEST
-//	for (int i=0;i<NetSize;i++)
-//		{
-//			for (int k=0;k<NetSize;k++)
-//			{
-//				//
-//				if (i!=k){
-//					s[i][k].~cascadeSynapse();
-//					//s[i][k].Reset(); //So we don't have to recreate Objects
-//				}
-//			}
-//		}
 
 	return w;
 }
@@ -351,7 +330,12 @@ inline uint calcHammingDistance(t_inVal* X1, t_inVal* X2, uint NetSize) {
  //@pAllocationFunct : 	 Options Are: allocCascadeSynArray, allocCascadeSynDoubleThresFiltArray, allocCascadeSynDualFiltArray
  //@vector<cascadeSynapse*> vSyn; //Vector Of Pointers To CascadeSynapses - Filled After Weigth Matrix is Created
  //For Binary Neurons and Synapses Capacity Grows as 6.75826677× log (_uiNeuronCount)
- //TODO: Need To add q as a parameter so I can test Binary Synapses Using Cascade - Also Use Cascade Constructor Which allows setting initial q
+
+  *
+  * For Each Trial
+  *  makeWeightMatrix
+  *  "Inject Probe Vector with Noise:"
+  *   Run n= NetSize * uiNetUpdateCycles Ouput Neuron Updates
  */
 template<class T>
 int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
@@ -402,7 +386,6 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 	while (t > 0)
 	{
 		start = clock();
-
 		cout << endl << endl << " Cascade Size:" << _iCascadeSize
 				<< " Pat Count: " << _iPatCount << " Tracking:"
 				<< (StoredPatIndex + 1) << " Trial:" << (trials - t)
@@ -411,6 +394,9 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 		if (duration > 0)
 			cout << " ETL:" << (t * (Totalduration / (trials - t))) / 60
 					<< "mins" << endl;
+
+
+
 
 		///WEIGHT MATRIX INIT
 		cout << (trials-t) << " Making Weight Matrix..." << endl;
@@ -451,8 +437,6 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 		}
 		//cout  << endl;
 		HammingDistance 	= calcHammingDistance(tX, X[StoredPatIndex], NetSize);
-		//AvgHammingDistance += HammingDistance;
-		//AvgSampleCount++;
 
 		//END OF PROBE INJECTION
 
@@ -465,6 +449,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 
 		HammingDistance2 = 0;
 		HammingDistance = 0;
+		//Update N*uiNetUpdateCycles Randomly picked OutputNeurons State
 		for (uint rep = 0; rep < NetSize * uiNetUpdateCycles; rep++) //Maximum Number of Network Updates
 		{
 			//Randomly Update Network
@@ -479,6 +464,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 			tX[i] = (tX[i] > 0) ? 1.0 : -1.0; //Save Neuron's output - Activation Function
 			//HammingDistance += (tX[i] != X[StoredPatIndex][i])?1:-1; //Update in StepWise Manner Starting From 0
 
+			//Once a cycle Is complete Start Measuring the time(updates) during which the output does not change (Accounting the Error Too)
 			if (rep > NetSize * iSearchTime) {
 				iSearchTime++;
 				HammingDistance = calcHammingDistance(tX, X[StoredPatIndex],
@@ -567,7 +553,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 			<< "/" << trials << endl;
 
 	cout << " Delete Weight Matrix..." << endl;
-//for (uint i=0;i<NetSize;i++ )
+
 	deleteMemoryBuffer(NetSize, W);
 
 	AvgSignal = AvgSignal / (float)trials;
@@ -578,12 +564,17 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 /*
  ///Converted from Legacy CascadeSynapse Is Used
  //HopField Memory Test
+  *	Init Pattern Memory for Max 100 patterns
+  * for Each Pattern (uint i = 1 + iTrackedMemIndex; i < PatCount; i++)
+  * 	testHopfieldBinarySyns
  */
 template<class T>
-int SearchForNetCapacity(T* oCSyn, uint _uiNeuronCount, uint iTrackedMemIndex,
+int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 		float _fProbeNoiseLevel, int _iCascadeSize, uint trials,float& AvgRecallSignal,
 		int iMemoryReps = 0)
 {
+	//T* oCSyn;
+
 	double dRepIntervalsecs = 1;
 	const bool bUseRandomPatterns = true;
 	uint maxMemCapacity = 150;//0.2*sqrt(_uiNeuronCount); //Number of Patterns to Expect After tracked pattern
@@ -605,7 +596,7 @@ int SearchForNetCapacity(T* oCSyn, uint _uiNeuronCount, uint iTrackedMemIndex,
 
 	gsl_rng* mprng = g_getRandGeneratorInstance(true);
 
-	//Init Memory For Patterns
+	//Init Memory For Patterns -- Vectors Re-Randomized At MakeWeight MAtrix
 	for (uint i = 0; i < PatCount; i++) {
 		X[i] = new t_inVal[_uiNeuronCount];
 		//Make Random Patterns to Fill the Gap to the Ones loaded from the File - Or All Random Patterns
@@ -657,6 +648,7 @@ int SearchForNetCapacity(T* oCSyn, uint _uiNeuronCount, uint iTrackedMemIndex,
 	cout << "No.St.Patt\t R.Hits\t AvgSignal" << endl;
 #endif
 
+	//Increment Stored PAtterns And MEasure Recall Hits
 	for (uint i = 1 + iTrackedMemIndex; i < PatCount; i++)
 	{
 		//Always Recall Pattern zero And Incrementally Increase the stored number of overlayed patterns
@@ -696,8 +688,10 @@ int SearchForNetCapacity(T* oCSyn, uint _uiNeuronCount, uint iTrackedMemIndex,
 		deleteMemoryBuffer(_uiNeuronCount, mem_buffer);
 
 	gsl_rng_free(mprng);
-	cout << "-:Fin:- Capacity: " << iCapacity << "  Cascade Size :"
-			<< _iCascadeSize << " Object Type: " << slogFiles[0].c_str()
+	char buff[150];
+	T::getTypeName(buff);
+	cout << "-:Fin:- Capacity: " << iCapacity << "  Object Size :"
+			<< _iCascadeSize << " Object Type: " << buff << " AllowedRecallError:" << g_fAllowedRecallError
 			<< endl;
 
 	return iCapacity;
@@ -719,8 +713,8 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 	cout << fname << " Hopfield Capacity Report Per Cascade Size:" << endl;
 
 	char params[150];
-	sprintf(params, "HopFieldTrial%dCapacityRNDV_%dI_%d.N%d-%ddat", itrials,
-			iNeuronCount, iNoOfInitPatterns, startIndex, maxCascSize);
+	sprintf(params, "-HOPFCapacity-T%d-RNDV_N%d_E%1.2f.N%d-%ddat", itrials,
+			iNeuronCount, g_fAllowedRecallError, startIndex, maxCascSize);
 	strcat(fname, params);
 
 	string fOutName(HOPFIELD_OUTPUT_DIRECTORY);
@@ -755,26 +749,44 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 
 		switch (modelType) {
 		case 1: //synapseCascade
-			synapseCascade* oCSyn;
-			C[i - 1] = SearchForNetCapacity<synapseCascade>(oCSyn, iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseCascade>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
 			break;
 		case 2: //Cascade Filter
+			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnified>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			break;
 		case 3: //Cascade Filter With Decay
+			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			break;
+		case 5: // //synapseCascadeFilterDual DUAL Filter
+			C[i - 1] = SearchForNetCapacity<synapseFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			break;
 		case 7: //Single DUAL Filter
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			break;
 		case 8: //A Single Filter Synapse
+		//	C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			break;
 		case 9: //A Stochastic Updater Synapse
+			C[i - 1] = SearchForNetCapacity<synapseSingleUpdater>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			break;
+		case 11:
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecayReflecting>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			break;
 
 		default:
+			cerr << modelName << endl;
 			ERREXIT(100, "Unhandled Model Type");
 			break;
 		};
-
+		///Write To output File
 		(*ofile) << i << "\t" << C[i - 1] << "\t" << fRecallSignal << endl;
 	}
 
 	for (int i = startIndex; i <= maxCascSize; i++) {
 		cout << i << "\t" << C[i - 1] << endl;
 	}
+
+	cout << fname << endl;
 
 	ofile->close();
 
