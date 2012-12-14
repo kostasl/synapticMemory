@@ -17,7 +17,8 @@ class synapseSingleFilterUnifiedWithDecay: public ICascadeSynapse {
 public:
 	typedef ICascadeSynapse super;//Creates the keyword super to refer to base class
 	synapseSingleFilterUnifiedWithDecay();
-	//synapseSingleFilterUnifiedWithDecay(int piCascadeSize,gsl_rng * rng_r); //Initialize with cascadeSize
+	synapseSingleFilterUnifiedWithDecay(int piFilterSize,gsl_rng * rng_r); //Initialize with cascadeSize
+	synapseSingleFilterUnifiedWithDecay(int piFilterSize,ICascadeSynapse::SYN_STRENGTH_STATE penumStartStrength,gsl_rng * rng_r); //Initialize with Filter And Strength
 	//synapseSingleFilterUnifiedWithDecay(int piCascadeSize,ICascadeSynapse::SYN_STRENGTH_STATE penumStartStrength,gsl_rng * rng_r); //
 	//synapseSingleFilterUnifiedWithDecay(int piCascadeSize,int piStartIndex,gsl_rng * rng_r); //Used to Start From A fixed point and test how distribution evolves
 	//synapseSingleFilterUnifiedWithDecay(int piCascadeSize,int piStartIndex,ICascadeSynapse::SYN_STRENGTH_STATE penumStartStrength,gsl_rng *  prng_r,int iRateDependentParameterSet=0); //Default Value is rate=1.0

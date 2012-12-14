@@ -137,6 +137,70 @@ synapseSingleFilterUnifiedWithDecay::synapseSingleFilterUnifiedWithDecay(int piL
 
 }
 
+
+synapseSingleFilterUnifiedWithDecay::synapseSingleFilterUnifiedWithDecay(int FilterSize, gsl_rng* prng):super() {
+
+	mprng = prng;
+	 //Enable Metaplastic Transition Allocations
+	mbPlasticAlloc = false;
+	mbMetaplasticAlloc = false;
+
+	miTerminalIndex = miCascadeIndex = miStartIndex = 0;
+	mdDecayRate = 0.0;
+	miTimeSinceLastInduction = 0;
+
+	miHThres = FilterSize;
+	miLThres = -FilterSize;
+
+	setAllocationThreshold(0); //No refraction Period
+	mprng = g_getRandGeneratorInstance(false);
+	double r = gsl_rng_uniform(mprng);
+
+	if (r<0.5)
+	{
+		penumStartStrength = penumStrength = SYN_STRENGTH_STRONG;
+	}
+	else
+	{
+		penumStartStrength = penumStrength = SYN_STRENGTH_WEAK;
+	}
+
+	assert(miLThres <  miHThres);
+	//Inject Somewhere
+	initialiseFilterState();
+	assert(miRFilterValue > miLThres && miRFilterValue < miHThres);
+
+}
+
+synapseSingleFilterUnifiedWithDecay::synapseSingleFilterUnifiedWithDecay(int piFilterSize, ICascadeSynapse::SYN_STRENGTH_STATE enumStartStrength, gsl_rng * prng):super()
+{
+mprng = prng;
+ //Enable Metaplastic Transition Allocations
+mbPlasticAlloc = false;
+mbMetaplasticAlloc = false;
+
+miTerminalIndex = miCascadeIndex = miStartIndex = 0;
+mdDecayRate = 0.0;
+miTimeSinceLastInduction = 0;
+
+miHThres = piFilterSize;
+miLThres = -piFilterSize;
+
+setAllocationThreshold(0); //No refraction Period
+mprng = g_getRandGeneratorInstance(false);
+
+penumStrength = penumStartStrength = enumStartStrength;
+
+assert(miLThres <  miHThres);
+//Inject Somewhere
+initialiseFilterState();
+assert(miRFilterValue > miLThres && miRFilterValue < miHThres);
+
+}
+
+
+
+
 /*
  * This is the constructor Called by the allocation Function for Single Filters.
  */
