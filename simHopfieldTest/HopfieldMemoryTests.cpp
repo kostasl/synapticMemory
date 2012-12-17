@@ -555,7 +555,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
  */
 template<class T>
 int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
-		float _fProbeNoiseLevel, int _iCascadeSize, uint trials,float& AvgRecallSignal,
+		float _fProbeNoiseLevel, int _iCascadeSize, uint trials,float& AvgRecallSignal, int& RecallSuccessAtCapacityLimit,
 		int iMemoryReps = 0)
 {
 	//T* oCSyn;
@@ -569,6 +569,7 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 	uint PatCount = 1 + iTrackedMemIndex + maxMemCapacity; //Max Patterns Created And Thus Max Storage Capacity is NeuronCount/5
 	//const float corrPercent = 0.5;
 	int recallHits;
+
 	int iCapacity = 0;
 	float AvgSignal;
 	double r; //Random Var.
@@ -635,6 +636,7 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 
 	//Increment Stored PAtterns And MEasure Recall Hits
 	AvgRecallSignal = 0;
+	RecallSuccessAtCapacityLimit = 0;
 	for (uint i = 1 + iTrackedMemIndex; i < PatCount; i++)
 	{	//Always Recall Pattern zero And Incrementally Increase the stored number of overlayed patterns
 		//An Empty Memory buffer pointer and Vector for the Synapses is Passed - Which is filled by the called functions
@@ -654,7 +656,8 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 		else {
 			NoRecallTrialsCount = 0;
 			iCapacity = i - iTrackedMemIndex; //Store Capacity Up to last successul recall
-			AvgRecallSignal = AvgSignal; //The last one saved will be when The PatCount = Capacity
+			AvgRecallSignal 			 = AvgSignal; //The last one saved will be when The PatCount = Capacity
+			RecallSuccessAtCapacityLimit = recallHits;
 		}
 
 		if (NoRecallTrialsCount == 3) //Stop If Recall has been impossible for 3 increasing pattern sizes now
@@ -676,8 +679,8 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 	gsl_rng_free(mprng);
 	char buff[150];
 	T::getTypeName(buff);
-	cout << "-:Fin:- Capacity: " << iCapacity << "  Object Size :"
-			<< _iCascadeSize << " Object Type: " << buff << " AllowedRecallError:" << g_fAllowedRecallError
+	cout << "-:Fin:- Capacity: " << iCapacity << " with Recall " << RecallSuccessAtCapacityLimit << "/" << trials
+			<< "  Object Size :" << _iCascadeSize << " Object Type: " << buff << " AllowedRecallError:" << g_fAllowedRecallError
 			<< endl;
 
 	return iCapacity;
@@ -722,8 +725,8 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 			<< " Init Patts:" << iNoOfInitPatterns << " Neurons:"
 			<< iNeuronCount << " Allowed Recall Error:" << g_fAllowedRecallError << endl;
 
-	(*ofile) << "#CascSize\tCapacity\tAvgSignal" << endl;
-
+	(*ofile) << "#CascSize\tCapacity\tAvgSignal\tRecallSuccessInTrials" << endl;
+	int rHits; //Recall Counts out of T trials At capacity Limi
 	for (int i = startIndex; i <= maxCascSize; i++) {
 		g_FilterTh = i;
 		g_UpdaterQ = 1.0 / (g_FilterTh * g_FilterTh);
@@ -735,28 +738,28 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 
 		switch (modelType) {
 		case 1: //synapseCascade
-			C[i - 1] = SearchForNetCapacity<synapseCascade>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseCascade>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits);
 			break;
 		case 2: //Cascade Filter
-			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnified>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnified>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits);
 			break;
 		case 3: //Cascade Filter With Decay
-			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits);
 			break;
 		case 5: // //synapseCascadeFilterDual DUAL Filter
-			C[i - 1] = SearchForNetCapacity<synapseFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits);
 			break;
 		case 7: //Single DUAL Filter
-			C[i - 1] = SearchForNetCapacity<synapseSingleFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits);
 			break;
 		case 8: //A Single Filter Synapse
-			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits);
 			break;
 		case 9: //A Stochastic Updater Synapse
-			C[i - 1] = SearchForNetCapacity<synapseSingleUpdater>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseSingleUpdater>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits);
 			break;
 		case 11:
-			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecayReflecting>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal);
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecayReflecting>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits);
 			break;
 
 		default:
@@ -765,7 +768,7 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 			break;
 		};
 		///Write To output File
-		(*ofile) << i << "\t" << C[i - 1] << "\t" << fRecallSignal << endl;
+		(*ofile) << i << "\t" << C[i - 1] << "\t" << fRecallSignal <<"\t" << (float)rHits/trials  << endl;
 	}
 
 	for (int i = startIndex; i <= maxCascSize; i++) {

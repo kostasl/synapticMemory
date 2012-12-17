@@ -43,7 +43,7 @@ all: simHopfieldTest
 simHopfieldTest: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/kostasl/CodeProjects/synapticMemory/synapseModels/Debug" -o "simHopfieldTest" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/kostasl/synapticMemory/synapseModels/Debug" -L/usr/lib/ -o "simHopfieldTest" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
