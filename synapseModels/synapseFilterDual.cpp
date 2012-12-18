@@ -682,19 +682,19 @@ void synapseFilterDual::initialiseFilterState()
 	for ( i = 0; i< ciMaxInternalStates;i++)
 	{
 		p += (*dPDFUsed)[miCascadeIndex][i]; //Accumulate the Pdf
-		if (p > r){
+		if (p >= r){
 			//Found the spot since r was just exceeded
 			miRPFilterValue = i; //Remove Offset so i=0 becomes state -3 floor(ciMaxInternalStates/2)
 			break;
 		}
 	}
 
-	//Do-D Filter State Init - Same As Above
+	//Do-D Filter State Init - Same As Above -- Could Replace ciMaxInternalStates with hThres
 	r = gsl_rng_uniform(mprng); //For the other filter now
 	for ( i = 0; i< ciMaxInternalStates;i++)
 	{
 		p += (*dPDFUsed)[miCascadeIndex][i]; //Accumulate the Pdf
-		if (p > r){
+		if (p >= r){
 			//Found the spot since r was just exceeded
 			miRDFilterValue = i; //Remove Offset so i=0 becomes state -3 floor(ciMaxInternalStates/2)
 			break;
@@ -704,6 +704,9 @@ void synapseFilterDual::initialiseFilterState()
 	//Catch stupid Errors
 	if(( (miRDFilterValue >= miLThres) || (miRPFilterValue >= miHThres) ))
 	{
+		char buff[400];
+		sprintf(buff,"Initialising filter state failed in index %d, cdf p:%f",miCascadeIndex,p);
+		liberrexit(100,buff);
 		assert((miRDFilterValue < miLThres) && ((miRPFilterValue < miHThres)));
 	}
 

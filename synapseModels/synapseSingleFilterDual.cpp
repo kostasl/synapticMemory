@@ -432,8 +432,8 @@ void synapseSingleFilterDual::initialiseFilterState()
 			const double probPStep = 2.0/(double)(miHThres*miHThres);
 			//const double probDStep = 1/miLThres;
 
-		for (int i=1;i<miHThres;i++)
-				p+=(i+1)*probPStep;
+		//for (int i=1;i<miHThres;i++)
+		//		p+=(i+1)*probPStep;
 
 			//Inject On one filter
 			assert (miHThres == miLThres);
@@ -443,7 +443,7 @@ void synapseSingleFilterDual::initialiseFilterState()
 			for (int i=0;i<miHThres;i++)
 			{
 				p+=(i+1)*probPStep;
-				if (p > r)
+				if (p >= r)
 				{
 					miRPFilterValue = i;
 					break;
@@ -454,7 +454,7 @@ void synapseSingleFilterDual::initialiseFilterState()
 			for (int i=0;i<miHThres;i++)
 			{
 				p+=(i+1)*probPStep;
-				if (p > q)
+				if (p >= q)
 				{
 					miRDFilterValue = i;
 					break;
