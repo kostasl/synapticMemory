@@ -118,7 +118,7 @@ ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecay>(vector<s
 
 		vSyn.push_back(pObj);//Add to Target Vector
 	}
-	cout << "Stability Threshold : " << g_AllocRefraction << endl;
+	//cout << "Stability Threshold : " << g_AllocRefraction << endl;
 	return (ICascadeSynapse*)pmem.first;
 	//Use return_temporary_buffer(buffer) To release
 
