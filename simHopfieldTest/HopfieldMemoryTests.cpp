@@ -557,10 +557,9 @@ template<class T>
 int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 		float _fProbeNoiseLevel, int _iCascadeSize, uint trials,float& AvgRecallSignal, int& RecallSuccessAtCapacityLimit,
 		int& RecallDuration,//Counter of consecutive number of Successfule patterns recalled - Filter Rising Signal could start recalling at middlepoint in sequence of patterns
-		int iMemoryReps = 0)
+		int NoRecallPatternsCountThreshold, int iMemoryReps = 0)
 {
 	//T* oCSyn;
-	const int NoRecallPatternsCountThreshold = 0.375*(float)_iCascadeSize*_iCascadeSize;
 	const int iRecallSuccessHitsThreshold 	= (float) trials / 2;
 
 
@@ -753,30 +752,39 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 				<< " cAMPInj:" << g_fcAMPMagnitude << " h_thres:"
 				<< g_fAllocHThres << endl;
 
+		int NoRecallPatternsCountThreshold = 10;
 		switch (modelType) {
 		case 1: //synapseCascade
-			C[i - 1] = SearchForNetCapacity<synapseCascade>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration);
+			NoRecallPatternsCountThreshold = 10;
+			C[i - 1] = SearchForNetCapacity<synapseCascade>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
 			break;
 		case 2: //Cascade Filter
-			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnified>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration);
+			NoRecallPatternsCountThreshold = 0.375*(float)i*i+10;
+			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnified>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
 			break;
 		case 3: //Cascade Filter With Decay
-			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration);
+			NoRecallPatternsCountThreshold = 0.375*(float)i*i+10;
+			C[i - 1] = SearchForNetCapacity<synapseCascadeFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
 			break;
 		case 5: // //synapseCascadeFilterDual DUAL Filter
-			C[i - 1] = SearchForNetCapacity<synapseFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration);
+			NoRecallPatternsCountThreshold = 2*i+10; //Peak Is mix OF All DualFilters But largest one is 4
+			C[i - 1] = SearchForNetCapacity<synapseFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
 			break;
 		case 7: //Single DUAL Filter
-			C[i - 1] = SearchForNetCapacity<synapseSingleFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration);
+			NoRecallPatternsCountThreshold = 2*i+10; //2 Theta - 1
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterDual>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
 			break;
 		case 8: //A Single Filter Synapse
-			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration);
+			NoRecallPatternsCountThreshold = 0.375*(float)i*i+10;
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecay>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
 			break;
 		case 9: //A Stochastic Updater Synapse
-			C[i - 1] = SearchForNetCapacity<synapseSingleUpdater>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration);
+			NoRecallPatternsCountThreshold = 3;
+			C[i - 1] = SearchForNetCapacity<synapseSingleUpdater>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
 			break;
 		case 11:
-			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecayReflecting>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration);
+			 NoRecallPatternsCountThreshold = 0.375*(float)i*i + 10;
+			C[i - 1] = SearchForNetCapacity<synapseSingleFilterUnifiedWithDecayReflecting>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
 			break;
 
 		default:
