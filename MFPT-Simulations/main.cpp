@@ -184,8 +184,8 @@ int main(int argc, char* argv[])
 	double dMFPT[8],dMFPTVar[8];
 	for (int i=startIndex;i<=endIndex;i++)
 	{
-	 g_FilterTh =i;
-	 //g_UpdaterQ = 1.0/(g_FilterTh*g_FilterTh);
+	 g_FilterTh = i;
+	 g_UpdaterQ = 1.0/(g_FilterTh*g_FilterTh);
 
 	 runMFPTWithRepetition(dMFPT,dMFPTVar,modelType,ts,trials,trackedMemIndex,RepMemoryIndex,iRepetitions,dRepTime,i,synapsesPopulation,dEncodingRate,iRepetitions);
 
