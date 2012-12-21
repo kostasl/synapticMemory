@@ -15,9 +15,9 @@
 <coolItem id="org.eclipse.cdt.ui.CElementCreationActionSet" itemType="typeToolBarContribution" x="156" y="30"/>
 <coolItem id="org.eclipse.cdt.ui.buildConfigActionSet" itemType="typeToolBarContribution" x="82" y="30"/>
 <coolItem id="org.eclipse.cdt.ui.editor.CEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
-<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="120" y="30"/>
-<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="132" y="30"/>
-<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="40" y="30"/>
+<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="156" y="30"/>
+<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="104" y="30"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="96" y="30"/>
 <coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
 <coolItem id="group.nav" itemType="typeGroupMarker"/>
@@ -26,7 +26,7 @@
 <coolItem id="group.help" itemType="typeGroupMarker"/>
 <coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
 </coolbarLayout>
-<page aggregateWorkingSetId="Aggregate for window 1354365268748" focus="true" label="Workspace - Debug">
+<page aggregateWorkingSetId="Aggregate for window 1354365268748" focus="true" label="Workspace - C/C++">
 <editors>
 <editorArea activeWorkbook="DefaultEditorWorkbook">
 <info part="DefaultEditorWorkbook">
@@ -39,6 +39,8 @@
 <part id="4"/>
 <part id="5"/>
 <part id="6"/>
+<part id="7"/>
+<part id="8"/>
 </presentation>
 </folder>
 </info>
@@ -51,13 +53,13 @@
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simHopfieldTest/InputVectorHandling.cpp"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="471"/>
 </editor>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="HopfieldMemoryTests.cpp" partName="HopfieldMemoryTests.cpp" path="/home/kostasl/CodeProjects/synapticMemory/simHopfieldTest/HopfieldMemoryTests.cpp" title="HopfieldMemoryTests.cpp" tooltip="simHopfieldTest/HopfieldMemoryTests.cpp" workbook="DefaultEditorWorkbook">
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="HopfieldMemoryTests.cpp" partName="HopfieldMemoryTests.cpp" path="/home/kostasl/CodeProjects/synapticMemory/simHopfieldTest/HopfieldMemoryTests.cpp" title="HopfieldMemoryTests.cpp" tooltip="simHopfieldTest/HopfieldMemoryTests.cpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simHopfieldTest/HopfieldMemoryTests.cpp"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="29189" selectionTopPixel="12760"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="30998" selectionTopPixel="13141"/>
 </editor>
-<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" partName="main.cpp" path="/home/kostasl/CodeProjects/synapticMemory/simHopfieldTest/main.cpp" title="main.cpp" tooltip="simHopfieldTest/main.cpp" workbook="DefaultEditorWorkbook">
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" partName="main.cpp" path="/home/kostasl/CodeProjects/synapticMemory/simHopfieldTest/main.cpp" title="main.cpp" tooltip="simHopfieldTest/main.cpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simHopfieldTest/main.cpp"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="7908" selectionTopPixel="1958"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="9958" selectionTopPixel="2509"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="common.h" partName="common.h" path="/home/kostasl/CodeProjects/synapticMemory/simHopfieldTest/common.h" title="common.h" tooltip="simHopfieldTest/common.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simHopfieldTest/common.h"/>
@@ -70,6 +72,14 @@
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="synapseAllocators.cpp" partName="synapseAllocators.cpp" path="/home/kostasl/CodeProjects/synapticMemory/simHopfieldTest/synapseAllocators.cpp" title="synapseAllocators.cpp" tooltip="simHopfieldTest/synapseAllocators.cpp" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/simHopfieldTest/synapseAllocators.cpp"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4387" selectionTopPixel="1720"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" partName="main.cpp" path="/home/kostasl/CodeProjects/synapticMemory/MFPT-Simulations/main.cpp" title="main.cpp" tooltip="MFPT-Simulations/main.cpp" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/MFPT-Simulations/main.cpp"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="8818" selectionTopPixel="2803"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="ContinuousTimeExperiments.h" partName="ContinuousTimeExperiments.h" path="/home/kostasl/CodeProjects/synapticMemory/MFPT-Simulations/ContinuousTime/ContinuousTimeExperiments.h" title="ContinuousTimeExperiments.h" tooltip="MFPT-Simulations/ContinuousTime/ContinuousTimeExperiments.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/MFPT-Simulations/ContinuousTime/ContinuousTimeExperiments.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="7" selectionOffset="7213" selectionTopPixel="4565"/>
 </editor>
 </editors>
 <views>
@@ -122,7 +132,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.ui.console.ConsoleView" activePerspective="org.eclipse.debug.ui.DebugPerspective">
+<perspectives activePart="org.eclipse.cdt.ui.editor.CEditor" activePerspective="org.eclipse.cdt.ui.CPerspective">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.eclipse.ui.internal.ide.application.ResourcePerspective" id="org.eclipse.ui.resourcePerspective" label="Resource"/>
 <alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
@@ -259,31 +269,43 @@
 <view id="org.eclipse.ui.console.ConsoleView"/>
 <view id="org.eclipse.ui.views.PropertySheet"/>
 <fastViewBars/>
-<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="topLeft">&#x0A;<folder activePageID="org.eclipse.ui.navigator.ProjectExplorer" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.navigator.ProjectExplorer" label="Project Explorer"/>
+<layout>
+<mainWindow>
+<info folder="true" part="topLeft">
+<folder activePageID="org.eclipse.ui.navigator.ProjectExplorer" appearance="2" expanded="2">
+<page content="org.eclipse.ui.navigator.ProjectExplorer" label="Project Explorer"/>
 <page content="org.eclipse.cdt.ui.CView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
 <page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="topLeft">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="topLeft">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
 <info part="org.eclipse.ui.editorss" ratio="0.27441582" ratioLeft="458" ratioRight="1211" relationship="2" relative="topLeft"/>
-<info folder="true" part="topRight" ratio="0.7748918" ratioLeft="895" ratioRight="260" relationship="2" relative="org.eclipse.ui.editorss">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
+<info folder="true" part="topRight" ratio="0.7748918" ratioLeft="895" ratioRight="260" relationship="2" relative="org.eclipse.ui.editorss">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
 <page content="org.eclipse.cdt.make.ui.views.MakeView" label="LabelNotFound"/>
 <page content="org.eclipse.pde.runtime.LogView" label="LabelNotFound"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@b95d2f1" ratio="0.59303594" ratioLeft="545" ratioRight="374" relationship="4" relative="org.eclipse.ui.editorss">&#x0A;<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@b95d2f1" ratio="0.82480955" ratioLeft="758" ratioRight="161" relationship="4" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
 <page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.ui.views.PropertySheet" label="Properties"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 <part id="3"/>
@@ -368,7 +390,7 @@
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.648531" ratioLeft="596" ratioRight="323" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
+<info folder="true" part="org.eclipse.debug.internal.ui.ConsoleFolderView" ratio="0.7334059" ratioLeft="674" ratioRight="245" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView">
 <folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
 <page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.ui.views.TaskList" label="Tasks"/>
@@ -388,7 +410,7 @@
 </presentation>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.37810946" ratioLeft="228" ratioRight="375" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
+<info part="org.eclipse.ui.editorss" ratio="0.22428331" ratioLeft="133" ratioRight="460" relationship="4" relative="org.eclipse.debug.internal.ui.NavigatorFolderView"/>
 <info folder="true" part="org.eclipse.debug.internal.ui.OutlineFolderView" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="org.eclipse.ui.editorss">
 <folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
 <page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
@@ -429,6 +451,8 @@
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simHopfieldTest/common.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simHopfieldTest/synapseAllocators.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simHopfieldTest/synapseAllocators.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/MFPT-Simulations/main.cpp"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/simHopfieldTest/HopfieldMemoryTests.cpp"/>
 </editors>
 <item historyLabel="HopfieldMemoryTests.h" index="0">
 <position info="not_deleted" x="0" y="0"/>
@@ -514,8 +538,29 @@
 <item historyLabel="HopfieldMemoryTests.cpp" index="2">
 <position info="not_deleted" x="29189" y="0"/>
 </item>
-<item active="true" historyLabel="main.cpp" index="3">
+<item historyLabel="main.cpp" index="3">
 <position info="not_deleted" x="9956" y="0"/>
+</item>
+<item historyLabel="main.cpp" index="7">
+<position info="not_deleted" x="0" y="0"/>
+</item>
+<item historyLabel="main.cpp" index="7">
+<position info="not_deleted" x="8818" y="0"/>
+</item>
+<item historyLabel="main.cpp" index="3">
+<position info="not_deleted" x="7908" y="0"/>
+</item>
+<item historyLabel="HopfieldMemoryTests.cpp" index="8">
+<position info="not_deleted" x="29189" y="0"/>
+</item>
+<item historyLabel="HopfieldMemoryTests.cpp" index="8">
+<position info="not_deleted" x="26883" y="22"/>
+</item>
+<item active="true" historyLabel="HopfieldMemoryTests.cpp" index="8">
+<position info="not_deleted" x="30998" y="0"/>
+</item>
+<item historyLabel="HopfieldMemoryTests.cpp" index="8">
+<position info="not_deleted" x="20344" y="20"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -534,6 +579,12 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ContinuousTimeExperiments.h" tooltip="MFPT-Simulations/ContinuousTime/ContinuousTimeExperiments.h">
+<persistable path="/MFPT-Simulations/ContinuousTime/ContinuousTimeExperiments.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="MFPT-Simulations/main.cpp">
+<persistable path="/MFPT-Simulations/main.cpp"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="synapseAllocators.cpp" tooltip="simHopfieldTest/synapseAllocators.cpp">
 <persistable path="/simHopfieldTest/synapseAllocators.cpp"/>
 </file>
@@ -572,12 +623,6 @@
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="common.h" tooltip="simAllocation-PKA/common.h">
 <persistable path="/simAllocation-PKA/common.h"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.cpp" tooltip="simAllocation-PKA/main.cpp">
-<persistable path="/simAllocation-PKA/main.cpp"/>
-</file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="ContinuousTimeExperiments.cpp" tooltip="simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.cpp">
-<persistable path="/simAllocation-PKA/ContinuousTime/ContinuousTimeExperiments.cpp"/>
 </file>
 </mruList>
 </workbench>
