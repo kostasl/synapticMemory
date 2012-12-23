@@ -112,6 +112,7 @@ int main(int argc, char* argv[])
 	mapSynapseAllocator["synapseCascadeFilterUnified"] = 2;
 	mapSynapseAllocator["synapseCascadeFilterUnifiedWithDecay"] = 3;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
 	mapSynapseAllocator["synapseSingleFilterDual"] = 4;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
+	mapSynapseAllocator["synapseCascadeFilterDual"]	= 5;
 	//mapSynapseAllocator["cascadeDelayed"]
 	//mapSynapseAllocator["CascadeSamplingFilter"]
 	//mapSynapseAllocator["synapseSingleFilterDual"]
@@ -248,6 +249,10 @@ break;
 case 4:
 	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
 	 simMFPT<synapseSingleFilterDual,pAllocationFunct>(_oMFPT,_oMFPTVar,pF, synapsesPopulation,CascadeSize,trackedMemIndex, trials,dEncodingRate,repetitionTable,ts);
+break;
+case 5:
+	 pF =  (pAllocationFunct)allocSynapseArrayCascade<synapseFilterDual>;
+	 simMFPT<synapseFilterDual,pAllocationFunct>(_oMFPT,_oMFPTVar,pF, synapsesPopulation,CascadeSize,trackedMemIndex, trials,dEncodingRate,repetitionTable,ts);
 break;
 case 8: //A Single Filter Synapse
 	 pF =  (pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>;

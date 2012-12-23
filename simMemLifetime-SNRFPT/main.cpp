@@ -47,7 +47,9 @@ int main(int argc, char* argv[])
 
 	string inputFile,modelName;
 	string simulationName = "simRepetition";
-	int startIndex,endIndex,simulationType,modelType,synapsesPopulation,trackedMemIndex,initPeriod,iRepetitions;
+	int startIndex,endIndex,simulationType,modelType,trackedMemIndex,initPeriod,iRepetitions;
+	int synapsesPopulationFinal = 1000;
+	int synapsesPopulationStart;
 	unsigned int trials;
 	bool bUseCascadeParadigm;
 
@@ -68,7 +70,8 @@ int main(int argc, char* argv[])
 		("simulation,S", po::value<string>(&simulationName)->default_value(simulationName), "The simulation name to run")
 		("trials,T", po::value<unsigned int>(&trials)->default_value(10000), "Number of iteration to average over")
 	    ("cSimTimeSecs,secs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds")
-		("synapsesSize", po::value<int>(&synapsesPopulation)->default_value(10000), "The number of synapses to use - Has to match the vector file size where required")
+		("synapsesSize", po::value<int>(&synapsesPopulationFinal)->default_value(synapsesPopulationFinal), "Incremental Maximum Size of Net- Has to match the vector file size where required")
+		("synapsesSizeStart", po::value<int>(&synapsesPopulationStart)->default_value(synapsesPopulationFinal), "Start Size of Net - The experiment will increment it up Maximum Size")
 		("inputFile,V", po::value<string>(&inputFile)->default_value("\n"), "The vector input file to use from directory MemoryInputVectors. If No file given then Random Vectors are used.")
 		("UnAllocTID", po::value< vector<uint> >(&pviTrackedIndex)->multitoken(), "Pattern indexes to Track that will not be allocated. These patterns will signal No allocation")
 		("AllocateTID", po::value< vector<uint> >(&pviAllocIndex)->multitoken(), "Pattern Index on which to enable the global Allocation Signal")
@@ -160,7 +163,7 @@ int main(int argc, char* argv[])
 
 	////OPEN OUTPUT FILES To save The point When MEAN signal Drops below SNR=1
 	char buff[100];
-		sprintf(buff,"_FPT-N%d_%d-%d_T%d_ts%.2f.dat",synapsesPopulation,startIndex,endIndex,trials,ts);
+		sprintf(buff,"_FPT-N%d_%d-%d_T%d_ts%.2f.dat",synapsesPopulationFinal,startIndex,endIndex,trials,ts);
 
 	string strDir(MFPTIMESSNR_OUTPUT_DIRECTORY);
 	string strFilename(modelName);
@@ -175,23 +178,31 @@ int main(int argc, char* argv[])
 
 	//////LOG File Opened////
 	(*ofile) << "#First Passage Time Is where SNR=1 - That is the point where on Avg Signal crosses 0" << endl;
-	(*ofile) << "#Size\tMSFPT" << endl;
+	(*ofile) << "#Size\tMSFPT\tNSize" << endl;
 
 	double dMSFPT;
-	//For Cascade Indexes
-	for (int i=startIndex;i<=endIndex;i++)
+	int N = synapsesPopulationStart;
+	for ( N = synapsesPopulationStart;N <= synapsesPopulationFinal;N += pow(10, floor(log10(N)) ) )
 	{
-		 g_FilterTh =i;
-		 g_UpdaterQ = 1.0/(g_FilterTh*g_FilterTh);
+		cout << " Size Increment :" << pow(10, floor(log10(N))) << endl;
 
-		 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,vdRepTime,i,synapsesPopulation,lSimtimeSeconds,dEncodingRate,inputFile);
-		 (*ofile) << i << "\t" << dMSFPT << endl;
-		//Switch the Simulation Type
-	 }//Loop For Each Cascade Index
+		//For Cascade Indexes
+		for (int i=startIndex;i<=endIndex;i++)
+		{
+			 g_FilterTh =i; ///The Unified Filter Thresholds
+			 g_UpdaterQ = 1.0/(g_FilterTh*g_FilterTh);
 
+			 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,vdRepTime,i,N,lSimtimeSeconds,dEncodingRate,inputFile);
+			 (*ofile) << i << "\t" << dMSFPT << "\t" << N << endl;
+			//Switch the Simulation Type
+		 }//Loop For Each Cascade Index
+
+
+	}
 	 ofile->close();
   ///Measure Duration
   finish = clock();
+
   ///Print Duration of Run - //TODO: This gives the wrong Time When using Threads!
 
   double duration = (double)(finish - start) / CLOCKS_PER_SEC;//Eclipse Reports Problem with  CLOCKS_PER_SEC But it compiles normally -Eclipse Bug
