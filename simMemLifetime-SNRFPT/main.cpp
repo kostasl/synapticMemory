@@ -182,9 +182,11 @@ int main(int argc, char* argv[])
 
 	double dMSFPT;
 	int N = synapsesPopulationStart;
+	int iFixedIterations;
 	for ( N = synapsesPopulationStart;N <= synapsesPopulationFinal;N += pow(10, floor(log10(N)) ) )
 	{
 		cout << " Size Increment :" << pow(10, floor(log10(N))) << endl;
+		iFixedIterations = trials / N;
 
 		//For Cascade Indexes
 		for (int i=startIndex;i<=endIndex;i++)
@@ -192,7 +194,9 @@ int main(int argc, char* argv[])
 			 g_FilterTh =i; ///The Unified Filter Thresholds
 			 g_UpdaterQ = 1.0/(g_FilterTh*g_FilterTh);
 
-			 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,vdRepTime,i,N,lSimtimeSeconds,dEncodingRate,inputFile);
+			 dMSFPT = runContinuousMemoryRepetition(modelType,ts,iFixedIterations,trackedMemIndex,
+					 	 	 	 	 	 	 	 	 RepMemoryIndex,vdRepTime,i,N,lSimtimeSeconds,
+					 	 	 	 	 	 	 	 	 	dEncodingRate,inputFile);
 			 (*ofile) << i << "\t" << dMSFPT << "\t" << N << endl;
 			//Switch the Simulation Type
 		 }//Loop For Each Cascade Index
