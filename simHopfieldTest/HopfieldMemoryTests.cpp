@@ -76,8 +76,10 @@ float** makeWeightMatrix(int NetSize, int* Xin, float** W) {
 template<class T>
 inline void deleteMemoryBuffer(uint ArrSize, T**& buffer) {
 	assert(buffer != 0);
+
 	for (uint i = 0; i < ArrSize; i++) {
-		delete[] buffer[i];
+		return_temporary_buffer(buffer[i]);
+		//delete[] buffer[i];
 		//delete the memory for each char array in array first
 	}
 	//then delete the memory to the array of pointers
@@ -126,7 +128,7 @@ inline void deleteMemoryBuffer(uint ArrSize, T**& buffer) {
  */
 template<class T>
 float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
-		uint iTrackedIndex, int _CascadeSize, char**& buffer, float**& w,
+		uint iTrackedIndex, int _CascadeSize, T**& buffer, float**& w,
 		vector<T*>& vSyn, vector<string>& slogfiles) {
 
 	bool bReconstructObjects = false; //Destruct and Re-construct objects in memory buffer every time function is called
@@ -138,7 +140,7 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 
 	T** s;
 
-	char* pseg = 0;
+	T* pseg = 0;
 	//float StartStrength = 0.0f;
 	size_t sizeBlock = sizeof(T);
 	gsl_rng* mprng = g_getRandGeneratorInstance(true);
@@ -155,13 +157,17 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 		vSyn.clear(); //Clear Vector of Pointers to Synapses
 		vSyn.reserve(0.55*NetSize * NetSize); //Size Vector To save Time
 		//Buffer Inited In Alloc Function - Here Make The Array of pointers to buffers
-		buffer = new char*[NetSize]; //Make Pointer Array to Pointers
-		assert( buffer != NULL);
-		memset(buffer,0,NetSize*sizeof(char*));
-		cout << "Memory for synapses in bytes :" << NetSize*NetSize*0.5*sizeBlock <<  endl;
+		//buffer = new char*[NetSize]; //Make Pointer Array to Pointers of buffers where the each array of synapses is to stored
+		//pair<T*,ptrdiff_t> pmem;
+		//pmem = get_temporary_buffer<T*>(NetSize); //new t_inVal[_uiNeuronCount];
+		buffer = new T*[NetSize];
 
-	} else {
-		//Memory Has been Inited So delete Old Objects to create New over allocated Memory  //Call Destructors Manually
+		assert( buffer != NULL);
+		memset(buffer,0,NetSize*sizeof(T*));
+		cout << "Memory for synapses in bytes :" << NetSize*sizeBlock <<  endl;
+
+	} else {//Memory Has been Inited So delete Old Objects to create New over allocated Memory  //Call Destructors Manually
+
 		if (bReconstructObjects)
 				for (typename vector<T*>::iterator it = vSyn.begin();it != vSyn.end(); ++it)(*it)->~T();
 		}
@@ -183,14 +189,15 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 
 		} else {
 			memset(w[i], 0, NetSize*sizeof(float)); //Reset Contents of weight matrix to 0 for New Round
-			pseg = buffer[i]; //memory Had Been Initialised on Previous Run so just reposition pointer
+			pseg = (T*) buffer[i]; //memory Had Been Initialised on Previous Run so just reposition pointer
 		}
 
 		s = (T**) (buffer); ///Cast Memory Location Pointer for Objects
 
 		if (bReconstructObjects || NeedToInitMemory) {
 			///Initialise Synapses Using Allocation Function - Only 1/2 of NetSize^2 - As there are symmetric connections
-			s[i] = (T*)allocSynapseArray<T>(vSyn,(char*) buffer[i], i,(int) _CascadeSize, mprng, 1.0);
+			s[i] = (T*)allocSynapseArray<T>(vSyn,(T*)buffer[i], i,(int) _CascadeSize, mprng, 1.0);
+			buffer[i] = s[i]; //Buffer Is not by ref so set address here
 			iSynCount += i;
 
 		} //If Init Memory Or Objects Required
@@ -343,7 +350,7 @@ template<class T>
 int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 		t_inVal* tX, float _fProbeNoiseLevel, int _iStoredPatIndex,
 		int _iCascadeSize, float& AvgSignal, uint trials,
-		vector<string>& slogFiles, vector<T*>& vSyn, char**& mem_buffer) {
+		vector<string>& slogFiles, vector<T*>& vSyn, T**& mem_buffer) {
 	///Simulation Statistics//
 	const uint uiNetUpdateCycles = 20;
 	const uint ciInterruptCondition = trials * 0.10; // If the first n trials give 0% or 100% The simulation result is taken as min or Max and stops.
@@ -383,10 +390,13 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 	while (t > 0)
 	{
 		start = clock();
-		cout << endl << endl << " Cascade Size:" << _iCascadeSize
+
+		if (t%(trials/10))
+		{cout << endl << endl << " Cascade Size:" << _iCascadeSize
 				<< " Pat Count: " << _iPatCount << " Tracking:"
 				<< (StoredPatIndex + 1) << " Trial:" << (trials - t)
-				<< " Recall Hits Up to Now:" << rcallHits << endl;
+				<< " Recall Hits Up to Now:" << rcallHits << endl;}
+
 
 		if (duration > 0)
 			cout << " ETL:" << (t * (Totalduration / (trials - t))) / 60
@@ -415,7 +425,7 @@ int testHopfieldBinarySyns(int _iPatCount, uint _uiNeuronCount, t_inVal** X,
 			tX[j] = X[StoredPatIndex][j];
 			//cout << ((tX[j]>0)?"+":"-");
 			if (ProbeNoise > 0) //If the Probe Is noisy
-					{
+			{
 				double r = gsl_rng_uniform(mprng);
 				if (r > ProbeNoise)
 					tX[j] = -tX[j];
@@ -579,9 +589,9 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 	double r; //Random Var.
 
 	//This Function Will Handle the Memory Of the Whole Experiment- Improves speed and adds monitoring Control of synapse Population
-	char** mem_buffer = 0; //Pointer To Memory Allocated for CascadeSynapses
+	T** mem_buffer = 0; //Pointer To Memory Allocated for CascadeSynapses
 	vector<T*> vSyn; //Vector Of Pointers To CascadeSynapses - Filled After Weight Matrix is Created
-	t_inVal* X[PatCount]; //Memory PAtterns Containing The Ones Loaded from File and Random Initialization patterns
+	t_inVal** X = new t_inVal*[PatCount]; //Memory PAtterns Containing The Ones Loaded from File and Random Initialization patterns
 	t_inVal tX[_uiNeuronCount]; //Aux Vector
 
 	gsl_rng* mprng = g_getRandGeneratorInstance(true);
@@ -685,11 +695,16 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 
 	cout << " Call Destructors..." << endl;
 	//Call Destructors Manually
-	for (typename vector<T*>::iterator it = vSyn.begin(); it != vSyn.end();	++it)
-		(*it)->~T();
+	///for (typename vector<T*>::iterator it = vSyn.begin(); it != vSyn.end();	++it)
+	//	(*it)->~T();
 
 	if (mem_buffer != 0)
 		deleteMemoryBuffer(_uiNeuronCount, mem_buffer);
+
+	//Delete Pattern Memory
+	//deleteMemoryBuffer(PatCount, X);
+	delete [] X;
+	//delete [] tX;
 
 	gsl_rng_free(mprng);
 	char buff[150];
@@ -756,7 +771,7 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 		switch (modelType) {
 		case 1: //synapseCascade
 			NoRecallPatternsCountThreshold = 10;
-			C[i - 1] = SearchForNetCapacity<synapseCascade>( iNeuronCount, initPatterns, 0.0f, i, trials,fRecallSignal,rHits,iRecallDuration,NoRecallPatternsCountThreshold);
+			C[i - 1] = SearchForNetCapacity<synapseCascade>( iNeuronCount, initPatterns, 0.0f, i, trials, fRecallSignal, rHits, iRecallDuration, NoRecallPatternsCountThreshold);
 			break;
 		case 2: //Cascade Filter
 			NoRecallPatternsCountThreshold = 0.375*(float)i*i+10;

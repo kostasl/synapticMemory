@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 
 	string inputFile,modelName = "synapseSingleFilterUnifiedWithDecay"; //Default
 	string simulationName = "HopfieldTest";
-	int startIndex,endIndex,simulationType,modelType,iNeuronPopulation,trackedMemIndex,initPeriod;
+	int startIndex,endIndex,simulationType,modelType,iNeuronPopulationFinal,iNeuronPopulationStart,trackedMemIndex,initPeriod;
 	unsigned int trials;
 
 	long lSimtimeSeconds = 250;
@@ -78,7 +78,8 @@ int main(int argc, char* argv[])
 		("simulation,S", po::value<string>(&simulationName)->default_value(simulationName), "The simulation name to run")
 		("trials,T", po::value<unsigned int>(&trials)->default_value(100), "Number of iteration to average over")
 	    ("cSimTimeSecs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds")
-		("NetSize", po::value<int>(&iNeuronPopulation)->default_value(100), "The number of synapses to use - Has to match the vector file size where required")
+		("NetSize", po::value<int>(&iNeuronPopulationFinal)->default_value(100), "Network Size to test - Assume N^2 synapses per neuron")
+		("NetSizeStart", po::value<int>(&iNeuronPopulationStart)->default_value(iNeuronPopulationFinal), "Network Initial Size - This will grow to NetSize growing until n*NetSizeStart < NetSize")
 		("inputFile,V", po::value<string>(&inputFile)->default_value("\n"), "The vector input file to use from directory MemoryInputVectors. If No file given then Random Vectors are used.")
 		("startSize", po::value<int>(&startIndex)->default_value(1), "The range of model size parameter to begin testing - interpretation is model dependent")
 		("endSize", po::value<int>(&endIndex)->default_value(15), "The range of model size parameter to end testing - interpretation is model dependent")
@@ -170,7 +171,16 @@ int main(int argc, char* argv[])
 	if (simulationType == 4) //Simulate Signal In Time MLT
 	{
 		cout << "****HOPFIELD MEMORY LIFETIME TEST******" << endl;
-		doHopfieldCapacityTest(modelType,modelName, iNeuronPopulation, trials, trackedMemIndex, endIndex, startIndex);
+
+		uint uicycles = trials*iNeuronPopulationFinal*iNeuronPopulationFinal;
+
+		for (int n = 1; n*iNeuronPopulationStart <= iNeuronPopulationFinal;n++){
+
+			trials = uicycles/(n*iNeuronPopulationStart*n*iNeuronPopulationStart);
+			cout << "######## Trials:" << trials << " NetSize: " << n*iNeuronPopulationStart << " #####" << endl;
+			doHopfieldCapacityTest(modelType,modelName, n*iNeuronPopulationStart, trials, trackedMemIndex, endIndex, startIndex);
+
+		}
 	}//END IF SIMULATION TYPE (1) MLT
 	else
 	{

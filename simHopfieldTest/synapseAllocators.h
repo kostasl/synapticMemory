@@ -30,7 +30,7 @@ extern int g_MetaplasticitySampleSize;
 //A Generic Allocation Function For all ICascadeSynapse Type Objects
 //NOTES: This Can be converted to return a T*, But.. Issues with older non template functions arise
 template <class T>
-ICascadeSynapse* allocSynapseArray(vector<T*> &vSyn,char* buffer, int iSynCount,int iParamSize,gsl_rng* prng_r,float StimRate)
+ICascadeSynapse* allocSynapseArray(vector<T*> &vSyn,T* buffer, int iSynCount,int iParamSize,gsl_rng* prng_r,float StimRate)
 {
 	  const bool bFixedStartState = false;
 	  ICascadeSynapse::SYN_STRENGTH_STATE startStrength;

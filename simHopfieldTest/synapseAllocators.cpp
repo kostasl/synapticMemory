@@ -14,7 +14,7 @@
 
 //Allocating Fusi Cascade
 template <>
-ICascadeSynapse* allocSynapseArray<synapseCascade>(vector<synapseCascade*> &vSyn,char* buffer,int iSynCount,int iCascadeSize, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseCascade>(vector<synapseCascade*> &vSyn, synapseCascade* buffer,int iSynCount,int iCascadeSize, gsl_rng* prng_r, float StimRate)
 {
 	 // const int iCascadeSize = 1;
 	  const bool bFixedStartState = false;
@@ -68,7 +68,7 @@ ICascadeSynapse* allocSynapseArray<synapseCascade>(vector<synapseCascade*> &vSyn
 }
 
 template <>
-ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecay>(vector<synapseSingleFilterUnifiedWithDecay*> &vSyn,char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecay>(vector<synapseSingleFilterUnifiedWithDecay*> &vSyn,synapseSingleFilterUnifiedWithDecay* buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	 // const int iCascadeSize = 1; //Used So File Name Reflects the Filter Size
 	 ICascadeSynapse::SYN_STRENGTH_STATE startStrength;
@@ -127,7 +127,7 @@ ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecay>(vector<s
 
 //Allocating Stochastic Updaters
 template <>
-ICascadeSynapse* allocSynapseArray<synapseSingleUpdater>(vector<synapseSingleUpdater*> &vSyn,char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseSingleUpdater>(vector<synapseSingleUpdater*> &vSyn,synapseSingleUpdater* buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  const int iCascadeSize = 1;
 	  const bool bFixedStartState = false;
@@ -185,7 +185,7 @@ ICascadeSynapse* allocSynapseArray<synapseSingleUpdater>(vector<synapseSingleUpd
 
 //Allocating Stochastic Updaters
 template <>
-ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecayReflecting>(vector<synapseSingleFilterUnifiedWithDecayReflecting*> &vSyn,char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecayReflecting>(vector<synapseSingleFilterUnifiedWithDecayReflecting*> &vSyn,synapseSingleFilterUnifiedWithDecayReflecting* buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  const int iCascadeSize = 1; //Used So File Name Reflects the Filter Size
 	  const bool bFixedStartState = false;
@@ -243,7 +243,7 @@ ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecayReflecting
 
 //Allocating Stochastic Updaters DUAL FILTER
 template <>
-ICascadeSynapse* allocSynapseArray<synapseSingleFilterDual>(vector<synapseSingleFilterDual*> &vSyn,char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
+ICascadeSynapse* allocSynapseArray<synapseSingleFilterDual>(vector<synapseSingleFilterDual*> &vSyn,synapseSingleFilterDual* buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {
 	  const int iCascadeSize = 1;
 	  const bool bFixedStartState = false;
