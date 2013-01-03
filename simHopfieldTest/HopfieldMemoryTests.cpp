@@ -25,6 +25,8 @@ extern double g_dcAMPMax; // A globally set  saturation value of cAMP.
 extern float g_fPKAAllocThres;
 extern float g_fAllowedRecallError;
 
+extern gsl_rng* g_rng_r;
+
 //Simply Leanrning Rule - No Synapse Model Class
 //Does A dotProd to produce the correlation matrix for a number of training Patterns patCount
 float** makeWeightMatrix(int NetSize, float** Xin, int patCount) {
@@ -80,6 +82,35 @@ inline void deleteMemoryBuffer(uint ArrSize, T**& buffer) {
 	for (uint i = 0; i < ArrSize; i++) {
 		return_temporary_buffer(buffer[i]);
 		//delete[] buffer[i];
+		//delete the memory for each char array in array first
+	}
+	//then delete the memory to the array of pointers
+	delete[] buffer;
+	buffer = 0;
+
+}
+
+//For Weight Matrix
+template<>
+inline void deleteMemoryBuffer<float>(uint ArrSize, float**& buffer) {
+	assert(buffer != 0);
+
+	for (uint i = 0; i < ArrSize; i++) {
+		delete[] buffer[i];
+		//delete the memory for each char array in array first
+	}
+	//then delete the memory to the array of pointers
+	delete[] buffer;
+	buffer = 0;
+
+}
+//For Weight Matrix
+template<>
+inline void deleteMemoryBuffer<t_inVal>(uint ArrSize, t_inVal**& buffer) {
+	assert(buffer != 0);
+
+	for (uint i = 0; i < ArrSize; i++) {
+		delete[] buffer[i];
 		//delete the memory for each char array in array first
 	}
 	//then delete the memory to the array of pointers
@@ -143,7 +174,7 @@ float** makeWeightMatrix(int NetSize, t_inVal** Xin, uint patCount,
 	T* pseg = 0;
 	//float StartStrength = 0.0f;
 	size_t sizeBlock = sizeof(T);
-	gsl_rng* mprng = g_getRandGeneratorInstance(true);
+	gsl_rng* mprng = g_getRandGeneratorInstance(false);
 
 	//initialize Memory If This is the 1st Call to the function
 
@@ -594,7 +625,7 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 	t_inVal** X = new t_inVal*[PatCount]; //Memory PAtterns Containing The Ones Loaded from File and Random Initialization patterns
 	t_inVal tX[_uiNeuronCount]; //Aux Vector
 
-	gsl_rng* mprng = g_getRandGeneratorInstance(true);
+	gsl_rng* mprng = g_getRandGeneratorInstance(false);
 
 	//Init Memory For Patterns -- Vectors Re-Randomized At MakeWeight MAtrix
 	for (uint i = 0; i < PatCount; i++) {
@@ -695,18 +726,20 @@ int SearchForNetCapacity(uint _uiNeuronCount, uint iTrackedMemIndex,
 
 	cout << " Call Destructors..." << endl;
 	//Call Destructors Manually
-	///for (typename vector<T*>::iterator it = vSyn.begin(); it != vSyn.end();	++it)
-	//	(*it)->~T();
+	for (typename vector<T*>::iterator it = vSyn.begin(); it != vSyn.end();	++it)
+		(*it)->~T();
+	vSyn.clear();
 
 	if (mem_buffer != 0)
 		deleteMemoryBuffer(_uiNeuronCount, mem_buffer);
 
 	//Delete Pattern Memory
-	//deleteMemoryBuffer(PatCount, X);
-	delete [] X;
-	//delete [] tX;
+	deleteMemoryBuffer(PatCount, X);
 
-	gsl_rng_free(mprng);
+
+	//gsl_rng_free(mprng); -> Now done in static instance
+	g_rng_r =  g_getRandGeneratorInstance(false, true); //Free INstance in static Var
+
 	char buff[150];
 	T::getTypeName(buff);
 	cout << "-:Fin:- Max Patterns stored: " << iCapacity << " Recall Width:" << RecallDuration << " with Recall " << RecallSuccessAtCapacityLimit << "/" << trials
@@ -818,6 +851,7 @@ void doHopfieldCapacityTest(int modelType, string modelName, uint iNeuronCount,
 	cout << fname << endl;
 
 	ofile->close();
+	delete ofile;
 
 }
 
@@ -834,7 +868,7 @@ int recallHopfieldNetPattern(uint _uiNeuronCount, uint StartNeuron, t_inVal* tX,
 	//pAllocationFunct = &allocCascadeSynDoubleThresFiltArray; //Assign Value To Function Pointer
 
 	//IF THE NET IS INITIALIZED WITH SYNS OF 0 STRENGTH THEN Binary Synapses 0-1 can be used
-	gsl_rng* mprng = g_getRandGeneratorInstance();
+	gsl_rng* mprng = g_getRandGeneratorInstance(false,false);
 
 	uint NetSize = _uiNeuronCount;
 	float fAccError = _uiNeuronCount * 0.001;

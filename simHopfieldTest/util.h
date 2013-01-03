@@ -16,7 +16,8 @@ extern int g_FilterTh;
 #include "synapseCascade.h"
 
 
-gsl_rng* g_getRandGeneratorInstance(bool newInstance=false); ///GLOBAL Instance and FunctioN - Called by some Default Constructors even Synapse Classes
+gsl_rng* g_getRandGeneratorInstance(bool newInstance = false ); ///GLOBAL Instance and FunctioN - Called by some Default Constructors even Synapse Classes
+gsl_rng* g_getRandGeneratorInstance(bool newInstance ,bool freeInstance); ///GLOBAL Instance and FunctioN - Called by some Default Constructors even Synapse Classes
 
 void MakeListOfFiles(vector<string>& vLogFiles,unsigned int ciInitPeriod,int iCascadeSize,double mdRate,double dFp, int iSynCount);
 void saveCycleHistogramToFile(map<uint,uint>& mDistrib,string outputFilename,unsigned long trials,unsigned long sampleTime);

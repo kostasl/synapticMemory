@@ -209,7 +209,7 @@ void convertVectorFileToTxt(uint uiPatCount,uint iSynCount,char* pInputFile)
 {
 	t_inVal* X[uiPatCount]; //Memory PAtterns Containing The Ones Loaded from File and Random Initialization patterns
 
-	gsl_rng* mprng = g_getRandGeneratorInstance();
+	gsl_rng* mprng = g_getRandGeneratorInstance(false);
 	cout << "Making Text Version of Hadamard Vector File" << pInputFile << endl;
 	//Initialise The memory For Patterns
 	initPatternMemory(X,uiPatCount,iSynCount,0,0.5, mprng,false);

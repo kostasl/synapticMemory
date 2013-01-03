@@ -8,39 +8,62 @@
 #include "util.h"
 
 
+
+gsl_rng* g_getRandGeneratorInstance(bool newInstance)
+{
+	return g_getRandGeneratorInstance(newInstance,false);
+}
+
 ///GLOBAL Instance and FunctioN - Called by some Default Constructors
 //static gsl_rng* g_rng_r = 0;
 //Default value is False
-gsl_rng* g_getRandGeneratorInstance(bool newInstance)
+gsl_rng* g_getRandGeneratorInstance(bool newInstance,bool freeInstance)
 {
+	static gsl_rng* g_rng_r = 0;
+
 		 ///Setup the GSL Random number Generator
 		  // select random number generator
 		//Return Pointer to global instance if it has been initialized
+		if (freeInstance)
+		{
+			gsl_rng_free(g_rng_r); //De-Alloc -Fix Bug Of Mem Leak - Then Create New
+			g_rng_r = 0;
+			return 0;
+		}
 
-		if (g_rng_r && !newInstance)
-			  return g_rng_r;
+		if (g_rng_r != 0 ) //Pointer Exists
+		{
+			if(!newInstance)
+				return g_rng_r; //Return Old Instance - STOP AND RETURN HERE
+			else
+			{
+				gsl_rng_free(g_rng_r); //De-Alloc -Fix Bug Of Mem Leak - Then Create New
+				g_rng_r = 0;
+			}
+		}
 
-		  time_t t; //Used for random num generation
-		  unsigned int seed = unsigned(time(&t)) + clock() + rand();
-		  //unsigned int seed = 1;
-		  gsl_rng* mrng_r = gsl_rng_alloc (gsl_rng_mt19937);
 
-		  if (!mrng_r)
-		  {
-			  liberrexit(1,"GSL RNG Init Failed. Out Of Memory?");
-		  }
+	  time_t t; //Used for random num generation
+	  unsigned int seed = unsigned(time(&t)) + clock() + rand();
+	  //unsigned int seed = 1;
+	  gsl_rng* mrng_r = gsl_rng_alloc (gsl_rng_mt19937);
 
-		  gsl_rng_set(mrng_r,seed);
-		  //Seed random number generator
-		  srand(seed);
-		  //cout << "New Generator Seeded:" << seed;
-	//END OF GSL SETUP
+	  if (!mrng_r)
+	  {
+		  liberrexit(1,"GSL RNG Init Failed. Out Of Memory?");
+	  }
 
-		  //SET TO GLOBAL INSTANCE
-		 //if (!newInstance)
-			  g_rng_r = mrng_r;
+	  gsl_rng_set(mrng_r,seed);
+	  //Seed random number generator
+	  srand(seed);
+	  //cout << "New Generator Seeded:" << seed;
+//END OF GSL SETUP
 
-		  return mrng_r;
+	  //SET TO GLOBAL INSTANCE
+	 //if (!newInstance)
+		  g_rng_r = mrng_r;
+
+	  return mrng_r;
 }
 
 /* Called by makelogfilenames

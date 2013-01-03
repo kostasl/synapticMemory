@@ -57,12 +57,16 @@ int main(int argc, char* argv[])
 
 	string inputFile,modelName = "synapseSingleFilterUnifiedWithDecay"; //Default
 	string simulationName = "HopfieldTest";
-	int startIndex,endIndex,simulationType,modelType,iNeuronPopulationFinal,iNeuronPopulationStart,trackedMemIndex,initPeriod;
+	int startIndex,endIndex,simulationType,modelType,iNeuronPopulationStart,trackedMemIndex,initPeriod;
+	int iNeuronPopulationFinal = 100;
+
 	unsigned int trials;
 
 	long lSimtimeSeconds = 250;
 	int RepMemoryIndex = 0;
 	int RepMemoryCount = 0;
+
+	g_rng_r = 0; //Reset GSL Pointer
 
 	double ts = 1.000;//When Set to 1 simu. is in discrete Time
 	double dEncodingRate = 1.0;
