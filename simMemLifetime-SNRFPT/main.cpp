@@ -196,7 +196,6 @@ int main(int argc, char* argv[])
 		{
 			 g_FilterTh =i; ///The Unified Filter Thresholds
 			 g_UpdaterQ = 1.0/(g_FilterTh*g_FilterTh);
-
 			 dMSFPT = runContinuousMemoryRepetition(modelType,ts,iFixedIterations,trackedMemIndex,
 					 	 	 	 	 	 	 	 	 RepMemoryIndex,vdRepTime,i,N,lSimtimeSeconds,
 					 	 	 	 	 	 	 	 	 	dEncodingRate,inputFile);
