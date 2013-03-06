@@ -272,10 +272,12 @@ int synapseSingleFilterUnifiedWithDecay::getRunningValue() const
 	return miRFilterValue;
 }
 
+//iValue = 1 -> POT
+//iValue = -1 DEP
 int synapseSingleFilterUnifiedWithDecay::addSample(int iValue)
 {
 	int Ret = 0;
-	freezePlasticity(); //Lock Synapse If any of the Allocation Criteria was met at the previous memory storage event
+	//freezePlasticity(); //Lock Synapse If any of the Allocation Criteria was met at the previous memory storage event
 
 	miTimeSinceLastInduction++; //Increment time since last induction - For Decay
 
@@ -290,6 +292,16 @@ int synapseSingleFilterUnifiedWithDecay::addSample(int iValue)
 
 	//NOP - No decay on this synapse so we don't count time
 	if (iValue == 0) return 0;
+
+	//Reset TAG :
+	mbAllocationTag = false;
+	//TAG Synapse CONDITION : if DEP (So input Was low and Weak Synapse and have Exceeded Metaplastic Transition Counter
+	if ((iValue == -1 && penumStrength == SYN_STRENGTH_WEAK) && uiSameThresholdTransitionCounter >= uiThresholdForAllocation) //POT Means Weight Agrees With Stimulus
+		mbAllocationTag = true;
+	//TAG:  POT and Strong and Exceeded Metaplastic Transition Counter
+	if ((iValue == +1 && penumStrength == SYN_STRENGTH_STRONG) && uiSameThresholdTransitionCounter >= uiThresholdForAllocation) //POT Means Weight Agrees With Stimulus
+		mbAllocationTag = true;
+
 
 	miRFilterValue +=iValue; //Integrate Stimulus Value
 

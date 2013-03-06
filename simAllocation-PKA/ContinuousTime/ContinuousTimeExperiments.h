@@ -93,7 +93,7 @@ return iNeuronOut;
  * t_inVal* X : The input vector
  * The Synapses Are marked as monitored for the 1st Tracked pattern
  * Output: uiAllocSynapses -The number of allocated-frozen Synapses
- * 	Also  h  = 0.0; //Neuron Depolarization
+ * 	Also  h  = 0.0;
  * 	Returns: The number of synapses that encoded the signal
  * 			and h(byref) the Signal Output to the pattern being stored before storage occurs
  */
@@ -153,9 +153,11 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 		//Before Fix I only: oCSyn->enableMetaplasticCounting();
 
 		//Added To fix Fixed SampleDistribution Problems
-		oCSyn->disableMetaplasticCounting();
-		oCSyn->resetMetaplasticCounter();
+		//oCSyn->disableMetaplasticCounting();
+		//oCSyn->resetMetaplasticCounter();
+		///Use BPlan: Allow free metaplastic counting - Allocate Synapses That are in correct state and have mcounter >= 1
 		oCSyn->enableMetaplasticCounting();
+		oCSyn->enableMetaplasticAllocation(); //set the AllocFlag=True So FreezePlasticity works only once after bAllocationSignal is flagged
 
 #ifdef _DEBUG
 		if (i==0)
@@ -163,11 +165,14 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 #endif
 	}
 
-	if (bAllocationSignal)
+	if (bAllocationSignal) //Global Signal Now Freeze Tagged Synapses - Then Stop Allocation
 	{//At the allocation signal we begin measuring Stability
-		oCSyn->setAllocationThreshold(g_AllocRefraction); //When same threshold is crossed X times and allocation is On-Allocate
-		oCSyn->enableMetaplasticAllocation();
-		//oCSyn->resetAllocationRefraction(); //Reset The internal Counter
+		//oCSyn->setAllocationThreshold(g_AllocRefraction); //When same threshold is crossed X times and allocation is On-Allocate
+		oCSyn->freezePlasticity(); //If Synapse Has been Tagged from previous stimulation Then Freeze it, Since global signal has arrived
+		//Ignore Late-associativity - Once after Global Signal : Then We run out of PRPS and allocation is closed -
+		oCSyn->disableMetaplasticCounting(); //Then Stop Counting Metaplasticity
+		oCSyn->disableMetaplasticAllocation(); //Stop The metaplastic Allocation
+		////oCSyn->resetAllocationRefraction(); //Reset The internal Counter
 	}
 
 	//Whether File or Random Patterns
@@ -289,6 +294,7 @@ void saveMetaplasticCounters(vector<T*>& vpSyns,map<uint,uint>& mpMDistribDst,ma
 // A U filter specialization Exists in the .cpp file
 //template<class T>
 double getcAMP(double ts,double dcAMPLevel,double dCA, double dDA,double h_thres);
+double getcAMP_noSat(double ts,double dcAMPLevel,double dCA, double dDA,double h_thres);
 
 
 //#undef USE_CUDA
@@ -526,7 +532,9 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 			 * 			 * TODO cAMP needs to be Reconsidered for Continuous time  */
 			//cout << j << " CA:" << dCAInjectionLevel;
 			/*Cant Use Template Because of Compiler BUG*/
-			dcAMPLevel				= getcAMP(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
+			//dcAMPLevel				= getcAMP(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
+
+			dcAMPLevel				= getcAMP_noSat(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
 			//assert(!isnan(dcAMPLevel));
 			dPKALevel 				+= dcAMPLevel;	 //Integrate the cAMP signal
 			if (dPKALevel > dPKAThreshold) //PKA Threshold Exceeded So Allocate

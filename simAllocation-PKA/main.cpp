@@ -42,10 +42,10 @@ float g_fAllocHThres	= 0.0; //Default Post Synaptic depol. Threshold to switch o
 float g_fcAMPDecay		= 0.01; //The timeconstant for the cAmp alpha process (With 0.5 it takes approx 10 tsteps for a complete wave)
 float g_fcAMPMagnitude	= 0.0;
 double g_dcAMPMax		= 1.0;// A globally set  saturation value of cAMP.
-float g_fPKAAllocThres	= 1000; //Threshold beyong which the integrating PKA signal switches allocation ON
+float g_fPKAAllocThres	= 1000; //Threshold beyond which the integrating PKA signal switches allocation ON - Set to very High By default
 float g_fInjectionGain	= 1.0; //The GAIN of the cAMP production Process
 int g_iHillOrder		= 4; //The threshold function hill order
-uint g_AllocRefraction	= 0;//The Same Threshold Counter Limit required to allocate a synapse --0.375*g_FilterTh*g_FilterTh;
+uint g_AllocRefraction	= 1;//The Same Threshold Counter Limit required to allocate a synapse -
 string g_outputTag;
 
 // Signal h_thresholds {Theta,repetitions,MaxSignal<-Used as Threshold}
@@ -126,6 +126,8 @@ if (modelType == 9 || modelType == 1) //SU Synapse
 return 0.0;
 }
 
+#define OUTPUT_FILENAME "_AllocSignalVsRepTime-NoSat-PKA_n"
+
 int main(int argc, char* argv[])
 {
 
@@ -181,7 +183,7 @@ int main(int argc, char* argv[])
 		("repPatIndex,RI", po::value<int>(&RepMemoryIndex)->default_value(RepMemoryIndex), "The index of the pattern to repeat relative to the 1st tracked pattern")
 		("repPatCount,RC", po::value<int>(&RepMemoryCount)->default_value(RepMemoryCount), "For PKA vs Rep. Interval experiments it sets the number of repetitions")
 		("repTimes,RT", po::value< vector<double> >(&vdRepTime)->multitoken(), "The relevant time intervals a pattern will be repeated after initial encoding")
-		("AllocDepolThres,RT", po::value< float >(&g_fAllocHThres)->default_value(g_fAllocHThres), "The relevant time intervals a pattern will be repeated after initial encoding.Set Automatically for simulation: AllocSignalVsRepetitionTime")
+		("AllocDepolThres,RT", po::value< float >(&g_fAllocHThres)->default_value(g_fAllocHThres), "SignalThreshold For Allocation-Set Automatically for simulation: AllocSignalVsRepetitionTime")
 		("AllocRefrac,RP", po::value<uint>(&g_AllocRefraction)->default_value(g_AllocRefraction), "The period a synapse needs to be stable before it is allocated-Threshold Counter Tagging")
 		("PKAAllocThres,PK", po::value<float>(&g_fPKAAllocThres)->default_value(g_fPKAAllocThres), "The PKA level above which global allocation is switched on.")
 		("cAMPDecay,Fc", po::value<float>(&g_fcAMPDecay)->default_value(g_fcAMPDecay), "cAMP decay F_c rate. Std Vals : 0.5,0.05 or 0.01");
@@ -302,9 +304,10 @@ int main(int argc, char* argv[])
 		{
 			 g_FilterTh			= i;
 			 g_UpdaterQ 		= 1.0/(g_FilterTh*g_FilterTh);
+			 g_fAllocHThres 	=  getCAthres(g_FilterTh,4,modelType);
 			 //g_fcAMPDecay		= 0.01; //The timeconstant for the cAMP Exp Decay
 			 g_fcAMPMagnitude	= 1.0;  //The magnitude for the cAmp alpha process beta=1/0.138384Theta^2r where r is the number of repetitions desired to reach PKA thres
-			 cout << "SynSz:"<< g_FilterTh << " Decay Fc:" << g_fcAMPDecay << " cAMPInj:" << g_fcAMPMagnitude << " h_thres Fixed R 4" << endl;
+			 cout << "Theta:"<< g_FilterTh << " Decay Fc:" << g_fcAMPDecay << " cAMPInj:" << g_fcAMPMagnitude << " h_thres (Fixed To 4 reps) :" << g_fAllocHThres << endl;
 
 			 runAllocSignalVsRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,RepMemoryCount ,i,synapsesPopulation,lSimtimeSeconds,dEncodingRate,inputFile);
 		 }//Loop For Each Cascade Index
@@ -529,7 +532,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 
 	string sAggregateFile;
 	sAggregateFile += boost::lexical_cast<std::string>(modelType);
-	sAggregateFile.append("_AllocSignalVsRepTime-PKA_n");
+	sAggregateFile.append(OUTPUT_FILENAME);
 	sAggregateFile += boost::lexical_cast<std::string>(FilterSize);
 	sAggregateFile.append("_N");
 	sAggregateFile += boost::lexical_cast<std::string>(synapsesPopulation);

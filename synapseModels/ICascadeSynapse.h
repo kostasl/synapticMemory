@@ -107,6 +107,8 @@ protected:
 	bool mbMetaplasticAlloc; //Lock Plasticity After A metaplastic Transition
 	bool mbPlasticAlloc; //Lock Plasticity After A plastic Transition
 	bool mbStabilityAlloc; //If Set Then A synapse Locks when automatically it has exceeded the stability Criteria
+	bool mbAllocationTag; //A SynapseMark Set for when local allocation conditions have been met. Here Set when a synapse is Strong and Receives a Strong Input +1*+1
+
 	bool mbSaveMetaplasticHistogram; //If Set Then each reset of the Metaplastic counter is saved in this histogram
 	bool mbStopRecordingOfMHistogramAtNextThresholdEvent; //Change mbSaveMetaplasticHistogram to true on next threshold event
 	bool mbIsMonitored; //true Means this synapse is part of the Tracked group - As fusi defines it
