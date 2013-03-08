@@ -149,15 +149,17 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 
 	if (bresetAllocationThreshold) //Just Before 1st Encoding of tracked Pattern
 	{
-		////oCSyn->resetMetaplasticCounter();
-		//Before Fix I only: oCSyn->enableMetaplasticCounting();
 
 		//Added To fix Fixed SampleDistribution Problems
 		//oCSyn->disableMetaplasticCounting();
 		//oCSyn->resetMetaplasticCounter();
-		///Use BPlan: Allow free metaplastic counting - Allocate Synapses That are in correct state and have mcounter >= 1
-		oCSyn->enableMetaplasticCounting();
-		oCSyn->enableMetaplasticAllocation(); //set the AllocFlag=True So FreezePlasticity works only once after bAllocationSignal is flagged
+
+		oCSyn->setAllocationThreshold(g_AllocRefraction); //When same threshold is crossed X times and allocation is On-Allocate
+		oCSyn->disableMetaplasticAllocation(); //Switched off Allocation
+		oCSyn->enableMetaplasticCounting(); //Start the Histogram save
+
+
+		//oCSyn->enableplasticAllocation(); //mbPlasticAlloc=True The synapse May Lock Strength After A plastic Transition
 
 #ifdef _DEBUG
 		if (i==0)
@@ -167,11 +169,16 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 
 	if (bAllocationSignal) //Global Signal Now Freeze Tagged Synapses - Then Stop Allocation
 	{//At the allocation signal we begin measuring Stability
-		//oCSyn->setAllocationThreshold(g_AllocRefraction); //When same threshold is crossed X times and allocation is On-Allocate
+
+		//With Old LTM Switch On We Allocate All Synapses that exceed the metaplastic steps limit
+		//oCSyn->enableMetaplasticAllocation(); //set the AllocFlag=True So FreezePlasticity works only once after bAllocationSignal is flagged
+
+		//With TAG&Capture I Ignore Late-associativity - Once after Global Signal : TAG and Capture Then We run out of PRPS and allocation is closed -
+		oCSyn->enableMetaplasticAllocation(); //set the AllocFlag=True So FreezePlasticity works only once after bAllocationSignal is flagged
 		oCSyn->freezePlasticity(); //If Synapse Has been Tagged from previous stimulation Then Freeze it, Since global signal has arrived
-		//Ignore Late-associativity - Once after Global Signal : Then We run out of PRPS and allocation is closed -
 		oCSyn->disableMetaplasticCounting(); //Then Stop Counting Metaplasticity
-		oCSyn->disableMetaplasticAllocation(); //Stop The metaplastic Allocation
+		//oCSyn->resetMetaplasticCounter(); //Save the Distribution Of Metaplastic Steps
+		oCSyn->disableMetaplasticAllocation(); //Stop The metaplastic Allocation - Immediate Tag and Capture
 		////oCSyn->resetAllocationRefraction(); //Reset The internal Counter
 	}
 
@@ -537,7 +544,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 			dcAMPLevel				= getcAMP_noSat(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
 			//assert(!isnan(dcAMPLevel));
 			dPKALevel 				+= dcAMPLevel;	 //Integrate the cAMP signal
-			if (dPKALevel > dPKAThreshold) //PKA Threshold Exceeded So Allocate
+			if (dPKALevel > dPKAThreshold && (dPKAThreshold > 0)) //PKA Threshold Exceeded So Allocate
 				bAllocatePattern = true;
 
 			//Encode Pattern

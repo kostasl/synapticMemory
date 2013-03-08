@@ -1,0 +1,1 @@
+./simAllocation-PKA --simulation=AllocSignalVsRepetitionTime --model=synapseSingleFilterUnifiedWithDecay --trials=102 --startSize=7 --endSize=13 --synapsesSize=10000 --initPeriod=0 --cSimTimeSecs=1000 --Timestep=1.00 --repPatIndex=0 --repPatCount=2 --AllocRefrac=1 --metaSampleTime=0 --cAMPDecay=0.5 --PKAAllocThres=0.2

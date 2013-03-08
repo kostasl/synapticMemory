@@ -375,7 +375,7 @@ void synapseSingleFilterUnifiedWithDecay::switchReset()
 	//If Strength Changes Towards correct target Strength Increment the counter - Simplifies the effect of 1st encoding
 
 	resetMetaplasticCounter();//Sets uiMetaplasticTransitionCounter = 0;
-	uiSameThresholdTransitionCounter=1;//Count 1st Threshold Crossing due to this plasticity event
+	uiSameThresholdTransitionCounter	= 1;//Count 1st Threshold Crossing due to this plasticity event
 
 	//uiSameThresholdTransitionCounter++;
 	//Finally Update Synaptic Strength
