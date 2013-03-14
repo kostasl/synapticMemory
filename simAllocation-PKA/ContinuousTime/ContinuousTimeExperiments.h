@@ -532,9 +532,9 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 			 * 			 * TODO cAMP needs to be Reconsidered for Continuous time  */
 			//cout << j << " CA:" << dCAInjectionLevel;
 			/*Cant Use Template Because of Compiler BUG*/
-			//dcAMPLevel				= getcAMP(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
+			dcAMPLevel				= getcAMP(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
 
-			dcAMPLevel				= getcAMP_noSat(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
+			//dcAMPLevel				= getcAMP_noSat(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
 			//assert(!isnan(dcAMPLevel));
 			dPKALevel 				+= dcAMPLevel;	 //Integrate the cAMP signal
 			if (dPKALevel > dPKAThreshold) //PKA Threshold Exceeded So Allocate
