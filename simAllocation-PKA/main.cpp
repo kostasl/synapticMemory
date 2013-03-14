@@ -530,17 +530,10 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	slogFiles.push_back(fOutName);
 	/////////// END OF LOG FILE INIT //////////////////////////
 
-	string sAggregateFile;
-	sAggregateFile += boost::lexical_cast<std::string>(modelType);
-	sAggregateFile.append(OUTPUT_FILENAME);
-	sAggregateFile += boost::lexical_cast<std::string>(FilterSize);
-	sAggregateFile.append("_N");
-	sAggregateFile += boost::lexical_cast<std::string>(synapsesPopulation);
-	sAggregateFile.append("_T");
-	sAggregateFile += boost::lexical_cast<std::string>(trials);
-	sAggregateFile.append("_r");
-	sAggregateFile += boost::lexical_cast<std::string>(iMemoryReps);
-	sAggregateFile.append(".dat");
+	char buff[300];
+	sprintf(buff,"%d%s%d_N%d_T%d_Fc%.2f_r%d.dat",modelType,OUTPUT_FILENAME,FilterSize,synapsesPopulation,trials,g_fcAMPDecay,iMemoryReps);
+	string sAggregateFile(buff);
+
 
 	cout << "Signal Output Files: " <<  sAggregateFile << endl; //Tell User Which Output file we are using
 	ofstream* pfile = openfile(fOutName,sAggregateFile,ios::out);
