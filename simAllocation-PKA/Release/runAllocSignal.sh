@@ -1,8 +1,7 @@
 #!/bin/sh
-echo "Filter Size $1 To $2 Repetitions : $3"
-echo "cAMP Decay $4"
-echo "PKA AllocThreshold $5"
-echo " TRIALS: ${6:-1000}"
+echo "Filter Size $1 (1) To $2 (2) Repetitions : $3 (3)TRIALS:  ${6:-1000}(6)"
+echo "cAMP Decay $4 (4)"
+echo "PKA AllocThreshold $5 (5)"s
 logc="Release/simOut$1-${2:?NoSize}R${3:?NoReps}F${4:?NoFc}P${5:?NoPKAThres}.log"
 
 echo "std output in $logc"

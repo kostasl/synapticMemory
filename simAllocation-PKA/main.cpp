@@ -650,7 +650,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 		}
 
 		(*pfile) << iabsRepTime << "\t"<< AllocSignal.pairAllocSignalVal.first /sqrt(AllocSignal.pairAllocSignalVal.second) <<
-				"\t" << AllocSignal.pairAllocSignalVal.first << "\t"
+				"\t" << AllocSignal.pairAllocSignalVal.first << "\t" //Allocated signal is the last mean signal value
 				<< AllocSignal.pairAllocSignalVal.second << "\t"
 				<< g_fAllocHThres << "\t"
 				<< AllocSignal.pairPKAVal.first << "\t"
