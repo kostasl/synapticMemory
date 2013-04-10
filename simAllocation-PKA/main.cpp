@@ -126,7 +126,8 @@ if (modelType == 9 || modelType == 1) //SU Synapse
 return 0.0;
 }
 
-#define OUTPUT_FILENAME "_AllocSignalVsRepTime-NoSat-PKA_n"
+#define OUTPUT_FILENAME "_AllocSignalVsRepTime-Sat-PKA_n"
+
 
 int main(int argc, char* argv[])
 {
@@ -184,7 +185,7 @@ int main(int argc, char* argv[])
 		("repPatCount,RC", po::value<int>(&RepMemoryCount)->default_value(RepMemoryCount), "For PKA vs Rep. Interval experiments it sets the number of repetitions")
 		("repTimes,RT", po::value< vector<double> >(&vdRepTime)->multitoken(), "The relevant time intervals a pattern will be repeated after initial encoding")
 		("AllocDepolThres,RT", po::value< float >(&g_fAllocHThres)->default_value(g_fAllocHThres), "SignalThreshold For Allocation-Set Automatically for simulation: AllocSignalVsRepetitionTime")
-		("AllocRefrac,RP", po::value<uint>(&g_AllocRefraction)->default_value(g_AllocRefraction), "The period a synapse needs to be stable before it is allocated-Threshold Counter Tagging-")
+		("AllocRefrac,RP", po::value<uint>(&g_AllocRefraction)->default_value(g_AllocRefraction), "The Same Threshold Counter for Tagging")
 		("PKAAllocThres,PK", po::value<float>(&g_fPKAAllocThres)->default_value(g_fPKAAllocThres), "The PKA level above which global allocation is switched on.")
 		("cAMPDecay,Fc", po::value<float>(&g_fcAMPDecay)->default_value(g_fcAMPDecay), "cAMP decay F_c rate. Std Vals : 0.5,0.05 or 0.01");
 
