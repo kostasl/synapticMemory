@@ -50,19 +50,22 @@ ICascadeSynapse::ICascadeSynapse(bool PlasticAlloc, bool MetaplasticAlloc,bool b
 //Checks If conditions to Lock-Allocate Synapse have been met and Set mbNoPlasticity accordingly
 void ICascadeSynapse::freezePlasticity()
 {
-	 //CANCEL oTHER Allocation Methods
-	//if (mbStabilityAlloc && (uiStateLifetime > uiThresholdForAllocation)) //This criterion counts the number of memories stored without this synapse changing strength
- //		mbNoPlasticity = true;
 
 	//Synapse Has been tagged - Then this function is called Due to Global Alloc Signal Just allocate
 	//mbMetaplasticAlloc Is set to False Once GlobalSignal Has called FreezePlasticity
 	if (mbAllocationTag && mbMetaplasticAlloc)
+	{
 		mbNoPlasticity = true;
+		resetMetaplasticCounter(); //Once Allocation Period has expired we reset the counters--
+	}
+
+//CANCEL OTHER Allocation Methods
+//		if (mbStabilityAlloc && (uiStateLifetime > uiThresholdForAllocation)) //This criterion counts the number of memories stored without this synapse changing strength
+//			mbNoPlasticity = true;
 
 
-
-/*//Cancel Other Allocation Methods - Only Allocate Tagged Synapses When Called After GlobalSignal si set
-	//If Metaplastic -- Then Compare Metaplastic Cycles against threshold
+//Cancel Other Allocation Methods - Only Allocate Tagged Synapses When Called After GlobalSignal si set
+/*	//If Metaplastic -- Then Compare Metaplastic Cycles against threshold
 	if (mbMetaplasticAlloc)
 	{
 		if(uiSameThresholdTransitionCounter >= uiThresholdForAllocation) //This criterion counts the number of memories stored without this synapse changing strength
@@ -80,6 +83,7 @@ void ICascadeSynapse::freezePlasticity()
 			//SameThresholdCounters Were Reset upon Allocation
 		}
 	}
+
 */
 }
 

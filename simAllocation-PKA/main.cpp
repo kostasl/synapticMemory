@@ -42,10 +42,10 @@ float g_fAllocHThres	= 0.0; //Default Post Synaptic depol. Threshold to switch o
 float g_fcAMPDecay		= 0.01; //The timeconstant for the cAmp alpha process (With 0.5 it takes approx 10 tsteps for a complete wave)
 float g_fcAMPMagnitude	= 0.0;
 double g_dcAMPMax		= 1.0;// A globally set  saturation value of cAMP.
-float g_fPKAAllocThres	= 1000; //Threshold beyond which the integrating PKA signal switches allocation ON - Set to very High By default
+float g_fPKAAllocThres	= -1000; //Threshold beyond which the integrating PKA signal switches allocation ON - Set -Ve means no allocation
 float g_fInjectionGain	= 1.0; //The GAIN of the cAMP production Process
 int g_iHillOrder		= 4; //The threshold function hill order
-uint g_AllocRefraction	= 1;//The Same Threshold Counter Limit required to allocate a synapse -
+uint g_AllocRefraction	= 1;//The Same Threshold Counter Limit required to allocate a synapse - Set to -1 For No Allocation
 string g_outputTag;
 
 // Signal h_thresholds {Theta,repetitions,MaxSignal<-Used as Threshold}
@@ -126,7 +126,8 @@ if (modelType == 9 || modelType == 1) //SU Synapse
 return 0.0;
 }
 
-#define OUTPUT_FILENAME "_AllocSignalVsRepTime-NoSat-PKA_n"
+#define OUTPUT_FILENAME "_AllocSignalVsRepTime-Sat-PKA_n"
+
 
 int main(int argc, char* argv[])
 {
@@ -160,7 +161,7 @@ int main(int argc, char* argv[])
 	    ("model,M", po::value<string>(&modelName), "The model to run the simulation on")
 		("simulation,S", po::value<string>(&simulationName)->default_value(simulationName), "The simulation name to run")
 		("trials,T", po::value<unsigned int>(&trials)->default_value(100), "Number of iteration to average over")
-	    ("cSimTimeSecs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds")
+	    ("cSimTimeSecs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds-For AllocTests its the recording time after the last repetition.")
 		("synapsesSize", po::value<int>(&synapsesPopulation)->default_value(10000), "The number of synapses to use - Has to match the vector file size where required")
 		("inputFile,V", po::value<string>(&inputFile)->default_value("\n"), "The vector input file to use from directory MemoryInputVectors. If No file given then Random Vectors are used.")
 		("startSize", po::value<int>(&startIndex)->default_value(7), "The range of model size parameter to begin testing - interpretation is model dependent")
@@ -183,7 +184,7 @@ int main(int argc, char* argv[])
 		("repPatCount,RC", po::value<int>(&RepMemoryCount)->default_value(RepMemoryCount), "For PKA vs Rep. Interval experiments it sets the number of repetitions")
 		("repTimes,RT", po::value< vector<double> >(&vdRepTime)->multitoken(), "The relevant time intervals a pattern will be repeated after initial encoding")
 		("AllocDepolThres,RT", po::value< float >(&g_fAllocHThres)->default_value(g_fAllocHThres), "SignalThreshold For Allocation-Set Automatically for simulation: AllocSignalVsRepetitionTime")
-		("AllocRefrac,RP", po::value<uint>(&g_AllocRefraction)->default_value(g_AllocRefraction), "The period a synapse needs to be stable before it is allocated-Threshold Counter Tagging")
+		("AllocRefrac,RP", po::value<uint>(&g_AllocRefraction)->default_value(g_AllocRefraction), "The Same Threshold Counter for Tagging")
 		("PKAAllocThres,PK", po::value<float>(&g_fPKAAllocThres)->default_value(g_fPKAAllocThres), "The PKA level above which global allocation is switched on.")
 		("cAMPMax,umax", po::value<double>(&g_dcAMPMax)->default_value(g_dcAMPMax), "cAMP Saturation Level u'(t)=(u_max-u(t))")
 		("cAMPDecay,Fc", po::value<float>(&g_fcAMPDecay)->default_value(g_fcAMPDecay), "cAMP decay F_c rate. Std Vals : 0.5,0.05 or 0.01");
@@ -322,7 +323,6 @@ int main(int argc, char* argv[])
  // std::exit(0);
 return 0;
 }
-
 
 
 /*
@@ -521,7 +521,6 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	//repetitionTable[Timepoint of repetition] = RepMemoryIndex+InitPeriod (NoOfPatternsStored)
 	///Rep Times Need to Account For the init period
 
-
 	///////// LOG FILE INIT /////////////////////
 	//Add the File name as the 1st entry- Used by the makeLogFileNames
 	vector<string> slogFiles; //The list of output file names used
@@ -533,7 +532,6 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	char buff[300];
 	sprintf(buff,"%d%s%d_N%d_T%d_Fc%.2f_r%d.dat",modelType,OUTPUT_FILENAME,FilterSize,synapsesPopulation,trials,g_fcAMPDecay,iMemoryReps);
 	string sAggregateFile(buff);
-
 
 	cout << "Signal Output Files: " <<  sAggregateFile << endl; //Tell User Which Output file we are using
 	ofstream* pfile = openfile(fOutName,sAggregateFile,ios::out);
@@ -551,7 +549,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	while (dRepIntervalsecs <= MaxRepTime)
 	{
 		cout << "#########" << endl;
-		 clock_t start2 = clock();
+		clock_t start2 = clock();
 
 		repetitionTable.clear();
 		//Add the Index of the memory with  A key Being the Time When it should be repeated and the value -> The Pattern Number cInitPeriod+repIndex
@@ -568,7 +566,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 		//No Fix to test Allocated signal a fixed time after last repetition
 		long lAllocSignalMeasureTime =  iMemoryReps*iabsRepTime +  lSimtimeSeconds; //Add Sim Time Parameter to last rep
 
-		cout <<"Sim.Time " << lAllocSignalMeasureTime << " ts:" << ts << " Rep. Memory " << RepMemoryIndex << " " << iMemoryReps << " times with interval: " << (dRepIntervalsecs) << "secs" << " h_thres >" << g_fAllocHThres << endl;
+		cout <<"TOTAL Sim.Time " << lAllocSignalMeasureTime << " ts:" << ts << " Rep. Memory " << RepMemoryIndex << " " << iMemoryReps << " times with interval: " << (dRepIntervalsecs) << "secs" << " h_thres >" << g_fAllocHThres << endl;
 		cout << "Stability Threshold : " << g_AllocRefraction << endl;
 
 		char* mem_buffer 			= 0;		//This Pointer is filled by allocMem, To point to the reuseable allocated memory
