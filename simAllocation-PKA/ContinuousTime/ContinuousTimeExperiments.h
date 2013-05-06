@@ -539,6 +539,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 			 * 			 * TODO cAMP needs to be Reconsidered for Continuous time  */
 			//cout << j << " CA:" << dCAInjectionLevel;
 			/*Cant Use Template Because of Compiler BUG*/
+
 #ifdef USE_SATURATION_MODEL
 			dcAMPLevel				= getcAMP(ts, dcAMPLevel, dCAInjectionLevel, dDAInjectionLevel, h_thres);
 #else

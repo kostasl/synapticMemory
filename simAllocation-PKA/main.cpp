@@ -156,7 +156,6 @@ int main(int argc, char* argv[])
 	map<string,unsigned int> mapSimType;
 	map<string,int> mapSynapseAllocator; //An association of a the target object name With the allocation Function for the synapse Population
 
-
 	basicSim.add_options()
 	    ("help", "produce help message")
 	    ("model,M", po::value<string>(&modelName), "The model to run the simulation on")
@@ -187,6 +186,7 @@ int main(int argc, char* argv[])
 		("AllocDepolThres,RT", po::value< float >(&g_fAllocHThres)->default_value(g_fAllocHThres), "SignalThreshold For Allocation-Set Automatically for simulation: AllocSignalVsRepetitionTime")
 		("AllocRefrac,RP", po::value<uint>(&g_AllocRefraction)->default_value(g_AllocRefraction), "The Same Threshold Counter for Tagging")
 		("PKAAllocThres,PK", po::value<float>(&g_fPKAAllocThres)->default_value(g_fPKAAllocThres), "The PKA level above which global allocation is switched on.")
+		("cAMPMax,umax", po::value<double>(&g_dcAMPMax)->default_value(g_dcAMPMax), "cAMP Saturation Level u'(t)=(u_max-u(t))")
 		("cAMPDecay,Fc", po::value<float>(&g_fcAMPDecay)->default_value(g_fcAMPDecay), "cAMP decay F_c rate. Std Vals : 0.5,0.05 or 0.01");
 
 	if (g_MetaplasticitySampleSize == 0)
@@ -533,6 +533,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	char buff[300];
 	sprintf(buff,"%d%s%d_N%d_T%d_Fc%.2f_r%d.dat",modelType,OUTPUT_FILENAME,FilterSize,synapsesPopulation,trials,g_fcAMPDecay,iMemoryReps);
 	string sAggregateFile(buff);
+<<<<<<< HEAD
 //	sAggregateFile += boost::lexical_cast<std::string>(modelType);
 //	sAggregateFile.append(OUTPUT_FILENAME);  sAggregateFile += boost::lexical_cast<std::string>(FilterSize);
 //	sAggregateFile.append("_N"); sAggregateFile += boost::lexical_cast<std::string>(synapsesPopulation);
@@ -540,6 +541,9 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 //	sAggregateFile.append("_Fc");sAggregateFile += boost::lexical_cast<std::string>(g_fcAMPDecay);
 //	sAggregateFile.append("_r"); sAggregateFile += boost::lexical_cast<std::string>(iMemoryReps);
 //	sAggregateFile.append(".dat");
+=======
+
+>>>>>>> 8b63466434aa6064bb1ca8ee16b7b848b678c273
 
 	cout << "Signal Output Files: " <<  sAggregateFile << endl; //Tell User Which Output file we are using
 	ofstream* pfile = openfile(fOutName,sAggregateFile,ios::out);
