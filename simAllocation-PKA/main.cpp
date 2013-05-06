@@ -126,7 +126,11 @@ if (modelType == 9 || modelType == 1) //SU Synapse
 return 0.0;
 }
 
-#define OUTPUT_FILENAME "_AllocSignalVsRepTime-Sat-PKA_n"
+#ifdef USE_SATURATION_MODEL
+	#define OUTPUT_FILENAME "_AllocSignalVsRepTime-Sat-PKA_n"
+#else
+	#define OUTPUT_FILENAME "_AllocSignalVsRepTime-NOSat-PKA_n"
+#endif
 
 
 int main(int argc, char* argv[])
@@ -533,7 +537,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	char buff[300];
 	sprintf(buff,"%d%s%d_N%d_T%d_Fc%.2f_r%d.dat",modelType,OUTPUT_FILENAME,FilterSize,synapsesPopulation,trials,g_fcAMPDecay,iMemoryReps);
 	string sAggregateFile(buff);
-<<<<<<< HEAD
+
 //	sAggregateFile += boost::lexical_cast<std::string>(modelType);
 //	sAggregateFile.append(OUTPUT_FILENAME);  sAggregateFile += boost::lexical_cast<std::string>(FilterSize);
 //	sAggregateFile.append("_N"); sAggregateFile += boost::lexical_cast<std::string>(synapsesPopulation);
@@ -541,9 +545,6 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 //	sAggregateFile.append("_Fc");sAggregateFile += boost::lexical_cast<std::string>(g_fcAMPDecay);
 //	sAggregateFile.append("_r"); sAggregateFile += boost::lexical_cast<std::string>(iMemoryReps);
 //	sAggregateFile.append(".dat");
-=======
-
->>>>>>> 8b63466434aa6064bb1ca8ee16b7b848b678c273
 
 	cout << "Signal Output Files: " <<  sAggregateFile << endl; //Tell User Which Output file we are using
 	ofstream* pfile = openfile(fOutName,sAggregateFile,ios::out);
