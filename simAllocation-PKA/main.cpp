@@ -38,7 +38,7 @@ double g_FilterDecay 	= 0.0; //0.0916986;
 uint g_timeToSampleMetaplasticity	= 0; //Used by Sim code as the time to sample the number of metaplastic transitions
 int g_MetaplasticitySampleSize		= 0;//Sim Code Stops saving to the distribution of same threshold crossings Once this number of samples has been gathered
 double g_UpdaterQ 		= 1.0/(g_FilterTh*g_FilterTh); //The single Updater Transitions - Make sure its in double format
-float g_fAllocHThres	= 0.0; //Default Post Synaptic depol. Threshold to switch on Allocation
+float g_fAllocHThres	= 0.0; //Default Post Synaptic depol. Hill Threshold
 float g_fcAMPDecay		= 0.01; //The timeconstant for the cAmp alpha process (With 0.5 it takes approx 10 tsteps for a complete wave)
 float g_fcAMPMagnitude	= 0.0;
 double g_dcAMPMax		= 1.0;// A globally set  saturation value of cAMP.
@@ -126,7 +126,11 @@ if (modelType == 9 || modelType == 1) //SU Synapse
 return 0.0;
 }
 
-#define OUTPUT_FILENAME "_AllocSignalVsRepTime-Sat-PKA_n"
+#ifdef USE_SATURATION_MODEL
+	#define OUTPUT_FILENAME "_AllocSignalVsRepTime-Sat-PKA_n"
+#else
+	#define OUTPUT_FILENAME "_AllocSignalVsRepTime-NOSat-PKA_n"
+#endif
 
 
 int main(int argc, char* argv[])
@@ -533,6 +537,9 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	sprintf(buff,"%d%s%d_N%d_T%d_Fc%.2f_r%d.dat",modelType,OUTPUT_FILENAME,FilterSize,synapsesPopulation,trials,g_fcAMPDecay,iMemoryReps);
 	string sAggregateFile(buff);
 
+//	sAggregateFile += boost::lexical_cast<std::string>(modelType);
+//	sAggregateFile.append(".dat");
+
 	cout << "Signal Output Files: " <<  sAggregateFile << endl; //Tell User Which Output file we are using
 	ofstream* pfile = openfile(fOutName,sAggregateFile,ios::out);
 
@@ -540,7 +547,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	if (!pfile->is_open())
 		ERREXIT(101,"Could Not Open output files. Check directories");
 	//Write Header
-	(*pfile) << "#RepTime\tAllocSNR\tAllocSignal\tAllocVariance\tAllocThreshold\tPKALevel\tPKAVariance\tSNR_FPT" << endl;
+	(*pfile) << "#RepTime\tAllocSNR\tAllocSignal\tAllocVariance\tAllocThreshold\tPKALevel\tPKAVariance\tSNR_FPT\tPKAAllocThres" << endl;
 
 	const float MaxRepTime = 100+PeakTime;
 	int iRepIntervalStep = 5; //Is in Numerical Model Mathematica Results
@@ -655,7 +662,8 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 				<< g_fAllocHThres << "\t"
 				<< AllocSignal.pairPKAVal.first << "\t"
 				<< AllocSignal.pairPKAVal.second << "\t"
-				<< AllocSignal.dMeanSignalLifetime << endl;
+				<< AllocSignal.dMeanSignalLifetime << "\t"
+				<< g_fPKAAllocThres << endl;
 
 		//Clear Object Memory
 		cout << "R.I:" << iabsRepTime << " PKA:" << AllocSignal.pairPKAVal.first << endl;
