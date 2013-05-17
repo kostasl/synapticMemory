@@ -91,7 +91,7 @@ using namespace std;
 #define USE_CASCADE_DEFAULT_PROBABILITIES //Cascade Synapses Initialize default geometric progression P and Q transition probabilities
 #define UNIFILTER_RESET_ZERO
 
-#define USE_SATURATION_MODEL //Get Allocation based on PKA will use the  uses Saturating Model of cAMP production
+#undef USE_SATURATION_MODEL //Get Allocation based on PKA will use the  uses Saturating Model of cAMP production
 
 #define ERREXIT(code, str) errexit((int)(code), __LINE__ ,__FILE__, str);
 

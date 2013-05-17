@@ -268,6 +268,7 @@ int main(int argc, char* argv[])
 		buffFilename.append(buff);
 
 		cout << "@ Simulation " << simulationName << " Output File:" << buffFilename.c_str() << endl;
+		cout << "Obtain Cycle Sample After cycles: " << g_MetaplasticitySampleSize << endl;
 		ofstream ofile(buffFilename.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
 
 		if (!ofile.is_open())
@@ -361,7 +362,10 @@ double runContinuousMemoryRepetition(int modelType,double ts, long trials, int t
 		repetitionTable[dRepIntervalsecs +(RepMemoryIndex)*(1.0/ts)*dEncodingRate] = trackedMemIndex+RepMemoryIndex; //Use the Absolute Pattern Number
 		cout << "ts:" << ts << " Repetition of Memory " << RepMemoryIndex << " at t:" << (dRepIntervalsecs+RepMemoryIndex) << endl;
 	}
-	dRepIntervalsecs = vpReptimes[0];
+
+	if (dRepIntervalsecs>0) //If repetition table Existed
+		dRepIntervalsecs = vpReptimes[0]; //Get the first interval to use In file Names I
+
 	cout << "#########" << endl;
 	cout <<  " h_thres >" << g_fAllocHThres << endl;
 /////////// LOG FILE INIT /////////////////////
