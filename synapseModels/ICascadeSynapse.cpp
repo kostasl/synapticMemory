@@ -249,7 +249,8 @@ void ICascadeSynapse::reset()
 	disableStabilityAllocation(); //Unset Flag For Automatic Allocation
 	unfreezePlasticity(); //De-Allocate Synapse
 
-	uiSameThresholdTransitionCounter = gsl_ran_geometric(mprng,0.5);
+	//uiSameThresholdTransitionCounter = gsl_ran_geometric(mprng,0.5);
+	uiSameThresholdTransitionCounter = 0;
 }
 
 //NOTE HACK: Stops the Histogram of Metaplastic Counters - Until Next Reset

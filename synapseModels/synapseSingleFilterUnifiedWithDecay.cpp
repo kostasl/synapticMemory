@@ -89,8 +89,8 @@ synapseSingleFilterUnifiedWithDecay::synapseSingleFilterUnifiedWithDecay(int piL
 	else
 		penumStartStrength = penumStrength = SYN_STRENGTH_WEAK;
 
-	uiSameThresholdTransitionCounter = gsl_ran_geometric(mprng,0.5);
-
+	//uiSameThresholdTransitionCounter = gsl_ran_geometric(mprng,0.5);
+	uiSameThresholdTransitionCounter = 0;
 	//Inject Somewhere
 	initialiseFilterState();
 	iCycleSamplesRemaining = CycleSamples; //The CountDown Starts from CycleSamples->On 0 No more Distribution Sampling occurs
