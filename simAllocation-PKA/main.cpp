@@ -17,6 +17,9 @@
  * u_max =1 setting the saturation upper bound (Increasing Bound only scales the final PKA)
  *
  *
+ * Command Line For Threshold Cycles :--simulation=simMemSignalinTime --model=synapseSingleFilterUnifiedWithDecay --trials=1 --startSize=7 --endSize=7 --synapsesSize=100000 --initPeriod=0 --cSimTimeSecs=1000 --metaSampleSize=1 --Timestep=1.00 --repPatIndex=0 --AllocRefrac=1 --metaSampleTime=0 --cAMPDecay=0.5 --PKAAllocThres=1000000  --repTimes=120 120
+ * Cmd for Alloc Per repInterval : --simulation=AllocSignalVsRepetitionTime --model=synapseSingleFilterUnifiedWithDecay --trials=1 --startSize=7 --endSize=7 --synapsesSize=100 --initPeriod=0 --cSimTimeSecs=1000 --Timestep=1.00 --repPatIndex=0 --repPatCount=4 --AllocRefrac=1 --metaSampleTime=0 --cAMPDecay=0.5 --PKAAllocThres=1000000
+ *
  */
 #include <boost/lexical_cast.hpp>
 #include "common.h"
