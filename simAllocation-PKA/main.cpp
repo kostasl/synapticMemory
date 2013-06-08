@@ -35,8 +35,9 @@ namespace po = boost::program_options;
 using namespace std;
 
 //GLOBAL VARS
-int g_FilterTh 			= 7; //Used for Single Filter Experiments
-double g_FilterDecay 	= 0.0; //0.0916986;
+int g_FilterTh 							= 7; //Used for Single Filter Experiments
+double g_FilterDecay 					= 0.0; //0.0916986;
+bool g_saveThresholdCyclesOnEveryTrial 	= false; //If True MetaC file saves ThresC distribution on every trial so we measure the average convergence
 
 uint g_timeToSampleMetaplasticity	= 0; //Used by Sim code as the time to sample the number of metaplastic transitions
 int g_MetaplasticitySampleSize		= 0;//Sim Code Stops saving to the distribution of same threshold crossings Once this number of samples has been gathered
@@ -49,6 +50,7 @@ float g_fPKAAllocThres	= -1000; //Threshold beyond which the integrating PKA sig
 float g_fInjectionGain	= 1.0; //The GAIN of the cAMP production Process
 int g_iHillOrder		= 4; //The threshold function hill order
 uint g_AllocRefraction	= 1;//The Same Threshold Counter Limit required to allocate a synapse - Set to -1 For No Allocation
+
 string g_outputTag;
 
 // Signal h_thresholds {Theta,repetitions,MaxSignal<-Used as Threshold}
@@ -206,14 +208,14 @@ int main(int argc, char* argv[])
 
 	///Add List Of Simulation Types
 	mapSimType["simMemSignalinTime"] = 1;
-	mapSimType["simMemSignalsFromFile"] = 2;
-	mapSimType["PerceptronTest"] = 3;
-	mapSimType["HopfieldTest"] = 4;
-	mapSimType["simMemSignalinContinuousTime"] = 5;
-	mapSimType["simEscTime"] = 6;
-	mapSimType["MeanMemoryLifetime"] = 7;
-	mapSimType["simRepetition"] = 8;
-	mapSimType["ThresholdCycleFq"] = 9;
+	mapSimType["simMemSignalsFromFile"] = 2; //NA
+	mapSimType["PerceptronTest"] = 3; //NA
+	mapSimType["HopfieldTest"] = 4; //NA
+	mapSimType["simMemSignalinContinuousTime"] = 5; //NA
+	mapSimType["simEscTime"] = 6; //NA
+	mapSimType["MeanMemoryLifetime"] = 7; //NA
+	mapSimType["simRepetition"] = 8;//NA
+	mapSimType["ThresholdCycleFq"] = 9; //Same as 1 but saves thresCycles for on every trial
 	mapSimType["AllocSignalVsRepetitionTime"] = 10;
 
 
@@ -260,8 +262,15 @@ int main(int argc, char* argv[])
 	start = clock();
 	float minRequiredEncodings = 3.0f;
 	double cPeakcAMPToTheta = 0.138384;
-	if (simulationType == 1) //Simulate Signal In Time MLT
+	if (simulationType == 1 || simulationType ==9) //Simulate Signal In Time MLT
 	{
+		if (simulationType == 9)
+		{
+			cout << " Taking Threshold Cycle Distributions on Every Trial" << endl;
+			g_fPKAAllocThres = -1000;///Some very large value so we never allocate
+			lSimtimeSeconds = 10; //Stops when Distirb Sample Has been obtained
+			g_saveThresholdCyclesOnEveryTrial = true;//Save Distribution on every trial so I can obtain average distance Measure
+		}
 
 		////OPEN OUTPUT FILES To save The point When MEAN signal Drops below SNR=1
 		string buffFilename(ALLOCCTEVNT_OUTPUT_DIRECTORY);

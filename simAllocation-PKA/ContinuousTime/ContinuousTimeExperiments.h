@@ -28,6 +28,7 @@ extern int g_iHillOrder;
 extern uint g_timeToSampleMetaplasticity;
 extern int g_MetaplasticitySampleSize;
 extern uint g_AllocRefraction;
+extern bool g_saveThresholdCyclesOnEveryTrial;
 
 //void runAvgContinuousMemoryLifetimeSignalSimulation(int modelType,long trials,int trackedMemIndex,int CascadeSize,long synapsesPopulation,long SimTime,double dEncodingRate,string inputFile);
 
@@ -168,10 +169,8 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 
 	if (bAllocationSignal) //Global Signal Now Freeze Tagged Synapses - Then Stop Allocation
 	{//At the allocation signal we begin measuring Stability
-
 		//With Old LTM Switch On We Allocate All Synapses that exceed the metaplastic steps limit
 		//oCSyn->enableMetaplasticAllocation(); //set the AllocFlag=True So FreezePlasticity works only once after bAllocationSignal is flagged
-
 		//With TAG&Capture I Ignore Late-associativity - Once after Global Signal : TAG and Capture Then We run out of PRPS and allocation is closed -
 		oCSyn->enableMetaplasticAllocation(); //set the AllocFlag=True So FreezePlasticity works only once after bAllocationSignal is flagged
 		oCSyn->freezePlasticity(); //If Synapse Has been Tagged from previous stimulation Then Freeze it, Since global signal has arrived
@@ -195,6 +194,11 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 	 	if (bEncodeNewPattern) //But this is a tracked Pattern So Save it
 			X[iPatIndexRelativeToX][i] = iStim; //Save The stimulus in the X vector holding The Tracked Patterns
 	}
+
+	////Re-enable Sampling for this synapse If this is the beginning of a new trial and we  are in ThrsCycle Mode
+	if (g_saveThresholdCyclesOnEveryTrial && ts ==0)
+		oCSyn->setDistributionSampleLimit(1); //Reset The limit so the synapse starts recounting on the next trial
+
 
 	switch (iStim)
 	{ //Set What the Correct Strength State is For Each Synapse So they Can Save to the distribution
@@ -249,11 +253,13 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 		pMDistribinSamples.insert(pMDistrib.begin(),pMDistrib.end());//Copy Snapshot of current Distrib IN time
 		//pMDistribinSamples[0] = pMDistrib[0]; //This is Used in the Time loop To know if the Sample Has been obtained
 		pMDistribinSamples[0] = ts+1; //Save the Time Of When The sample Limit Was Reached
-		cout << "ThreshCycle Sample :" << g_MetaplasticitySampleSize << " Per Synapse Reached At:" << pMDistribinSamples[0] << endl;
+		cout << "Th.Cycle Sample :" << g_MetaplasticitySampleSize << " Per Synapse Reached At:" << pMDistribinSamples[0] << endl;
 	}
 
 	if (pMDistribinSamples[0] != 0)
-		oCSyn->disableDistributionSampleLimit(); //Once the distribution is Copied - Remove Sample Size Constraint
+			oCSyn->disableDistributionSampleLimit(); //Once the distribution is Copied - Remove Sample Size Constraint
+
+
 
 	i++; //INcrement Index used for input vector
 } //For Each Synapse
@@ -372,6 +378,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 	// HISTOGRAM of ThresholdCycles //
 	map<uint,uint> mpMDistrib; //The distribution Of Metaplastic Transitions Used by All Synapses -Live
 	map<uint,uint> mpMDistribinSamples; //The Avg distribution Of Metaplastic Transitions among Synapses for a fixed number of cycle samples - Sample Limited
+										//This is obtained by copying from mpMDistrib when the number of samples reaches the required number.
 	map<uint,uint> mpMDistribinTime; // Time Limited Average over All trials - Contains the distribution of Synapses At the cut-off point too
 
 	mpMDistribinTime.clear();
@@ -475,6 +482,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 	///Do a Trial - First trial will allocate the memory buffer -
 	t = trials;
 
+	//Main Trial Loop
 	while (t > 0)
 	{
 		reportCycle ++; //Report Trial Progress
@@ -507,7 +515,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 		bool bAllocatePattern = false; //This Flag will be set On-by encodeMemory when h>0.5
 		double h = 0.0; //Neuron Response to Encoded Memory
 
-		//First Wait enough cycles so the Sampled Distribution is obtained (If g_MetaplasticitySampleSize is set )
+		// Sim Step Loop First Wait enough cycles so the Sampled Distribution is obtained (If g_MetaplasticitySampleSize is set )
 		while ((j < lTotalTimesteps) || ((mpMDistribinSamples[0] == 0) && (g_MetaplasticitySampleSize > 0)) ) //
 		{
 			bool bDASignal = false;
@@ -649,6 +657,18 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 		}
 */
 		t--; //Decrement Trial count down to 0
+
+		if (g_saveThresholdCyclesOnEveryTrial)
+		{
+			if ((trials-t)==1) //Create File on 1st Trial
+				createCycleHistogramFile(mpMDistribinSamples, slogFiles[10],trials,mpMDistribinSamples[0]);
+
+			//cout <<" Save THCL:" << t;
+			appendCycleHistogramToFile(mpMDistribinSamples, slogFiles[10],trials,mpMDistribinSamples[0],trials-t);
+			mpMDistribinSamples.clear(); //Save Distinct for each trial
+		}
+
+
 	}//LOOP For each trial
 
 	//Save Avg Distribution To File
@@ -744,10 +764,11 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 	}
 	ofile.close();
 */
+	createCycleHistogramFile(mpMDistribinTime, slogFiles[9],trials,cSampleMetaplasticCounters);
+	appendCycleHistogramToFile(mpMDistribinTime, slogFiles[9],trials,cSampleMetaplasticCounters,t);
 
-	saveCycleHistogramToFile(mpMDistribinTime, slogFiles[9],trials,cSampleMetaplasticCounters);
-
-	saveCycleHistogramToFile(mpMDistribinSamples, slogFiles[10],trials,mpMDistribinSamples[0]);
+	if (!g_saveThresholdCyclesOnEveryTrial)//Then Only save the last one
+		appendCycleHistogramToFile(mpMDistribinSamples, slogFiles[10],trials,mpMDistribinSamples[0],t);
 
 	//CLEAR MEMORY
 	vpSyns.clear();

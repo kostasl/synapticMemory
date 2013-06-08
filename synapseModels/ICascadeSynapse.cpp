@@ -178,6 +178,12 @@ void ICascadeSynapse::saveMetaplasticDistribution()
 
 
 
+//So I can reset Sampling on every trial
+void ICascadeSynapse::setDistributionSampleLimit(int i)
+{
+	iCycleSamplesRemaining = i; //Make -1 so saveDistribution Can Carry on
+}
+
 void ICascadeSynapse::disableDistributionSampleLimit()
 {
 	iCycleSamplesRemaining = -1; //Make -1 so saveDistribution Can Carry on

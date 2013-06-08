@@ -93,7 +93,7 @@ public:
 	void saveMetaplasticDistribution();
 
 	void disableDistributionSampleLimit(); //Remove the limitation on the number of samples obtained for thres-cycle sampling
-
+	void setDistributionSampleLimit(int i);
 	bool isPlastic(); //Returns true if synapse is not Locked (Allocated)
 
 	virtual ~ICascadeSynapse();
