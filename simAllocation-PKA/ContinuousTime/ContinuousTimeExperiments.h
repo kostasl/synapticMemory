@@ -405,7 +405,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 	if (bUseRandomPatterns) //For On The Fly Vectors
 		uiPatCount = ciNoOfTrackedPatterns+1; //No Need to have Large X vectors - Only Tracked patterns Saved
 
-	assert(simTimeSeconds*(1/ts) > maxRepTime); //Check If the Simulation Time Allows for the number of repetitions
+	assert((simTimeSeconds*(1/ts) > maxRepTime) || g_saveThresholdCyclesOnEveryTrial); //Check If the Simulation Time Allows for the number of repetitions
 
 	t_inVal* 	 X[uiPatCount]; //Memory Patterns Containing The Ones Loaded from File and Random Initialization patterns
 	t_inVal* 	 W = new t_inVal[iSynCount]; //Weight Vector Reflecting The state of the Synapses

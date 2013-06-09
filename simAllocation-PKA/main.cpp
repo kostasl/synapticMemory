@@ -291,7 +291,7 @@ int main(int argc, char* argv[])
 		ofile << "#Size\tMSFPT" << endl;
 
 
-		cout << "****MEMORY LIFETIME SIMULATION******" << endl;
+
 		double dMSFPT;
 		//For Cascade Indexes/Symmetric Filter Sizes
 		for (int i=startIndex;i<=endIndex;i+=2)
@@ -303,8 +303,28 @@ int main(int argc, char* argv[])
 			 /* Magnitude of cAMP */
 			 g_fcAMPMagnitude	= 1.0;  //
 			 cout << "SynSz:"<< g_FilterTh << " Decay Fc:" << g_fcAMPDecay << " cAMPInj:" << g_fcAMPMagnitude << " h_thres:" << g_fAllocHThres << endl;
-			 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,vdRepTime,i,synapsesPopulation,lSimtimeSeconds,dEncodingRate,inputFile);
-			 cout << i << "\t Lifetime of Mean signal :" << dMSFPT << endl;
+
+			 if (simulationType == 9)
+			 { //For threshold Cycle Simulation Increase the Sampling Up to 100 by increasing the synapsesPopulation
+				 cout << "****SAMPLE THRESHOLD CYCLES For N=1->100 SIMULATION******" << endl;
+				 for (int n=1;n<=synapsesPopulation; n+=(n<10)?1:10 )
+				 {
+					 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,
+					 	 	 	 	 	 	 	 	 vdRepTime,i,n,lSimtimeSeconds,
+					 	 	 	 	 	 	 	 	 dEncodingRate,inputFile);
+				 	 cout << i << "\t Lifetime of Mean signal :" << dMSFPT << endl;
+				 }
+			 }
+			 else
+			 {
+				 cout << "****MEMORY LIFETIME SIMULATION******" << endl;
+				 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,
+									 	 	 	 	 	 	 	 	 vdRepTime,i,synapsesPopulation,lSimtimeSeconds,
+									 	 	 	 	 	 	 	 	 dEncodingRate,inputFile);
+				 cout << i << "\t Lifetime of Mean signal :" << dMSFPT << endl;
+			 }
+
+
 
 			 ofile << i << "\t" << dMSFPT << endl;
 		 }//Loop For Each Cascade Index
