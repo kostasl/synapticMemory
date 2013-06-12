@@ -660,7 +660,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 
 		if (g_saveThresholdCyclesOnEveryTrial)
 		{
-			if ((trials-t)==1) //Create File on 1st Trial
+			if ((trials-t)==0) //Create File on 1st Trial
 				createCycleHistogramFile(mpMDistribinSamples, slogFiles[10],trials,mpMDistribinSamples[0]);
 
 			//cout <<" Save THCL:" << t;
@@ -768,7 +768,10 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 	appendCycleHistogramToFile(mpMDistribinTime, slogFiles[9],trials,cSampleMetaplasticCounters,t);
 
 	if (!g_saveThresholdCyclesOnEveryTrial)//Then Only save the last one
+	{
+		createCycleHistogramFile(mpMDistribinSamples, slogFiles[10],trials,mpMDistribinSamples[0]);
 		appendCycleHistogramToFile(mpMDistribinSamples, slogFiles[10],trials,mpMDistribinSamples[0],t);
+	}
 
 	//CLEAR MEMORY
 	vpSyns.clear();
