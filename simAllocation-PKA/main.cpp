@@ -307,7 +307,7 @@ int main(int argc, char* argv[])
 			 if (simulationType == 9)
 			 { //For threshold Cycle Simulation Increase the Sampling Up to 100 by increasing the synapsesPopulation
 				 cout << "****SAMPLE THRESHOLD CYCLES For N=1->100 SIMULATION******" << endl;
-				 for (int n=1;n<=synapsesPopulation; n+=(n<10)?1:10 )
+				 for (int n=1100;n<=synapsesPopulation; n+=(n<10)?1:100)
 				 {
 					 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,
 					 	 	 	 	 	 	 	 	 vdRepTime,i,n,lSimtimeSeconds,

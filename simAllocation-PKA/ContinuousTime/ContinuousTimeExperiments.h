@@ -253,7 +253,7 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 		pMDistribinSamples.insert(pMDistrib.begin(),pMDistrib.end());//Copy Snapshot of current Distrib IN time
 		//pMDistribinSamples[0] = pMDistrib[0]; //This is Used in the Time loop To know if the Sample Has been obtained
 		pMDistribinSamples[0] = ts+1; //Save the Time Of When The sample Limit Was Reached
-		cout << "Th.Cycle Sample :" << g_MetaplasticitySampleSize << " Per Synapse Reached At:" << pMDistribinSamples[0] << endl;
+		//cout << "Th.Cycle Sample :" << g_MetaplasticitySampleSize << " Per Synapse Reached At:" << pMDistribinSamples[0] << endl;
 	}
 
 	if (pMDistribinSamples[0] != 0)
@@ -388,6 +388,8 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 
 	//ADD REPEATED PATTERNS TO TRACKED LIST AND MARK AS ALLOCATED - Track All patterns That Are in the Repetition table
 	unsigned long maxRepTime = 0;
+
+	vTrackedIndex[0] = 1; //Always Track the Initial Pattern
 	//	vTrackedIndex[i+uiInitPatterns] = 0;  ; //Setting to 0 means Disable Allocation / 1 Means Allocate
 	for (itRep = repetitionTable.begin(); itRep != repetitionTable.end();++itRep  )
 	{
@@ -397,6 +399,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 			maxRepTime = itRep->first; //Save the Last Repetition Time into MaxRep
 	}
 
+	//assert(vTrackedIndex.size() > 0);
 	//vTrackedIndex[13] = 0; //Just Testing
 	unsigned long cSampleMetaplasticCounters 	= g_timeToSampleMetaplasticity; //Sample the metaplastic Counters At Fixed Time
 	cout << "Sampling Metaplastic Counters at :" << cSampleMetaplasticCounters << endl;
@@ -405,7 +408,7 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 	if (bUseRandomPatterns) //For On The Fly Vectors
 		uiPatCount = ciNoOfTrackedPatterns+1; //No Need to have Large X vectors - Only Tracked patterns Saved
 
-	assert((simTimeSeconds*(1/ts) > maxRepTime) || g_saveThresholdCyclesOnEveryTrial); //Check If the Simulation Time Allows for the number of repetitions
+	//assert((simTimeSeconds*(1/ts) > maxRepTime) || g_saveThresholdCyclesOnEveryTrial); //Check If the Simulation Time Allows for the number of repetitions
 
 	t_inVal* 	 X[uiPatCount]; //Memory Patterns Containing The Ones Loaded from File and Random Initialization patterns
 	t_inVal* 	 W = new t_inVal[iSynCount]; //Weight Vector Reflecting The state of the Synapses
