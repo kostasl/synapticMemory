@@ -253,7 +253,7 @@ for (it = vpSyns.begin();it!=vpSyns.end();++it)
 		pMDistribinSamples.insert(pMDistrib.begin(),pMDistrib.end());//Copy Snapshot of current Distrib IN time
 		//pMDistribinSamples[0] = pMDistrib[0]; //This is Used in the Time loop To know if the Sample Has been obtained
 		pMDistribinSamples[0] = ts+1; //Save the Time Of When The sample Limit Was Reached
-		cout << "Th.Cycle Sample :" << g_MetaplasticitySampleSize << " Per Synapse Reached At:" << pMDistribinSamples[0] << endl;
+		//cout << "Th.Cycle Sample :" << g_MetaplasticitySampleSize << " Per Synapse Reached At:" << pMDistribinSamples[0] << endl;
 	}
 
 	if (pMDistribinSamples[0] != 0)
@@ -388,7 +388,8 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 
 	//ADD REPEATED PATTERNS TO TRACKED LIST AND MARK AS ALLOCATED - Track All patterns That Are in the Repetition table
 	unsigned long maxRepTime = 0;
-	//	vTrackedIndex[i+uiInitPatterns] = 0;  ; //Setting to 0 means Disable Allocation / 1 Means Allocate
+
+	vTrackedIndex[0] = 1;  ; //Setting to 0 means Disable Allocation / 1 Means Allocate
 	for (itRep = repetitionTable.begin(); itRep != repetitionTable.end();++itRep  )
 	{
 		///Tracked pattern Is allocated - Give Allocation Signal
