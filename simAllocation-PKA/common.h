@@ -53,6 +53,15 @@ using namespace std;
 #define SPIKE_EXPIRATION_TIMECONSTS 2.2 //Sets When A Spike is considered Expired
 //#define DEBUG_LOG
 
+#define NTHREADS 30 //THREADING ?? MAXIMUM THREADS
+//#define USE_NATIVE_RAND
+//#define TH_FILT_FREEZE_THRESHOLD //Freezes the growth of the thresholds
+#define USE_CASCADE_DEFAULT_PROBABILITIES //Cascade Synapses Initialize default geometric progression P and Q transition probabilities
+#define UNIFILTER_RESET_ZERO
+
+#define USE_SATURATION_MODEL //Get Allocation based on PKA will use the  uses Saturating Model of cAMP production
+
+
 #define USE_SONG_CONDUCTANCE //When Defined the simpler Song method is used to calculate gex
 ///Need to change this and make a separate Song Synapse
 //#define USE_SONG_LEARNING	// Synaptic modification implemented as the double exponential rule and switch rule is ignored.
@@ -85,11 +94,6 @@ using namespace std;
 	#define ALLOCCTEVNT_OUTPUT_DIRECTORY "results//MemAllocationPKAResults//"
 #endif
 
-	#define NTHREADS 30 //THREADING ?? MAXIMUM THREADS
-//#define USE_NATIVE_RAND
-//#define TH_FILT_FREEZE_THRESHOLD //Freezes the growth of the thresholds
-#define USE_CASCADE_DEFAULT_PROBABILITIES //Cascade Synapses Initialize default geometric progression P and Q transition probabilities
-#define UNIFILTER_RESET_ZERO
 
 
 #define ERREXIT(code, str) errexit((int)(code), __LINE__ ,__FILE__, str);

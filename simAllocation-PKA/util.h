@@ -19,8 +19,8 @@ extern int g_FilterTh;
 gsl_rng* g_getRandGeneratorInstance(bool newInstance=false); ///GLOBAL Instance and FunctioN - Called by some Default Constructors even Synapse Classes
 
 void MakeListOfFiles(vector<string>& vLogFiles,unsigned int ciInitPeriod,int iCascadeSize,double mdRate,double dFp, int iSynCount);
-void saveCycleHistogramToFile(map<uint,uint>& mDistrib,string outputFilename,unsigned long trials,unsigned long sampleTime);
-
+void createCycleHistogramFile(map<uint,uint>& mDistrib,string outputFilename,unsigned long trials,unsigned long sampleTime);
+void appendCycleHistogramToFile(map<uint,uint>& mDistrib, string outputFilename,unsigned long totalTrials,unsigned long sampleTime,unsigned long trialNo);
 
 //For Rev 1 Objects of ICascadeSynapse Interface
 //synapseAllocator<ICascadeSynapse>::pFunct pallocF

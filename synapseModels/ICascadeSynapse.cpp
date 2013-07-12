@@ -26,6 +26,7 @@ ICascadeSynapse::ICascadeSynapse() {
 	penumTrackedStrength = penumStartStrength = penumStrength  = SYN_STRENGTH_NOTSET;
 
 	mdAllocationDecayRate = 0.0;
+	mbAllocationTag = false;
 }
 
 ///Constr. With Allocation Switches
@@ -41,14 +42,30 @@ ICascadeSynapse::ICascadeSynapse(bool PlasticAlloc, bool MetaplasticAlloc,bool b
 	uiSameThresholdTransitionCounter 	= 0;
 	mpMDistribinTime 				= NULL;
 	penumTrackedStrength = penumStartStrength = penumStrength  =SYN_STRENGTH_NOTSET;
-	iCycleSamplesRemaining = 0;
+	iCycleSamplesRemaining 			= 0;
+	mbAllocationTag 				= false;
+
 }
+
+//Checks If conditions to Lock-Allocate Synapse have been met and Set mbNoPlasticity accordingly
 void ICascadeSynapse::freezePlasticity()
 {
-	if (mbStabilityAlloc && (uiStateLifetime > uiThresholdForAllocation)) //This criterion counts the number of memories stored without this synapse changing strength
-		mbNoPlasticity = true;
 
-	//If Metaplastic -- Then Compare Metaplastic Cycles against threshold
+	//Synapse Has been tagged - Then this function is called Due to Global Alloc Signal Just allocate
+	//mbMetaplasticAlloc Is set to False Once GlobalSignal Has called FreezePlasticity
+	if (mbAllocationTag && mbMetaplasticAlloc)
+	{
+		mbNoPlasticity = true;
+		resetMetaplasticCounter(); //Once Allocation Period has expired we reset the counters--
+	}
+
+//CANCEL OTHER Allocation Methods
+//		if (mbStabilityAlloc && (uiStateLifetime > uiThresholdForAllocation)) //This criterion counts the number of memories stored without this synapse changing strength
+//			mbNoPlasticity = true;
+
+
+//Cancel Other Allocation Methods - Only Allocate Tagged Synapses When Called After GlobalSignal si set
+/*	//If Metaplastic -- Then Compare Metaplastic Cycles against threshold
 	if (mbMetaplasticAlloc)
 	{
 		if(uiSameThresholdTransitionCounter >= uiThresholdForAllocation) //This criterion counts the number of memories stored without this synapse changing strength
@@ -57,17 +74,17 @@ void ICascadeSynapse::freezePlasticity()
 			resetMetaplasticCounter(); //Once Allocation Period has expired we reset the counters--
 			//Without this line allocation Freezes synapses and a metaplastic sample May never be reached
 		}
-
-/*		//Set Lifetime of Metaplastic Alloc Signal
+		//Set Lifetime of Metaplastic Alloc Signal
 		if (mdAllocationDecayRate > 0.0)
 		{
 			double r = gsl_rng_uniform(mprng);
 			if (r < mdAllocationDecayRate) //Allocation Signal Stochatically Switches off
 				mbMetaplasticAlloc = false;//Allocation Stops at this Synapse
 			//SameThresholdCounters Were Reset upon Allocation
-		}*/
-
+		}
 	}
+
+*/
 }
 
 bool ICascadeSynapse::isPlastic()
@@ -161,6 +178,12 @@ void ICascadeSynapse::saveMetaplasticDistribution()
 
 
 
+//So I can reset Sampling on every trial
+void ICascadeSynapse::setDistributionSampleLimit(int i)
+{
+	iCycleSamplesRemaining = i; //Make -1 so saveDistribution Can Carry on
+}
+
 void ICascadeSynapse::disableDistributionSampleLimit()
 {
 	iCycleSamplesRemaining = -1; //Make -1 so saveDistribution Can Carry on
@@ -232,7 +255,8 @@ void ICascadeSynapse::reset()
 	disableStabilityAllocation(); //Unset Flag For Automatic Allocation
 	unfreezePlasticity(); //De-Allocate Synapse
 
-	uiSameThresholdTransitionCounter = gsl_ran_geometric(mprng,0.5);
+	//uiSameThresholdTransitionCounter = gsl_ran_geometric(mprng,0.5);
+	uiSameThresholdTransitionCounter = 0;
 }
 
 //NOTE HACK: Stops the Histogram of Metaplastic Counters - Until Next Reset
@@ -269,13 +293,14 @@ void ICascadeSynapse::unfreezePlasticity()
 
 void ICascadeSynapse::enableMetaplasticAllocation()
 {
-	if (uiThresholdForAllocation > 0)
+	//if (uiThresholdForAllocation > 0) //Now Tagged synapses May Be allocated for just being in the correct state
 		mbMetaplasticAlloc = true;
 }
 
 void ICascadeSynapse::disableMetaplasticAllocation()
 {
 	mbMetaplasticAlloc = false;
+	mbAllocationTag = false;
 }
 
 //If True Then The synapse May Lock Strength After A plastic Transition

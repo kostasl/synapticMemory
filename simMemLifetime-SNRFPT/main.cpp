@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	    ("help", "produce help message")
 	    ("model,M", po::value<string>(&modelName), "The model to run the simulation on")
 		("simulation,S", po::value<string>(&simulationName)->default_value(simulationName), "The simulation name to run")
-		("trials,T", po::value<unsigned int>(&trials)->default_value(10000), "Number of iteration to average over")
+		("iterations,T", po::value<unsigned int>(&trials)->default_value(10000), "Number of iterations to average over in Trials*NetSize")
 	    ("cSimTimeSecs,secs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds")
 		("synapsesSize", po::value<int>(&synapsesPopulationFinal)->default_value(synapsesPopulationFinal), "Incremental Maximum Size of Net- Has to match the vector file size where required")
 		("synapsesSizeStart", po::value<int>(&synapsesPopulationStart)->default_value(synapsesPopulationFinal), "Start Size of Net - The experiment will increment it up Maximum Size")
@@ -188,12 +188,14 @@ int main(int argc, char* argv[])
 		cout << " Size Increment :" << pow(10, floor(log10(N))) << endl;
 		iFixedIterations = trials / N;
 
+		if (iFixedIterations < 1)
+			ERREXIT(1,"Total Iterations are less than NetSize! making Trials=0");
+
 		//For Cascade Indexes
 		for (int i=startIndex;i<=endIndex;i++)
 		{
 			 g_FilterTh =i; ///The Unified Filter Thresholds
 			 g_UpdaterQ = 1.0/(g_FilterTh*g_FilterTh);
-
 			 dMSFPT = runContinuousMemoryRepetition(modelType,ts,iFixedIterations,trackedMemIndex,
 					 	 	 	 	 	 	 	 	 RepMemoryIndex,vdRepTime,i,N,lSimtimeSeconds,
 					 	 	 	 	 	 	 	 	 	dEncodingRate,inputFile);
