@@ -18,8 +18,8 @@
 #include "synapseSingleUpdater.h"
 #include "synapseSingleFilterUnifiedWithDecay.h"
 #include "synapseSingleFilterDual.h"
+#include "synapseFilterDual.h" //This is a cascade of Dual Filters
 #include "synapseSingleFilterUnifiedWithDecayReflecting.h"
-
 
 extern double g_UpdaterQ;
 extern int g_FilterTh;
@@ -399,7 +399,7 @@ ICascadeSynapse* allocSynapseArray<synapseSingleFilterUnifiedWithDecayReflecting
 
 
 
-//Allocating Stochastic Updaters DUAL FILTER
+//Allocating Single DUAL FILTER
 template <>
 ICascadeSynapse* allocSynapseArray<synapseSingleFilterDual>(char*buffer,int iSynCount,int IndexOfTransitionProb, gsl_rng* prng_r, float StimRate)
 {

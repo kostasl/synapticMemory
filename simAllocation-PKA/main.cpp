@@ -215,7 +215,7 @@ int main(int argc, char* argv[])
 	mapSimType["simEscTime"] = 6; //NA
 	mapSimType["MeanMemoryLifetime"] = 7; //NA
 	mapSimType["simRepetition"] = 8;//NA
-	mapSimType["ThresholdCycleFq"] = 9; //Same as 1 but saves thresCycles for on every trial
+	mapSimType["ThresholdCycleFq"] = 9; //Same as 1 but saves thresCycles on every trial Το obtain Distribution Convergence plots
 	mapSimType["AllocSignalVsRepetitionTime"] = 10;
 
 

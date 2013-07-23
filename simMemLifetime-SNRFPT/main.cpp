@@ -114,10 +114,10 @@ int main(int argc, char* argv[])
 	mapSynapseAllocator["synapseCascade"] = 1;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascade>;
 	mapSynapseAllocator["synapseCascadeFilterUnified"] = 2;
 	mapSynapseAllocator["synapseCascadeFilterUnifiedWithDecay"] = 3;// (pAllocationFunct)allocSynapseArrayCascade<synapseCascadeFilterUnifiedWithDecay>;
-	mapSynapseAllocator["synapseSingleFilterDual"] = 4;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
+	mapSynapseAllocator["synapseCascadeFilterDual"] = 5;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterDual>;
 	//mapSynapseAllocator["cascadeDelayed"]
 	//mapSynapseAllocator["CascadeSamplingFilter"]
-	mapSynapseAllocator["synapseSingleFilterDual"]	= 5;
+	mapSynapseAllocator["synapseSingleFilterDual"]	= 7;
 	mapSynapseAllocator["synapseSingleFilterUnifiedWithDecay"] = 8;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleFilterUnifiedWithDecay>;
 	mapSynapseAllocator["synapseSingleUpdater"] = 9;//(pAllocationFunct)allocSynapseArraySingleQ<synapseSingleUpdater>;
 	//mapSynapseAllocator["synapseSerialCascade"]
@@ -286,14 +286,14 @@ case 3: //Cascade Filter with decay
 	 dMFPT = simRepetitionAllocation<synapseCascadeFilterUnifiedWithDecay,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
 
-case 5: //Single Filter Dual
-	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleFilterDual>;
-	 makeLogFileNames<synapseSingleFilterDual>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
+case 5: //Cascade DualFilter
+	 pF =  (pAllocationFunct)allocSynapseArray<synapseFilterDual>;
+	 makeLogFileNames<synapseFilterDual>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 //(pFunct pF, int iSynCount,int iCascadeSize,unsigned int iSimTime,unsigned int ciInitPeriod,double mdRate, double dFp=0.5)
 	 //Also Available : simMemSignalinContinuousTime
-	 dMFPT = simRepetitionAllocation<synapseSingleFilterDual,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
+	 dMFPT = simRepetitionAllocation<synapseFilterDual,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 break;
-case 7:
+case 7://Alloc Single DualFilter
 	 pF =  (pAllocationFunct)allocSynapseArray<synapseSingleFilterDual>;
 	 makeLogFileNames<synapseSingleFilterDual>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation,pF);
 	 dMFPT = simRepetitionAllocation<synapseSingleFilterDual,pAllocationFunct>(pF, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
