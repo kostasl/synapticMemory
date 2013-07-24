@@ -107,19 +107,25 @@ static void errexit(int code,uint lineno ,const char* srcFile,const char* str)
 
 using namespace std;
 
+//In util File
+extern pair<string,string> SplitFilename (const std::string& str);
 
-static std::ofstream* openfile(string strDir,string strFile,ios::openmode omode)
+
+static std::ofstream* openfile(string strFile,ios::openmode omode)
 {
-	string strbuff(strDir);
-	strbuff.append(strFile);
+
+	pair<string,string> splitFName = SplitFilename(strFile);
+
+	string strbuff(splitFName.first);
+	strbuff.append(splitFName.second);
 
 	cout << strbuff << endl;
 	std::ofstream* file = new ofstream(strbuff.c_str(), omode ); //Open Data File for Appending So you dont Overwrite Previous Results
 		if (!file->is_open())
 		{
-			cerr << strDir;
+			cerr << splitFName.first;
 			string cmd = "mkdir ";
-			cmd.append(strDir);
+			cmd.append(splitFName.first);
 			cout <<  "Create Output directory" << endl;
 			int ret = system(cmd.c_str());
 			cout << "Ret:" << ret << endl;

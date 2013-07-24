@@ -20,6 +20,7 @@ gsl_rng* g_getRandGeneratorInstance(bool newInstance=false); ///GLOBAL Instance 
 
 void MakeListOfFiles(vector<string>& vLogFiles,unsigned int ciInitPeriod,int iCascadeSize,double mdRate,double dFp, int iSynCount);
 
+pair<string,string> SplitFilename (const std::string& str);
 
 //For Rev 1 Objects of ICascadeSynapse Interface
 template <class T>

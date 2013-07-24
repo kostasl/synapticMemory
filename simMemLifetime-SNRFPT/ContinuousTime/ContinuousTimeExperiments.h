@@ -594,12 +594,13 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 		sprintf(buffFilename,(const char*)slogFiles[4].c_str(), itTracked->first-uiInitPatterns);
 		cout << "Signal Output Files: " <<  buffFilename << endl; //Tell User Which Output file we are using
 
-		ofstream ofile(buffFilename, ios::out ); //Open Data File
-		if (!ofile.is_open())
+		ofstream* ofile = openfile(buffFilename,ios::out);
+
+		if (!ofile->is_open())
 			ERREXIT(100,"Could Not Open output files. Check directories");
 		//Write Header
-		ofile << "#" << buffObjName << " Event Driven Memory Lifetime simulation Ts:" << ts << " Total samples: " << lTotalTimesteps << " Signal Sampling every :"<< "On everyEncoding" <<endl;
-		ofile << "#t\tE[h]\tPerceptronSigNonEncodingSynapses\tPerceptronSigEncodingSynapses\tVariance\tCoVariance\tE[h^2]\tAllocFraction" << endl;
+		*ofile << "#" << buffObjName << " Event Driven Memory Lifetime simulation Ts:" << ts << " Total samples: " << lTotalTimesteps << " Signal Sampling every :"<< "On everyEncoding" <<endl;
+		*ofile << "#t\tE[h]\tPerceptronSigNonEncodingSynapses\tPerceptronSigEncodingSynapses\tVariance\tCoVariance\tE[h^2]\tAllocFraction" << endl;
 
 		double simTime = 0.0; //Start from ts so GnuPlot Can plot the 1st timepoint on a logscale that does not start from 0.
 		double dEhsquared = 0.0;
@@ -623,19 +624,20 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 			simTime=ts*(double)j;
 
 			//if (i==0) 				cout << "S:" << (dSignal) << " N:" <<  sqrt(dVar[i][j]) << endl;
-			//While Above Water Update the Lifetime of the 1st tracked Memory
-			if (i==0 && (dSignal > sqrt(dVar[i][j]) ) )
+			//While mean Above Water Update the Lifetime of the 1st tracked Memory -
+			//Beware that in Low Averaging Fluctuations will mess up this calculation
+			if (i==0 && (dSignal > sqrt(dVar[i][j]) ))
 			{
 				dLowSignalMFPT = simTime; //Save Until last point when Avg Memory Signal is above Noise
 				//cout << dSignal/sqrt(dVar[i][j]) << endl;
 			}
 
-			ofile << (simTime) << "\t" << (float)(dSignal) << "\t" << (float)(dPntSn[i][j]) << "\t" << (float)(dPtSn[i][j]) << "\t" <<(float)(dVar[i][j]) << "\t" << dCovar << "\t" << dEhsquared << "\t" << dAllocSignal << endl;
+			*ofile << (simTime) << "\t" << (float)(dSignal) << "\t" << (float)(dPntSn[i][j]) << "\t" << (float)(dPtSn[i][j]) << "\t" <<(float)(dVar[i][j]) << "\t" << dCovar << "\t" << dEhsquared << "\t" << dAllocSignal << endl;
 		}
 
 		i++; //Next Tracked Mem Index
-		ofile << "#EOF" << endl;
-		ofile.close();
+		*ofile << "#EOF" << endl;
+		ofile->close();
 	}
 	cout << "*Mean Signal Lifetime : " <<  dLowSignalMFPT << endl;
 
@@ -655,8 +657,8 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 	cout << "In Time Meta Distribution Output File: " <<  slogFiles[9] << endl; //Tell User Which Output file we are using
 	ofstream ofile2(slogFiles[9].c_str(), ios::out ); //Open Data File For Wrong Cycles
 	ostringstream oss;
-	oss << "#SampleDuration :" << cSampleMetaplasticCounters << " Trials:" << trials << endl;
-	oss	<< "#Cycle-Size\tOverallFrequency\tCorrectStateFq\tWrongStateFq\tTotalSamples" << endl;
+	oss << "#SampleDuration :" << cSampleMetaplasticCounters << " Trials:" << trials << std::endl;
+	oss	<< "#Cycle-Size\tOverallFrequency\tCorrectStateFq\tWrongStateFq\tTotalSamples" << std::endl;
 	ofile2 << oss.str();
 
 	//Split Into Two distributions to ease saving into one File
@@ -725,8 +727,8 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 		cout << " Meta Distribution Output File: " <<  slogFiles[10] << endl; //Tell User Which Output file we are using
 		ofstream ofile3(slogFiles[10].c_str(), ios::out ); //Open Data File For Wrong Cycles
 		ostringstream oss2;
-		oss2 << "#SampleSize :" << lDistribSum << " Trials:" << trials << endl;
-		oss2	<< "#Cycle-Size\tOverallFrequency\tCorrectStateFq\tWrongStateFq\tSamplesPerTrial" << endl;
+		oss2 << "#SampleSize :" << lDistribSum << " Trials:" << trials << std::endl;
+		oss2	<< "#Cycle-Size\tOverallFrequency\tCorrectStateFq\tWrongStateFq\tSamplesPerTrial" << std::endl;
 		ofile3 << oss2.str();
 
 		//Output To File

@@ -43,6 +43,18 @@ gsl_rng* g_getRandGeneratorInstance(bool newInstance)
 		  return mrng_r;
 }
 
+
+pair<string,string> SplitFilename (const std::string& str)
+{
+	pair<string,string> ret;
+
+  unsigned found = str.find_last_of("/\\");
+  ret.first = str.substr(0,found);
+  ret.second = str.substr(found+1);
+
+  return ret;
+}
+
 /* Called by makelogfilenames
    Uses Simulation Parameters to create a vector of strings holding file names to be used for loging distributions
    or data. vLogFiles[0] needs to contain the base file name part to use to construct the filename
