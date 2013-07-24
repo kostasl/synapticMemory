@@ -121,7 +121,29 @@ void MakeListOfFiles(vector<string>& vLogFiles,unsigned int ciInitPeriod,int iCa
 }
 
 //////////OUTPUT THRES-CYCLES OVER FIXED SAMPLE
-void saveCycleHistogramToFile(map<uint,uint>& mDistrib, string outputFilename,unsigned long trials,unsigned long sampleTime)
+void createCycleHistogramFile(map<uint,uint>& mDistrib, string outputFilename,unsigned long trials,unsigned long sampleTime)
+{
+	//Now Save the Distribution Of Metaplastic Counters Over a fixed Sampled Size
+	cout << " Meta Distribution Output File: " <<  outputFilename << endl; //Tell User Which Output file we are using
+	ofstream ofile3(outputFilename.c_str(), ios::out ); //Open Data File For Wrong Cycles
+	ostringstream oss2;
+	oss2 << "#Distribution of consecutive threshold crossings" << endl;
+	oss2 << "#Trials:" << trials << " SampleLimit Reached At t:"<< sampleTime << endl;
+	oss2 << "#Cycle-Size\tOverallFrequency\tCorrectStateFq\tWrongStateFq\tTotalSamples\tTrialNo\tSampleTime" << endl;
+	ofile3 << oss2.str();
+
+//USE APPEND To CYCLE FILE To write output
+//		//Output To File
+//		for (int i=1;i<=maxOccupancy;i++)
+//		{
+//			ofile3 << i << "\t"<< mDistrib[i] << "\t" << mDistribCorrect[i] << "\t"<<  mDistribWrong[i] << "\t" << lDistribSum << endl;
+//		}
+//		ofile3 << "#-\t-\t" << lDistribSumCorrect << "\t"<< lDistribSumWrong << endl;
+//		ofile3.close();
+}
+
+///APPEND Threshold Cycles To file
+void appendCycleHistogramToFile(map<uint,uint>& mDistrib, string outputFilename,unsigned long totalTrials,unsigned long sampleTime,unsigned long trialNo)
 {
 	//Save the Distribution Of Metaplastic Counters Sampled Over a Time interval
 	//Split Into Two distributions to ease saving into one File
@@ -136,7 +158,6 @@ void saveCycleHistogramToFile(map<uint,uint>& mDistrib, string outputFilename,un
 
 	mDistribCorrect.clear();
 	mDistribWrong.clear();
-
 
 	for (map<uint,uint>::iterator it = mDistrib.begin();it!= mDistrib.end();++it)
 	{
@@ -160,20 +181,14 @@ void saveCycleHistogramToFile(map<uint,uint>& mDistrib, string outputFilename,un
 		mDistrib[iOccupancyIndex] = mDistribWrong[iOccupancyIndex] + mDistribCorrect[iOccupancyIndex]; //Fix To total Value
 	}
 		//Now Save the Distribution Of Metaplastic Counters Over a fixed Sampled Size
-		cout << " Meta Distribution Output File: " <<  outputFilename << endl; //Tell User Which Output file we are using
-		ofstream ofile3(outputFilename.c_str(), ios::out ); //Open Data File For Wrong Cycles
-		ostringstream oss2;
-		oss2 << "#Distribution of consecutive threshold crossings" << endl;
-		oss2 << "#SampleSize :" << lDistribSum << " Trials:" << trials << " SampleLimit Reached At t:"<< sampleTime << endl;
-		oss2 << "#Cycle-Size\tOverallFrequency\tCorrectStateFq\tWrongStateFq\tTotalSamples" << endl;
-		ofile3 << oss2.str();
+		ofstream ofile3(outputFilename.c_str(), ios::app ); //Open Data File For Wrong Cycles
 
 		//Output To File
 		for (int i=1;i<=maxOccupancy;i++)
 		{
-			ofile3 << i << "\t"<< mDistrib[i] << "\t" << mDistribCorrect[i] << "\t"<<  mDistribWrong[i] << "\t" << lDistribSum << endl;
+			ofile3 << i << "\t"<< mDistrib[i] << "\t" << mDistribCorrect[i] << "\t"<<  mDistribWrong[i]
+			            << "\t" << lDistribSum << "\t" << trialNo <<  "\t" << sampleTime << endl;
 		}
-		ofile3 << "#-\t-\t" << lDistribSumCorrect << "\t"<< lDistribSumWrong << endl;
+		//ofile3 << "#-\t-\t" << lDistribSumCorrect << "\t"<< lDistribSumWrong << endl;
 		ofile3.close();
-
 }

@@ -85,8 +85,9 @@
 								<option id="gnu.cpp.compiler.option.debugging.level.1724890564" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.warnings.allwarn.938305537" name="All warnings (-Wall)" superClass="gnu.cpp.compiler.option.warnings.allwarn" value="false" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1129060417" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/synapseModels/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="/home/kostasl/CodeProjects/synapticMemory/synapseModels"/>
 									<listOptionValue builtIn="false" value="/usr/include/"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/synapseModels}&quot;"/>
 									<listOptionValue builtIn="false" value="/usr/include/boost"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.44615068" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
@@ -106,7 +107,7 @@
 									<listOptionValue builtIn="false" value="synapseModels"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.894340867" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/synapseModels/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="/home/kostasl/CodeProjects/synapticMemory/synapseModels/Release"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.498010485" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>

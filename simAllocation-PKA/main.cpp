@@ -17,6 +17,9 @@
  * u_max =1 setting the saturation upper bound (Increasing Bound only scales the final PKA)
  *
  *
+ * Command Line For Threshold Cycles :--simulation=simMemSignalinTime --model=synapseSingleFilterUnifiedWithDecay --trials=1 --startSize=7 --endSize=7 --synapsesSize=100000 --initPeriod=0 --cSimTimeSecs=1000 --metaSampleSize=1 --Timestep=1.00 --repPatIndex=0 --AllocRefrac=1 --metaSampleTime=0 --cAMPDecay=0.5 --PKAAllocThres=1000000  --repTimes=120 120
+ * Cmd for Alloc Per repInterval : --simulation=AllocSignalVsRepetitionTime --model=synapseSingleFilterUnifiedWithDecay --trials=1 --startSize=7 --endSize=7 --synapsesSize=100 --initPeriod=0 --cSimTimeSecs=1000 --Timestep=1.00 --repPatIndex=0 --repPatCount=4 --AllocRefrac=1 --metaSampleTime=0 --cAMPDecay=0.5 --PKAAllocThres=1000000
+ *
  */
 #include <boost/lexical_cast.hpp>
 #include "common.h"
@@ -32,20 +35,22 @@ namespace po = boost::program_options;
 using namespace std;
 
 //GLOBAL VARS
-int g_FilterTh 			= 7; //Used for Single Filter Experiments
-double g_FilterDecay 	= 0.0; //0.0916986;
+int g_FilterTh 							= 7; //Used for Single Filter Experiments
+double g_FilterDecay 					= 0.0; //0.0916986;
+bool g_saveThresholdCyclesOnEveryTrial 	= false; //If True MetaC file saves ThresC distribution on every trial so we measure the average convergence
 
 uint g_timeToSampleMetaplasticity	= 0; //Used by Sim code as the time to sample the number of metaplastic transitions
 int g_MetaplasticitySampleSize		= 0;//Sim Code Stops saving to the distribution of same threshold crossings Once this number of samples has been gathered
 double g_UpdaterQ 		= 1.0/(g_FilterTh*g_FilterTh); //The single Updater Transitions - Make sure its in double format
-float g_fAllocHThres	= 0.0; //Default Post Synaptic depol. Threshold to switch on Allocation
+float g_fAllocHThres	= 0.0; //Default Post Synaptic depol. Hill Threshold
 float g_fcAMPDecay		= 0.01; //The timeconstant for the cAmp alpha process (With 0.5 it takes approx 10 tsteps for a complete wave)
 float g_fcAMPMagnitude	= 0.0;
 double g_dcAMPMax		= 1.0;// A globally set  saturation value of cAMP.
-float g_fPKAAllocThres	= 1000; //Threshold beyong which the integrating PKA signal switches allocation ON
+float g_fPKAAllocThres	= -1000; //Threshold beyond which the integrating PKA signal switches allocation ON - Set -Ve means no allocation
 float g_fInjectionGain	= 1.0; //The GAIN of the cAMP production Process
 int g_iHillOrder		= 4; //The threshold function hill order
-uint g_AllocRefraction	= 0;//The Same Threshold Counter Limit required to allocate a synapse --0.375*g_FilterTh*g_FilterTh;
+uint g_AllocRefraction	= 1;//The Same Threshold Counter Limit required to allocate a synapse - Set to -1 For No Allocation
+
 string g_outputTag;
 
 // Signal h_thresholds {Theta,repetitions,MaxSignal<-Used as Threshold}
@@ -126,6 +131,13 @@ if (modelType == 9 || modelType == 1) //SU Synapse
 return 0.0;
 }
 
+#ifdef USE_SATURATION_MODEL
+	#define OUTPUT_FILENAME "_AllocSignalVsRepTime-Sat-PKA_n"
+#else
+	#define OUTPUT_FILENAME "_AllocSignalVsRepTime-NOSat-PKA_n"
+#endif
+
+
 int main(int argc, char* argv[])
 {
 
@@ -153,13 +165,12 @@ int main(int argc, char* argv[])
 	map<string,unsigned int> mapSimType;
 	map<string,int> mapSynapseAllocator; //An association of a the target object name With the allocation Function for the synapse Population
 
-
 	basicSim.add_options()
 	    ("help", "produce help message")
 	    ("model,M", po::value<string>(&modelName), "The model to run the simulation on")
 		("simulation,S", po::value<string>(&simulationName)->default_value(simulationName), "The simulation name to run")
 		("trials,T", po::value<unsigned int>(&trials)->default_value(100), "Number of iteration to average over")
-	    ("cSimTimeSecs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds")
+	    ("cSimTimeSecs", po::value<long>(&lSimtimeSeconds)->default_value(lSimtimeSeconds), "Duration of continuous time simulation in seconds-For AllocTests its the recording time after the last repetition.")
 		("synapsesSize", po::value<int>(&synapsesPopulation)->default_value(10000), "The number of synapses to use - Has to match the vector file size where required")
 		("inputFile,V", po::value<string>(&inputFile)->default_value("\n"), "The vector input file to use from directory MemoryInputVectors. If No file given then Random Vectors are used.")
 		("startSize", po::value<int>(&startIndex)->default_value(7), "The range of model size parameter to begin testing - interpretation is model dependent")
@@ -181,9 +192,10 @@ int main(int argc, char* argv[])
 		("repPatIndex,RI", po::value<int>(&RepMemoryIndex)->default_value(RepMemoryIndex), "The index of the pattern to repeat relative to the 1st tracked pattern")
 		("repPatCount,RC", po::value<int>(&RepMemoryCount)->default_value(RepMemoryCount), "For PKA vs Rep. Interval experiments it sets the number of repetitions")
 		("repTimes,RT", po::value< vector<double> >(&vdRepTime)->multitoken(), "The relevant time intervals a pattern will be repeated after initial encoding")
-		("AllocDepolThres,RT", po::value< float >(&g_fAllocHThres)->default_value(g_fAllocHThres), "The relevant time intervals a pattern will be repeated after initial encoding.Set Automatically for simulation: AllocSignalVsRepetitionTime")
-		("AllocRefrac,RP", po::value<uint>(&g_AllocRefraction)->default_value(g_AllocRefraction), "The period a synapse needs to be stable before it is allocated-Threshold Counter Tagging")
+		("AllocDepolThres,RT", po::value< float >(&g_fAllocHThres)->default_value(g_fAllocHThres), "SignalThreshold For Allocation-Set Automatically for simulation: AllocSignalVsRepetitionTime")
+		("AllocRefrac,RP", po::value<uint>(&g_AllocRefraction)->default_value(g_AllocRefraction), "The Same Threshold Counter for Tagging")
 		("PKAAllocThres,PK", po::value<float>(&g_fPKAAllocThres)->default_value(g_fPKAAllocThres), "The PKA level above which global allocation is switched on.")
+		("cAMPMax,umax", po::value<double>(&g_dcAMPMax)->default_value(g_dcAMPMax), "cAMP Saturation Level u'(t)=(u_max-u(t))")
 		("cAMPDecay,Fc", po::value<float>(&g_fcAMPDecay)->default_value(g_fcAMPDecay), "cAMP decay F_c rate. Std Vals : 0.5,0.05 or 0.01");
 
 	if (g_MetaplasticitySampleSize == 0)
@@ -196,14 +208,14 @@ int main(int argc, char* argv[])
 
 	///Add List Of Simulation Types
 	mapSimType["simMemSignalinTime"] = 1;
-	mapSimType["simMemSignalsFromFile"] = 2;
-	mapSimType["PerceptronTest"] = 3;
-	mapSimType["HopfieldTest"] = 4;
-	mapSimType["simMemSignalinContinuousTime"] = 5;
-	mapSimType["simEscTime"] = 6;
-	mapSimType["MeanMemoryLifetime"] = 7;
-	mapSimType["simRepetition"] = 8;
-	mapSimType["ThresholdCycleFq"] = 9;
+	mapSimType["simMemSignalsFromFile"] = 2; //NA
+	mapSimType["PerceptronTest"] = 3; //NA
+	mapSimType["HopfieldTest"] = 4; //NA
+	mapSimType["simMemSignalinContinuousTime"] = 5; //NA
+	mapSimType["simEscTime"] = 6; //NA
+	mapSimType["MeanMemoryLifetime"] = 7; //NA
+	mapSimType["simRepetition"] = 8;//NA
+	mapSimType["ThresholdCycleFq"] = 9; //Same as 1 but saves thresCycles for on every trial
 	mapSimType["AllocSignalVsRepetitionTime"] = 10;
 
 
@@ -250,8 +262,15 @@ int main(int argc, char* argv[])
 	start = clock();
 	float minRequiredEncodings = 3.0f;
 	double cPeakcAMPToTheta = 0.138384;
-	if (simulationType == 1) //Simulate Signal In Time MLT
+	if (simulationType == 1 || simulationType ==9) //Simulate Signal In Time MLT
 	{
+		if (simulationType == 9)
+		{
+			cout << " Taking Threshold Cycle Distributions on Every Trial" << endl;
+			g_fPKAAllocThres = -1000;///Some very large value so we never allocate
+			lSimtimeSeconds = 10; //Stops when Distirb Sample Has been obtained
+			g_saveThresholdCyclesOnEveryTrial = true;//Save Distribution on every trial so I can obtain average distance Measure
+		}
 
 		////OPEN OUTPUT FILES To save The point When MEAN signal Drops below SNR=1
 		string buffFilename(ALLOCCTEVNT_OUTPUT_DIRECTORY);
@@ -261,6 +280,7 @@ int main(int argc, char* argv[])
 		buffFilename.append(buff);
 
 		cout << "@ Simulation " << simulationName << " Output File:" << buffFilename.c_str() << endl;
+		cout << "Obtain Cycle Sample After cycles: " << g_MetaplasticitySampleSize << endl;
 		ofstream ofile(buffFilename.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
 
 		if (!ofile.is_open())
@@ -271,7 +291,7 @@ int main(int argc, char* argv[])
 		ofile << "#Size\tMSFPT" << endl;
 
 
-		cout << "****MEMORY LIFETIME SIMULATION******" << endl;
+
 		double dMSFPT;
 		//For Cascade Indexes/Symmetric Filter Sizes
 		for (int i=startIndex;i<=endIndex;i+=2)
@@ -283,8 +303,30 @@ int main(int argc, char* argv[])
 			 /* Magnitude of cAMP */
 			 g_fcAMPMagnitude	= 1.0;  //
 			 cout << "SynSz:"<< g_FilterTh << " Decay Fc:" << g_fcAMPDecay << " cAMPInj:" << g_fcAMPMagnitude << " h_thres:" << g_fAllocHThres << endl;
-			 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,vdRepTime,i,synapsesPopulation,lSimtimeSeconds,dEncodingRate,inputFile);
-			 cout << i << "\t Lifetime of Mean signal :" << dMSFPT << endl;
+
+			 if (simulationType == 9)
+			 { //For threshold Cycle Simulation Increase the Sampling Up to 100 by increasing the synapsesPopulation
+				 cout << "****SAMPLE THRESHOLD CYCLES For N=1->100 SIMULATION******" << endl;
+				 int n=1;
+				 while (n<=synapsesPopulation)
+				 {
+					 n+=(n<10)?1:((n>=100)?100:10);//Fix Increment Spaces
+					 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,
+					 	 	 	 	 	 	 	 	 vdRepTime,i,n,lSimtimeSeconds,
+					 	 	 	 	 	 	 	 	 dEncodingRate,inputFile);
+				 	 cout << i << "\t Lifetime of Mean signal :" << dMSFPT << endl;
+				 }
+			 }
+			 else
+			 {
+				 cout << "****MEMORY LIFETIME SIMULATION******" << endl;
+				 dMSFPT = runContinuousMemoryRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,
+									 	 	 	 	 	 	 	 	 vdRepTime,i,synapsesPopulation,lSimtimeSeconds,
+									 	 	 	 	 	 	 	 	 dEncodingRate,inputFile);
+				 cout << i << "\t Lifetime of Mean signal :" << dMSFPT << endl;
+			 }
+
+
 
 			 ofile << i << "\t" << dMSFPT << endl;
 		 }//Loop For Each Cascade Index
@@ -302,9 +344,10 @@ int main(int argc, char* argv[])
 		{
 			 g_FilterTh			= i;
 			 g_UpdaterQ 		= 1.0/(g_FilterTh*g_FilterTh);
+			 g_fAllocHThres 	=  getCAthres(g_FilterTh,4,modelType);
 			 //g_fcAMPDecay		= 0.01; //The timeconstant for the cAMP Exp Decay
 			 g_fcAMPMagnitude	= 1.0;  //The magnitude for the cAmp alpha process beta=1/0.138384Theta^2r where r is the number of repetitions desired to reach PKA thres
-			 cout << "SynSz:"<< g_FilterTh << " Decay Fc:" << g_fcAMPDecay << " cAMPInj:" << g_fcAMPMagnitude << " h_thres Fixed R 4" << endl;
+			 cout << "Theta:"<< g_FilterTh << " Decay Fc:" << g_fcAMPDecay << " cAMPInj:" << g_fcAMPMagnitude << " h_thres (Fixed To 4 reps) :" << g_fAllocHThres << endl;
 
 			 runAllocSignalVsRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,RepMemoryCount ,i,synapsesPopulation,lSimtimeSeconds,dEncodingRate,inputFile);
 		 }//Loop For Each Cascade Index
@@ -319,7 +362,6 @@ int main(int argc, char* argv[])
  // std::exit(0);
 return 0;
 }
-
 
 
 /*
@@ -354,7 +396,10 @@ double runContinuousMemoryRepetition(int modelType,double ts, long trials, int t
 		repetitionTable[dRepIntervalsecs +(RepMemoryIndex)*(1.0/ts)*dEncodingRate] = trackedMemIndex+RepMemoryIndex; //Use the Absolute Pattern Number
 		cout << "ts:" << ts << " Repetition of Memory " << RepMemoryIndex << " at t:" << (dRepIntervalsecs+RepMemoryIndex) << endl;
 	}
-	dRepIntervalsecs = vpReptimes[0];
+
+	if (dRepIntervalsecs>0) //If repetition table Existed
+		dRepIntervalsecs = vpReptimes[0]; //Get the first interval to use In file Names I
+
 	cout << "#########" << endl;
 	cout <<  " h_thres >" << g_fAllocHThres << endl;
 /////////// LOG FILE INIT /////////////////////
@@ -518,7 +563,6 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	//repetitionTable[Timepoint of repetition] = RepMemoryIndex+InitPeriod (NoOfPatternsStored)
 	///Rep Times Need to Account For the init period
 
-
 	///////// LOG FILE INIT /////////////////////
 	//Add the File name as the 1st entry- Used by the makeLogFileNames
 	vector<string> slogFiles; //The list of output file names used
@@ -527,17 +571,12 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	slogFiles.push_back(fOutName);
 	/////////// END OF LOG FILE INIT //////////////////////////
 
-	string sAggregateFile;
-	sAggregateFile += boost::lexical_cast<std::string>(modelType);
-	sAggregateFile.append("_AllocSignalVsRepTime-PKA_n");
-	sAggregateFile += boost::lexical_cast<std::string>(FilterSize);
-	sAggregateFile.append("_N");
-	sAggregateFile += boost::lexical_cast<std::string>(synapsesPopulation);
-	sAggregateFile.append("_T");
-	sAggregateFile += boost::lexical_cast<std::string>(trials);
-	sAggregateFile.append("_r");
-	sAggregateFile += boost::lexical_cast<std::string>(iMemoryReps);
-	sAggregateFile.append(".dat");
+	char buff[300];
+	sprintf(buff,"%d%s%d_N%d_T%d_Fc%.2f_r%d.dat",modelType,OUTPUT_FILENAME,FilterSize,synapsesPopulation,trials,g_fcAMPDecay,iMemoryReps);
+	string sAggregateFile(buff);
+
+//	sAggregateFile += boost::lexical_cast<std::string>(modelType);
+//	sAggregateFile.append(".dat");
 
 	cout << "Signal Output Files: " <<  sAggregateFile << endl; //Tell User Which Output file we are using
 	ofstream* pfile = openfile(fOutName,sAggregateFile,ios::out);
@@ -546,7 +585,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	if (!pfile->is_open())
 		ERREXIT(101,"Could Not Open output files. Check directories");
 	//Write Header
-	(*pfile) << "#RepTime\tAllocSNR\tAllocSignal\tAllocVariance\tAllocThreshold\tPKALevel\tPKAVariance\tSNR_FPT" << endl;
+	(*pfile) << "#RepTime\tAllocSNR\tAllocSignal\tAllocVariance\tAllocThreshold\tPKALevel\tPKAVariance\tSNR_FPT\tPKAAllocThres" << endl;
 
 	const float MaxRepTime = 100+PeakTime;
 	int iRepIntervalStep = 5; //Is in Numerical Model Mathematica Results
@@ -555,7 +594,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 	while (dRepIntervalsecs <= MaxRepTime)
 	{
 		cout << "#########" << endl;
-		 clock_t start2 = clock();
+		clock_t start2 = clock();
 
 		repetitionTable.clear();
 		//Add the Index of the memory with  A key Being the Time When it should be repeated and the value -> The Pattern Number cInitPeriod+repIndex
@@ -572,7 +611,7 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 		//No Fix to test Allocated signal a fixed time after last repetition
 		long lAllocSignalMeasureTime =  iMemoryReps*iabsRepTime +  lSimtimeSeconds; //Add Sim Time Parameter to last rep
 
-		cout <<"Sim.Time " << lAllocSignalMeasureTime << " ts:" << ts << " Rep. Memory " << RepMemoryIndex << " " << iMemoryReps << " times with interval: " << (dRepIntervalsecs) << "secs" << " h_thres >" << g_fAllocHThres << endl;
+		cout <<"TOTAL Sim.Time " << lAllocSignalMeasureTime << " ts:" << ts << " Rep. Memory " << RepMemoryIndex << " " << iMemoryReps << " times with interval: " << (dRepIntervalsecs) << "secs" << " h_thres >" << g_fAllocHThres << endl;
 		cout << "Stability Threshold : " << g_AllocRefraction << endl;
 
 		char* mem_buffer 			= 0;		//This Pointer is filled by allocMem, To point to the reuseable allocated memory
@@ -656,12 +695,13 @@ void runAllocSignalVsRepetition(int modelType,double ts, long trials, int tracke
 		}
 
 		(*pfile) << iabsRepTime << "\t"<< AllocSignal.pairAllocSignalVal.first /sqrt(AllocSignal.pairAllocSignalVal.second) <<
-				"\t" << AllocSignal.pairAllocSignalVal.first << "\t"
+				"\t" << AllocSignal.pairAllocSignalVal.first << "\t" //Allocated signal is the last mean signal value
 				<< AllocSignal.pairAllocSignalVal.second << "\t"
 				<< g_fAllocHThres << "\t"
 				<< AllocSignal.pairPKAVal.first << "\t"
 				<< AllocSignal.pairPKAVal.second << "\t"
-				<< AllocSignal.dMeanSignalLifetime << endl;
+				<< AllocSignal.dMeanSignalLifetime << "\t"
+				<< g_fPKAAllocThres << endl;
 
 		//Clear Object Memory
 		cout << "R.I:" << iabsRepTime << " PKA:" << AllocSignal.pairPKAVal.first << endl;

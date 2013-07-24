@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lgsl -lgslcblas -lm -lsynapseModels -lboost_program_options
+LIBS := -lgsl -lgslcblas -lboost_program_options -lm -lsynapseModels
 
