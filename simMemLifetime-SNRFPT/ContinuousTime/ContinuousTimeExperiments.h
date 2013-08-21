@@ -583,11 +583,11 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 
 
 	double dCovar,dsqE;
-///RECORD STATISTICS FROM EACH TRACKED PATTERN
+
 
 	int i = 0; //TrackedMem INdex increment
 
-	//MFPT
+	//MFPT ///RECORD STATISTICS FROM EACH TRACKED PATTERN
 	for (itTracked = vTrackedIndex.begin();itTracked != vTrackedIndex.end();++itTracked)
 	{
 		//strcpy(buffFilename,slogFiles[4].c_str());
@@ -605,7 +605,7 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 		double simTime = 0.0; //Start from ts so GnuPlot Can plot the 1st timepoint on a logscale that does not start from 0.
 		double dEhsquared = 0.0;
 		//tsPeriodOfRecall = 1;
-
+		bool bSignalDropped = false;//Flag That Signal Is above noise
 		//Iterate Through All time Points of Measurement
 		for (set<unsigned long>::iterator it = vTs.begin();it!=vTs.end();++it)
 		{
@@ -626,12 +626,14 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 			//if (i==0) 				cout << "S:" << (dSignal) << " N:" <<  sqrt(dVar[i][j]) << endl;
 			//While mean Above Water Update the Lifetime of the 1st tracked Memory -
 			//Beware that in Low Averaging Fluctuations will mess up this calculation
-			if (i==0 && (dSignal > sqrt(dVar[i][j]) ))
+			if (i==0 )
 			{
-				dLowSignalMFPT = simTime; //Save Until last point when Avg Memory Signal is above Noise
+				if ((dSignal > sqrt(dVar[i][j]) ) && !bSignalDropped)
+					dLowSignalMFPT = simTime; //Save Until last point when Avg Memory Signal is above Noise
 				//cout << dSignal/sqrt(dVar[i][j]) << endl;
+				else//Dont Ever Update dLowSignalMFPTd again 	//Set Flag That at some point in the past the Signal Dropped below noise
+					bSignalDropped = true;
 			}
-
 			*ofile << (simTime) << "\t" << (float)(dSignal) << "\t" << (float)(dPntSn[i][j]) << "\t" << (float)(dPtSn[i][j]) << "\t" <<(float)(dVar[i][j]) << "\t" << dCovar << "\t" << dEhsquared << "\t" << dAllocSignal << endl;
 		}
 
