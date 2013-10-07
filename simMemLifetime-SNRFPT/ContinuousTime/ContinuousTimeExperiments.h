@@ -628,11 +628,11 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 			//Beware that in Low Averaging Fluctuations will mess up this calculation
 			if (i==0 )
 			{
-				if ((dSignal > sqrt(dVar[i][j]) ) && !bSignalDropped)
+				if ((dSignal > sqrt(dVar[i][j]) ) ) //bSignalDropped
 					dLowSignalMFPT = simTime; //Save Until last point when Avg Memory Signal is above Noise
-				//cout << dSignal/sqrt(dVar[i][j]) << endl;
-				else//Dont Ever Update dLowSignalMFPTd again 	//Set Flag That at some point in the past the Signal Dropped below noise
-					bSignalDropped = true;
+//				//cout << dSignal/sqrt(dVar[i][j]) << endl;
+//				else//Dont Ever Update dLowSignalMFPTd again 	//Set Flag That at some point in the past the Signal Dropped below noise
+//					bSignalDropped = true;
 			}
 			*ofile << (simTime) << "\t" << (float)(dSignal) << "\t" << (float)(dPntSn[i][j]) << "\t" << (float)(dPtSn[i][j]) << "\t" <<(float)(dVar[i][j]) << "\t" << dCovar << "\t" << dEhsquared << "\t" << dAllocSignal << endl;
 		}
