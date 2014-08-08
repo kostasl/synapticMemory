@@ -375,7 +375,7 @@ void makeGN2TestVectorsInFile(int PatCount,uint VecSize,float fbitBalance)
 		SearchTime++;
 		do
 		{
-		c = ceil((gsl_rng_uniform(mprng)+0.001)*(PatCount))-1;
+		c = ceil((double)(gsl_rng_uniform(mprng)+0.001)*(PatCount))-1;
 		}while (c==PatCount);
 
 		do

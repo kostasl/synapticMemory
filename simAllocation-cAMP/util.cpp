@@ -60,7 +60,7 @@ void MakeListOfFiles(vector<string>& vLogFiles,unsigned int ciInitPeriod,int iCa
 	}
 
 	//File Path is Global So have to be carefull when using threads
-	if (!getcwd(buffDFile, _MAX_PATH))// reads the current working directory into the array FilePath
+	if (!::getcwd(buffDFile, _MAX_PATH))// reads the current working directory into the array FilePath
 		ERREXIT(50,"makeLogFileNames:Could not read working dir");
 
 

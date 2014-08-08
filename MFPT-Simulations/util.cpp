@@ -7,7 +7,6 @@
 #include "common.h"
 #include "util.h"
 
-
 ///GLOBAL Instance and FunctioN - Called by some Default Constructors
 //static gsl_rng* g_rng_r = 0;
 //Default value is False
@@ -21,7 +20,7 @@ gsl_rng* g_getRandGeneratorInstance(bool newInstance)
 			  return g_rng_r;
 
 		  time_t t; //Used for random num generation
-		  unsigned int seed = unsigned(time(&t)) + clock() + rand();
+		  unsigned int seed = unsigned(::time(&t)) + ::clock() + rand();
 		  //unsigned int seed = 1;
 		  gsl_rng* mrng_r = gsl_rng_alloc (gsl_rng_mt19937);
 
@@ -60,7 +59,11 @@ void MakeListOfFiles(vector<string>& vLogFiles,unsigned int ciInitPeriod,int iCa
 		ERREXIT(110,"makeLogFileNames- Corpus at [0] is Missing");
 	}
 
-	//File Path is Global So have to be carefull when using threads
+	//Could Use Boost here:File Path is Global So have to be carefull when using threads
+	//boost::filesystem::path full_path( boost::filesystem::current_path() );
+	//std::cout << "Current path is : " << full_path << std::endl;
+	//full_path.m_pathname
+
 	if (!getcwd(buffDFile, _MAX_PATH))// reads the current working directory into the array FilePath
 		ERREXIT(50,"makeLogFileNames:Could not read working dir");
 

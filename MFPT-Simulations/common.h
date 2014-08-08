@@ -22,21 +22,21 @@
 #include <iomanip> //For Set Precision
 #include <string.h> //strcat
 #include <stdlib.h> // for srand ( ) and rand ( ) and _itoa
-#include <time.h> // for time ( ) and time_t
+
 #include <iostream>
 #include <fstream> //File Streams
 //#include <direct.h> // for getcwd
-#include <math.h>     // for exp(), log(), and log10()
+
 #include <stdlib.h> //To have abort()
 #include <new> //for parameter new allocation
 #include <memory>
-
+#include <cmath>    // for exp(), log(), and log10() - Not the math.c from C -causes ambiguity in calls
+#include <ctime> // for time ( ) and time_t       /* clock_t, clock, CLOCKS_PER_SEC */
 #include <vector>
 #include <set>
 #include <map>
-#include <ctime>
 
-
+#include <boost/filesystem.hpp> //Strangely makes getcwd work - As there is a bug with gcc4.8.2
 // ###GSL Note: For the library to work in MSVC, I had to change to the Multithreaded version WinGsl_md.lib
 // Also under Properties->C/C++->Code GEneration->Run Time Library Change to Multithreaded Debug
 //#include <WinGsl.h >

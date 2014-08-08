@@ -34,7 +34,8 @@ int main(int argc, char* argv[])
 {
 
 	clock_t start, finish;
-	start = clock();
+	start = ::clock();
+
 	map<string,unsigned int> mapSimType;
 	map<string,int> mapSynapseAllocator; //An association of a the target object name With the allocation Function for the synapse Population
 
@@ -190,7 +191,7 @@ int main(int argc, char* argv[])
 		 ofile[j]->close();
 
 	 ///Measure Duration
-  finish = clock();
+  finish = ::clock();
   ///Print Duration of Run - //TODO: This gives the wrong Time When using Threads!
 
   double duration = (double)(finish - start) / (CLOCKS_PER_SEC*60); //CLOCKS_PER_SEC;//Eclipse Reports Problem with  CLOCKS_PER_SEC But it compiles normally -Eclipse Bug

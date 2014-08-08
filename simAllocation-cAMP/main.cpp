@@ -341,10 +341,10 @@ case 9: //A Stochastic Updater Synapse
 	 if (!oCSyn) ERREXIT(500,"MemAllocation: Could not create synapse objects! Out Of memory?");
 	 mem_buffer = (char*)oCSyn; //If New Allocation Then Update The Mem Buff pointer to newly Allocated Space \\TODO:Could Happen Internally
 
-	 makeLogFileNames<synapseSingleUpdater>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation);
+	 ::makeLogFileNames<synapseSingleUpdater>(slogFiles,trackedMemIndex,CascadeSize,dRepIntervalsecs, 0.5,trials, synapsesPopulation);
 	 //simMemSignalinContinuousTime<synapseSingleUpdater,pAllocationFunct>(pF, synapsesPopulation,i,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate);
 	 //dMFPT =
-	 simRepetitionAllocation<synapseSingleUpdater>(oCSyn, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
+	 ::simRepetitionAllocation<synapseSingleUpdater>(oCSyn, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 }
 break;
 

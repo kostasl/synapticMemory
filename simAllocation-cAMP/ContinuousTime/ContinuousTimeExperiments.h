@@ -16,6 +16,7 @@
 #include "../util.h"
 #include <algorithm> //For Find
 #include "PoissonSource.h"
+#include "../InputVectorHandling.h"
 
 extern int g_FilterTh;
 extern float g_fAllocHThres;
@@ -433,7 +434,7 @@ pair<double,double> simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascad
 		//INIT PATTERNS Read in The Vectors from the File to X - Less are available then uiPatCount Is reduced
 		//Doing it This way or just random On each synapse in the synapse loop appears to have no impact on speed.
 		if (!bUseRandomPatterns)
-			readTestVectorsFromFile(pinputFile,X,iSynCount,uiPatCount,0,bShuffleLoadedVectors); //Load At 0 All Required PAtterns
+			::readTestVectorsFromFile(pinputFile,X,iSynCount,uiPatCount,0,bShuffleLoadedVectors); //Load At 0 All Required PAtterns
 
 		uint uiNoOfPatternsStoredInTrial = 0;
 		int  iPatIndex					 = 0;//The Pattern Index in focus at any particular timestep

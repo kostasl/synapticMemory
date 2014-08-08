@@ -378,7 +378,7 @@ case 1: //synapseCascade
 	 //(pFunct pF, int iSynCount,int iCascadeSize,unsigned int iSimTime,unsigned int ciInitPeriod,double mdRate, double dFp=0.5)
 	 //Also Available : simMemSignalinContinuousTime
 	 simRet =
-	 simRepetitionAllocation<synapseCascade>(oCSyn, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
+	 ::simRepetitionAllocation<synapseCascade>(oCSyn, synapsesPopulation,CascadeSize,trackedMemIndex,(char*)inputFile.c_str(), trials,lSimtimeSeconds,dEncodingRate,repetitionTable,ts,slogFiles);
 }
 break;
 

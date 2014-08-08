@@ -134,7 +134,7 @@ void readTestVectorsFromFile(const char* fname,t_inVal** X,uint VecSize, uint& i
 		if (bShuffleVectors) //If Shuffling
 		{
 			do{ //Look for Unique Random vector not Picked Previously
-				pos = ceil(gsl_rng_uniform(prng)*size)-1;
+				pos = std::ceil(gsl_rng_uniform(prng)*size)-1;
 			}while (vecIndex.find(pos) != vecIndex.end());
 
 			ifile.seekg(sizeof(t_inVal)*VecSize*pos, ios::beg);
@@ -608,7 +608,7 @@ uint makeGSTestVectorsInFile(uint PatCount,uint VecSize,float fbitBalance)
 				{
 
 					split  = ((float)VecSize/(pow(2,(i+1))));
-					if (jcount >= ceil(split))
+					if (jcount >= std::ceil(split))
 					{
 						up = !up;
 						jcount =0;

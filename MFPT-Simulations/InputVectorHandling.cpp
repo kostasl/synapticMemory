@@ -185,7 +185,7 @@ void readTestVectorsFromFile(const char* fname,t_inVal** X,uint VecSize, uint& i
 
 			//cout << i << "Vs" << k << " cdot:" << cdot << endl;
 
-			if  (abs(cdot) > maxcorrelation)
+			if  (std::abs((float)cdot) > maxcorrelation)
 			{
 				cerr << "Max Correlation " << maxcorrelation << " Exceeded between patterns " << i  << " and " << k << endl;
 				ERREXIT(1,"Max Correlation Exceeded ");
@@ -367,7 +367,7 @@ void makeGN2TestVectorsInFile(int PatCount,uint VecSize,float fbitBalance)
 	cdot =0;
 	for (int i=0;i<PatCount;i++)
 	{
-		cdot += abs(dotprod(X[0],X[i],VecSize));
+		cdot += std::abs(dotprod(X[0],X[i],VecSize));
 	}
 //Start Search
 	while(cdot > corrThres)
@@ -391,7 +391,7 @@ void makeGN2TestVectorsInFile(int PatCount,uint VecSize,float fbitBalance)
 		{
 			for (int i=0;i<PatCount;i++)
 			{
-				cdot += abs(dotprod(X[y],X[i],VecSize));
+				cdot += std::abs((double)dotprod(X[y],X[i],VecSize) );
 			}
 		}
 		//Reverse Change
@@ -485,7 +485,7 @@ void makeGNTestVectorsInFile(int PatCount,uint VecSize,float fbitBalance)
 			cdot =0;
 			for (int k=0;k<i;k++)
 			{
-				cdot += abs(dotprod(X[k],T,VecSize));
+				cdot += std::abs((double)dotprod(X[k],T,VecSize));
 				//cout << SearchTime << " X_"<< k << ".X_"<< i << ": " << cdot << endl;
 				//cout << i << " " << corrThres << " < " << cdot << endl;
 			}
@@ -607,7 +607,7 @@ uint makeGSTestVectorsInFile(uint PatCount,uint VecSize,float fbitBalance)
 				for (uint j=0;j<VecSize;j++)
 				{
 
-					split  = ((float)VecSize/(pow(2,(i+1))));
+					split  = ((float)VecSize/(std::pow((double)2,(double)(i+1))));
 					if (jcount >= ceil(split))
 					{
 						up = !up;
@@ -676,7 +676,7 @@ uint makeGSTestVectorsInFile(uint PatCount,uint VecSize,float fbitBalance)
 
 		for (uint l=0;l<i;l++)
 		{
-			cdot = abs(dotprod(W[i],W[l],VecSize));
+			cdot = std::abs((double)dotprod(W[i],W[l],VecSize));
 
 			cdotTotal[i]  +=cdot;
 //			cout << "W_"<<i<<"." << "W_"<<l<<"="<< cdot << endl;
