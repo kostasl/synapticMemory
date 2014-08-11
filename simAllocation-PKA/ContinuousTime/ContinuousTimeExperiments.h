@@ -7,6 +7,8 @@
  *  the results of wk13-14 2012 has been obtained using this code. The sampling cut off is defined by the input variable
  *
  *      Author: kostasl
+ *
+ *      11/8/2014 : Minor fixes to tranfer Code to new UBuntu14 setup in Edinburgh - Needed to add boost_system library ref.
  */
 #ifndef CONTINUOUSTIMEEXPERIMENTS_H_
 #define CONTINUOUSTIMEEXPERIMENTS_H_
