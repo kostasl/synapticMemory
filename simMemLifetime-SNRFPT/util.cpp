@@ -27,7 +27,8 @@ gsl_rng* g_getRandGeneratorInstance(bool newInstance)
 
 		  if (!mrng_r)
 		  {
-			  liberrexit(1,"GSL RNG Init Failed. Out Of Memory?");
+			  //liberrexit(1,"GSL RNG Init Failed. Out Of Memory?");
+			  ERREXIT(1,"GSL RNG Init Failed. Out Of Memory?")
 		  }
 
 		  gsl_rng_set(mrng_r,seed);

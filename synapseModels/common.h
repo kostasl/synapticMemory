@@ -1,19 +1,12 @@
-// common.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
 
 #pragma once
 
-#ifndef _COMMON_INC
-#define _COMMON_INC
+#ifndef _STD_INC
+#define _STD_INC
 
 #ifdef __linux__
-	#  define _REENTRANT
-
-	#ifndef _POSIX_SOURCE
-		#  define _POSIX_SOURCE
-	#endif
+	#define _REENTRANT
+	#define _POSIX_SOURCE
 #endif
 
 #define _USE_MATH_DEFINES //IN order to use Math COnstants
@@ -25,22 +18,26 @@
 #include <iomanip> //For Set Precision
 #include <string.h> //strcat
 #include <stdlib.h> // for srand ( ) and rand ( ) and _itoa
-#include <time.h> // for time ( ) and time_t 
 #include <iostream>
 #include <fstream> //File Streams
 //#include <direct.h> // for getcwd
-#include <math.h>     // for exp(), log(), and log10()
+#include <cmath>     // for exp(), log(), and log10()
 #include <stdlib.h> //To have abort()
 #include <new> //for parameter new allocation
 #include <memory>
+
 #include <vector>
 #include <set>
 #include <map>
+#include <ctime>
+
 
 // ###GSL Note: For the library to work in MSVC, I had to change to the Multithreaded version WinGsl_md.lib
 // Also under Properties->C/C++->Code GEneration->Run Time Library Change to Multithreaded Debug
+//#include <WinGsl.h >
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
+
 
 
 typedef int t_inVal; //Input Memory Vector value types (-1,1) used so int

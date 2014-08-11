@@ -22,11 +22,10 @@
 #include <iomanip> //For Set Precision
 #include <string.h> //strcat
 #include <stdlib.h> // for srand ( ) and rand ( ) and _itoa
-#include <time.h> // for time ( ) and time_t
 #include <iostream>
 #include <fstream> //File Streams
 //#include <direct.h> // for getcwd
-#include <math.h>     // for exp(), log(), and log10()
+#include <cmath>     // for exp(), log(), and log10()
 #include <stdlib.h> //To have abort()
 #include <new> //for parameter new allocation
 #include <memory>
@@ -42,6 +41,8 @@
 //#include <WinGsl.h >
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
+
+#include <boost/filesystem.hpp> //Strangely makes getcwd work - As there is a bug with gcc4.8.2
 
 
 typedef int t_inVal; //Input Memory Vector value types (-1,1) used so int
@@ -104,42 +105,6 @@ static void errexit(int code,uint lineno ,const char* srcFile,const char* str)
 	exit(1);
 }
 
-
-using namespace std;
-
-//In util File
-extern pair<string,string> SplitFilename (const std::string& str);
-
-
-static std::ofstream* openfile(string strFile,ios::openmode omode)
-{
-
-	pair<string,string> splitFName = SplitFilename(strFile);
-
-	string strbuff(splitFName.first);
-	strbuff.append(splitFName.second);
-
-	cout << strbuff << endl;
-	std::ofstream* file = new ofstream(strbuff.c_str(), omode ); //Open Data File for Appending So you dont Overwrite Previous Results
-		if (!file->is_open())
-		{
-			cerr << splitFName.first;
-			string cmd = "mkdir ";
-			cmd.append(splitFName.first);
-			cout <<  "Create Output directory" << endl;
-			int ret = system(cmd.c_str());
-			cout << "Ret:" << ret << endl;
-			if (!ret == 0)
-				ERREXIT(ret,"Missing path to output directory-could not create Model output directory");
-
-			file = new ofstream(strFile.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
-			if (!file->is_open())
-				ERREXIT(errno,"Could not Open output file");
-		}
-
-return file;
-}
-
 ///Simulation Global Variables
 //gsl_rng * rng_r; //Used by GSL Rand Num Generator
 extern char FilePath[_MAX_PATH]; // _MAX_PATH represents the longest possible path on this OS
@@ -174,6 +139,34 @@ typedef map<unsigned long,unsigned int> t_patt_reptbl; //Holds pairs of time, pa
 typedef map<unsigned int,unsigned int>  t_patt_trackedtbl; //Holds the list of index numbers of Tracked Patterns
 
 //Found in mltExperiments
+
+
+static std::ofstream* openfile(string strDir,string strFile,ios::openmode omode)
+{
+	string strbuff(strDir);
+	strbuff.append(strFile);
+
+	cout << strbuff << endl;
+	std::ofstream* file = new ofstream(strbuff.c_str(), omode ); //Open Data File for Appending So you dont Overwrite Previous Results
+		if (!file->is_open())
+		{
+			cerr << strDir;
+			string cmd = "mkdir ";
+			cmd.append(strDir);
+			cout <<  "Create Output directory" << endl;
+			int ret = system(cmd.c_str());
+			cout << "Ret:" << ret << endl;
+			if (!ret == 0)
+				ERREXIT(ret,"Missing path to output directory-could not create Model output directory");
+
+			file = new ofstream(strFile.c_str(), ios::app ); //Open Data File for Appending So you dont Overwrite Previous Results
+			if (!file->is_open())
+				ERREXIT(errno,"Could not Open output file");
+		}
+
+return file;
+}
+
 
 
 #endif // _STD_INC

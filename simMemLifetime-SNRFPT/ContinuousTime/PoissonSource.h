@@ -4,7 +4,8 @@
 class PoissonSource
 {
 public:
-	PoissonSource(double lamda,double timeStep,double noiseStdev);
+	//PoissonSource(double lamda,double timeStep,double noiseStdev);
+	PoissonSource(double lamda,double timeStep,double noiseStdev,gsl_rng* prng);
 	bool drawSpikeEvent(void);
 	double randGauss( double min, double max, double sigma, double centre);
 	double getTimeUntilNextEvent ();

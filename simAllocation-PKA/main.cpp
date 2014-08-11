@@ -22,14 +22,17 @@
  *
  */
 #include <boost/lexical_cast.hpp>
+#include <boost/program_options.hpp> //Located in usr/include --Using /usr/local/boost_1_42_0/stage/lib/libboost_program_options.a statically linked lib
+
 #include "common.h"
 #include "ContinuousTime/ContinuousTimeExperiments.h"
 //#include "../synapseModels/common.h"
 
 #include "InputVectorHandling.h"
 #include "synapseAllocators.h"
+#include "InputVectorHandling.h"
 
-#include <boost/program_options.hpp> //Located in usr/include --Using /usr/local/boost_1_42_0/stage/lib/libboost_program_options.a statically linked lib
+
 
 namespace po = boost::program_options;
 using namespace std;

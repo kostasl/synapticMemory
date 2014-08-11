@@ -165,12 +165,12 @@ int main(int argc, char* argv[])
 	char buff[100];
 		sprintf(buff,"_FPT-N%d_%d-%d_T%d_ts%.2f.dat",synapsesPopulationFinal,startIndex,endIndex,trials,ts);
 
-	string strFilename(MFPTIMESSNR_OUTPUT_DIRECTORY);
+	string strFilename; //(MFPTIMESSNR_OUTPUT_DIRECTORY);
 	strFilename.append(modelName);
 	strFilename.append(buff);
 
 	cout << "@ Simulation " << simulationName << " Output File:" << (strFilename) << std::endl;
-	ofstream* ofile = openfile(strFilename,ios::app);
+	ofstream* ofile = openfile(MFPTIMESSNR_OUTPUT_DIRECTORY,strFilename,ios::app);
 	//ofstream ofile(buffFilename.c_str(),  ); //Open Data File for Appending So you dont Overwrite Previous Results
 
 	if (!ofile->is_open())

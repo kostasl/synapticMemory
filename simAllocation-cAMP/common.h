@@ -1,7 +1,3 @@
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
 
 #pragma once
 
@@ -22,11 +18,10 @@
 #include <iomanip> //For Set Precision
 #include <string.h> //strcat
 #include <stdlib.h> // for srand ( ) and rand ( ) and _itoa
-#include <time.h> // for time ( ) and time_t
 #include <iostream>
 #include <fstream> //File Streams
 //#include <direct.h> // for getcwd
-#include <math.h>     // for exp(), log(), and log10()
+#include <cmath>     // for exp(), log(), and log10()
 #include <stdlib.h> //To have abort()
 #include <new> //for parameter new allocation
 #include <memory>
@@ -42,6 +37,9 @@
 //#include <WinGsl.h >
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
+
+#include <boost/filesystem.hpp> //Strangely makes getcwd work - As there is a bug with gcc4.8.2
+
 
 
 typedef int t_inVal; //Input Memory Vector value types (-1,1) used so int

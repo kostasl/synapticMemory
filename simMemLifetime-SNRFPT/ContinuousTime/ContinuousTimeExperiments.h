@@ -10,6 +10,7 @@
 
 #include "../common.h"
 #include "../util.h"
+#include "../InputVectorHandling.h"
 #include <algorithm> //For Find
 #include "PoissonSource.h"
 
@@ -309,7 +310,7 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 	T* oCSyn;	//POinter to allocated memory
 	vector<T*> vpSyns; //Vector of pointers to Synapses
 	vpSyns.reserve(iSynCount);
-	PoissonSource* PsMemEvent = new PoissonSource(dEncodingRate,ts,0);
+	PoissonSource* PsMemEvent = new PoissonSource(dEncodingRate,ts,0,mprng);
 
 	//ADD THE LIST OF TRACKED PATTERNS
 	t_patt_trackedtbl vTrackedIndex; //Key:The PattIndex - Value: 1 For Allocation Signal / 0 For no Allocation
@@ -594,7 +595,9 @@ double simRepetitionAllocation(pFunct pF, uint iSynCount,int iCascadeSize,uint u
 		sprintf(buffFilename,(const char*)slogFiles[4].c_str(), itTracked->first-uiInitPatterns);
 		cout << "Signal Output Files: " <<  buffFilename << endl; //Tell User Which Output file we are using
 
-		ofstream* ofile = openfile(buffFilename,ios::out);
+		//ofstream* ofile = openfile(buffFilename,ios::out);
+
+		ofstream *ofile = new ofstream(buffFilename, ios::out ); //Open Data File
 
 		if (!ofile->is_open())
 			ERREXIT(100,"Could Not Open output files. Check directories");

@@ -9,6 +9,7 @@
 */
 
 #include "../common.h"
+#include "../util.h"
 #include "../../synapseModels/common.h" //For the Global GSL Instance
 #include "PoissonSource.h"
 /*

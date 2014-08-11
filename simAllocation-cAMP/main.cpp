@@ -10,6 +10,8 @@
  *  each synapse stops writing to the global instance distribution map.
  *
  *      Author: kostasl
+ *
+ *      Note: Link with libraries: boost_program_options, boost_system, cblas, m, gsl
  */
 #include <boost/lexical_cast.hpp>
 #include "common.h"

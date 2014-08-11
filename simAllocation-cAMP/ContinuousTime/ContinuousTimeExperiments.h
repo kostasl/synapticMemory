@@ -14,6 +14,7 @@
 
 #include "../common.h"
 #include "../util.h"
+#include "../InputVectorHandling.h"
 #include <algorithm> //For Find
 #include "PoissonSource.h"
 

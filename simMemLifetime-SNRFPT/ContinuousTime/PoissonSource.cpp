@@ -9,29 +9,30 @@
 */
 
 #include "../common.h"
+#include "../util.h"
 #include "../../synapseModels/common.h" //For the Global GSL Instance
 #include "PoissonSource.h"
 /*
  * lamda is the rate of the occurance of events per second.
  * timestep is the simulation timestep used - This will be used to obtain a poisson distibuted time of next event by counting the number of timesteps in lamda
  */
-PoissonSource::PoissonSource(double lamda,double timeStep,double noiseStdev)
+
+PoissonSource::PoissonSource(double lamda,double timeStep,double noiseStdev,gsl_rng* prng)
 {
-	
 	mlamda	= (lamda < 0.0)?0.0:lamda;
 	h		= timeStep;
 	sigma	= noiseStdev;
 	mlamdaInTs = round(mlamda/h); ////The rate of Events in number of timesteps - The number of timesteps in the Event rate
 
-	 rng_r = g_getRandGeneratorInstance(false);
-	 if (!rng_r) throw "GSL RNG Init Failed. Out Of Memory?";
+	rng_r = prng;//g_getRandGeneratorInstance(false);
+	//if (!rng_r) ERREXIT(100,"GSL RNG Init Failed. Out Of Memory?");
 
 	 //unsigned int seed = unsigned(time(&t)) + rand()*100;
 	 // gsl_rng_set(rng_r,seed);
 	 //Seed random number generator
 	 //srand(seed);
-
 }
+
 
 bool PoissonSource::drawSpikeEvent()
 {
