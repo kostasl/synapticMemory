@@ -116,7 +116,7 @@ static std::ofstream* openfile(string strDir,string strFile,ios::openmode omode)
 	std::ofstream* file = new ofstream(strbuff.c_str(), omode ); //Open Data File for Appending So you dont Overwrite Previous Results
 		if (!file->is_open())
 		{
-			cerr << strDir;
+			cerr << strDir << endl;
 			string cmd = "mkdir ";
 			cmd.append(strDir);
 			cout <<  "Create Output directory" << endl;

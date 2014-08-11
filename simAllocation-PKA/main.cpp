@@ -153,7 +153,7 @@ int main(int argc, char* argv[])
 	po::options_description AllocationOptions("PKA Allocation Experiments - simulation options");
 
 	string inputFile,modelName = "synapseSingleFilterUnifiedWithDecay"; //Default
-	string simulationName = "simRepetition";
+	string simulationName = "AllocSignalVsRepetitionTime"; //Default
 	int startIndex,endIndex,simulationType,modelType,synapsesPopulation,trackedMemIndex,initPeriod;
 	unsigned int trials;
 
@@ -336,10 +336,8 @@ int main(int argc, char* argv[])
 
 		ofile.close();
 
-
-	}//END IF SIMULATION TYPE (1) MLT
-
-	if (simulationType == 10) //Run simulation To obtain Alloc Signal Size Vs Reptime for each Theta
+	}//END IF SIMULATION TYPE (1) MLT or 9(thresh cycle)
+	else if (simulationType == 10) //Run simulation To obtain Alloc Signal Size Vs Reptime for each Theta
 	{
 		cout << "****MEMORY ALLOCATION PER REP.INTERVAL SIMULATION******" << endl;
 		//For Cascade Indexes/Symmetric Filter Sizes
@@ -354,7 +352,8 @@ int main(int argc, char* argv[])
 
 			 runAllocSignalVsRepetition(modelType,ts,trials,trackedMemIndex,RepMemoryIndex,RepMemoryCount ,i,synapsesPopulation,lSimtimeSeconds,dEncodingRate,inputFile);
 		 }//Loop For Each Cascade Index
-	}
+	}else
+    cerr << "Simulation Type is not implemented" << endl;
 
   ///Measure Duration
   finish = clock();

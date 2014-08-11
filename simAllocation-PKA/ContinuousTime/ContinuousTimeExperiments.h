@@ -695,10 +695,12 @@ t_simRet simRepetitionAllocation(T* oCSyn, uint iSynCount,int iCascadeSize,uint 
 	//MFPT
 	for (itTracked = vTrackedIndex.begin();itTracked != vTrackedIndex.end();++itTracked)
 	{
+		//TODO: Replace this with Openfile
 		//strcpy(buffFilename,slogFiles[4].c_str());
 		std::sprintf(buffFilename,(const char*)slogFiles[4].c_str(), itTracked->first-uiInitPatterns);
 		cout << "Signal Output Files: " <<  buffFilename << endl; //Tell User Which Output file we are using
 		ofstream ofile(buffFilename, ios::out ); //Open Data File
+
 		if (!ofile.is_open())
 			ERREXIT(100,"Could Not Open output files. Check directories");
 		//Write Header
